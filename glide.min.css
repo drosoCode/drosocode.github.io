@@ -11,6 +11,12 @@ li.glide__slide > * {
     list-style: none !important;
 }
 
+@media screen and (min-width: 1470px) { 
+    .glide__slide {
+        width: 400px !important;
+    }
+}
+
 .glide__arrow {
     border: 0px;
     font-size: large;
