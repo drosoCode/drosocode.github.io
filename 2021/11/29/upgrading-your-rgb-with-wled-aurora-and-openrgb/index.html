@@ -1,0 +1,570 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Upgrading your RGB with WLED, Aurora and OpenRGB - DrosoCode</title><meta name=Description content><meta property="og:title" content="Upgrading your RGB with WLED, Aurora and OpenRGB">
+<meta property="og:description" content="I was always interested in going furether than the pre-made RGB equipement by various manufacturers because each system was only compatible with only one brand (ex: iCUE, RGB Fusion, Asus RGB …) and that their RGB softwares were very unfinished and didn’t exploit the full potential of the RGB hardware.
+First Attempt So, when I built my first desktop PC, I decided to create from scratch a custom RGB system. This was based on an arduino board, internally connected to my PC using USB.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://thomasz.me/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-11-29T00:00:00+01:00">
+<meta property="article:modified_time" content="2021-11-29T00:00:00+01:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Upgrading your RGB with WLED, Aurora and OpenRGB">
+<meta name=twitter:description content="I was always interested in going furether than the pre-made RGB equipement by various manufacturers because each system was only compatible with only one brand (ex: iCUE, RGB Fusion, Asus RGB …) and that their RGB softwares were very unfinished and didn’t exploit the full potential of the RGB hardware.
+First Attempt So, when I built my first desktop PC, I decided to create from scratch a custom RGB system. This was based on an arduino board, internally connected to my PC using USB.">
+<meta name=application-name content="DrosoCode">
+<meta name=apple-mobile-web-app-title content="DrosoCode"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thomasz.me/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/><link rel=prev href=https://thomasz.me/2020/11/03/control-your-light-with-a-nintendo-ds/><link rel=next href=https://thomasz.me/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Upgrading your RGB with WLED, Aurora and OpenRGB","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thomasz.me\/2021\/11\/29\/upgrading-your-rgb-with-wled-aurora-and-openrgb\/"},"genre":"posts","keywords":"arduino, home assistant, esp8266, hardware, RGB, python","wordcount":2144,"url":"https:\/\/thomasz.me\/2021\/11\/29\/upgrading-your-rgb-with-wled-aurora-and-openrgb\/","datePublished":"2021-11-29T00:00:00+01:00","dateModified":"2021-11-29T00:00:00+01:00","publisher":{"@type":"Organization","name":"drosocode"},"author":{"@type":"Person","name":"droso"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title=DrosoCode>DrosoCode</a>
+</div><div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/projects/> Projects </a><a class=menu-item href=https://github.com/drosocode rel="noopener noreffer" target=_blank> Github </a><a class=menu-item href=/about/> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div></div></div></header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title=DrosoCode>DrosoCode</a>
+</div><div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div></div><div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/projects/ title>Projects</a><a class=menu-item href=https://github.com/drosocode title rel="noopener noreffer" target=_blank>Github</a><a class=menu-item href=/about/ title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div></div></header><div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div></div><main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Upgrading your RGB with WLED, Aurora and OpenRGB</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=https://github.com/drosocode title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>droso</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-11-29>2021-11-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2144 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;11 minutes&nbsp;</div></div><div class="details toc" id=toc-static kept=true>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#first-attempt>First Attempt</a></li><li><a href=#second-attempt>Second Attempt</a>
+<ul>
+<li><a href=#wled>WLED</a></li><li><a href=#openrgb>OpenRGB</a></li><li><a href=#aurora>Aurora</a></li><li><a href=#custom-effects>Custom effects</a></li><li><a href=#home-assistant>Home Assistant</a></li></ul></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div><div class=content id=content><p>I was always interested in going furether than the pre-made RGB equipement by various manufacturers because each system was only compatible with only one brand (ex: iCUE, RGB Fusion, Asus RGB …) and that their RGB softwares were very unfinished and didn’t exploit the full potential of the RGB hardware.</p><h2 id=first-attempt>First Attempt</h2><p>So, when I built my first desktop PC, I decided to create from scratch a custom RGB system. This was based on an arduino board, internally connected to my PC using USB. This arduino was controlling cheap adressable RGB strips (WS2812B) powered by my PSU in 5v. On the software side, I developped a custom C# application, <a href=https://github.com/drosoCode/LedControl target=_blank rel="noopener noreffer">LedControl</a>. This was my first attempt at controlling my RGB leds.</p><figure><a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1_setup.jpg title=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1_setup.jpg data-thumbnail=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1_setup.jpg data-sub-html="<h2>The window mounted on the pc with the arduino control box in a HDD slot (on the left) and the WS2812B leds mounted on the window (on the right)</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=assets/rgb_v1_setup.jpg data-srcset="/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1_setup.jpg, assets/rgb_v1_setup.jpg 1.5x, /2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1_setup.jpg 2x" data-sizes=auto alt=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1_setup.jpg width=80%>
+</a><figcaption class=image-caption>The window mounted on the pc with the arduino control box in a HDD slot (on the left) and the WS2812B leds mounted on the window (on the right)</figcaption></figure><figure><a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_1.png title=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_1.png data-thumbnail=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_1.png data-sub-html="<h2>My custom software in C#</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=assets/rgb_1.png data-srcset="/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_1.png, assets/rgb_1.png 1.5x, /2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_1.png 2x" data-sizes=auto alt=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_1.png>
+</a><figcaption class=image-caption>My custom software in C#</figcaption></figure><p>A bit later, while adding RGB fans, I discovered that they were using the same type of adressable leds. Unfortunately, only an input port was available, meaning that you were not able to chain the devices and control their leds individually. So, in order to control every led of my system, I needed to wire each fan data line to a dedicated port on the arduino. As there wasn’t enough ports on the nano (and that a mega was too big), I needed to add a second arduino.</p><figure><a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wiring.jpg title=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wiring.jpg data-thumbnail=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wiring.jpg data-sub-html="<h2>Going from the first to the second version (with 2 arduinos)</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=assets/wiring.jpg data-srcset="/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wiring.jpg, assets/wiring.jpg 1.5x, /2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wiring.jpg 2x" data-sizes=auto alt=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wiring.jpg width=80%>
+</a><figcaption class=image-caption>Going from the first to the second version (with 2 arduinos)</figcaption></figure><figure><a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/ws2812.png title=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/ws2812.png data-thumbnail=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/ws2812.png data-sub-html="<h2>Example of WS2812B led strip, notice the white arrow next to the data pin, indicating the correct side to add more leds</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=assets/ws2812.png data-srcset="/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/ws2812.png, assets/ws2812.png 1.5x, /2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/ws2812.png 2x" data-sizes=auto alt=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/ws2812.png>
+</a><figcaption class=image-caption>Example of WS2812B led strip, notice the white arrow next to the data pin, indicating the correct side to add more leds</figcaption></figure><p>This system was working quite well, my software was able to control each device and leds individually and to apply multiple effects at the same time (ex: GPU Temp reactive lighting for a fan, CPU Temp for another fan, and music reactive effect for the window’s leds). However it wasn’t able to interact with built-in RGB like the leds on the motherboard/GPU and also had a quite limited set of effects available.</p><figure><a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1.jpg title=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1.jpg data-thumbnail=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1.jpg data-sub-html="<h2>Control of the window/fans’s RGB leds on the left, wiring of the next version (see below) on the right</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=assets/rgb_v1.jpg data-srcset="/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1.jpg, assets/rgb_v1.jpg 1.5x, /2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1.jpg 2x" data-sizes=auto alt=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/rgb_v1.jpg width=70%>
+</a><figcaption class=image-caption>Control of the window/fans’s RGB leds on the left, wiring of the next version (see below) on the right</figcaption></figure><h2 id=second-attempt>Second Attempt</h2><h3 id=wled>WLED</h3><p>So, when I renewed my computer and bought a new case, I decided to completely change the RGB lighting system. A lot of things happened after I created my first solution, and the ESP8266/ESP32 were now very common and had received a lot of support from the opensource community. Among the incredible amount of projects, was <a href=https://github.com/Aircoookie/WLED target=_blank rel="noopener noreffer">WLED</a>, a RGB control program for these wifi chips that allowed you to control various led strips, including the WS2812B from a web interface and much more. I decided to use this project as a base to control the WS2812B-based RGB in my PC. <em>As mutli-pin control (required for my fans) wasn’t available in the provided firmware, I neded to slightly edit the source-code and recompile it.</em> Starting from version 0.12.0, <a href=https://github.com/Aircoookie/WLED/wiki/Multi-strip target=_blank rel="noopener noreffer">multi-strips are supported</a> in the precompiled binaries and are easily configurables.</p><p>After wriring all my led strips, I connected my pc to the wireless hostpot created by the esp and configured the my home wifi credentials, and that’s it. I was now able to connect to the web ui of WLED and control my PC’s RGB from any device. WLED has a lot of really cool features such as synchronizing with other WLED devices, E1.31 support, an incredibly complete list of effects and the ability to define independant zones on the light strip.</p><div class=galleryContainer>
+<figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wled.png>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wled.png>
+</a>
+<figcaption class=image-caption>
+WLED Web UI
+</figcaption></figure><figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wled2.png>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/wled2.png>
+</a>
+<figcaption class=image-caption>
+WLED sync config page
+</figcaption></figure></div><h3 id=openrgb>OpenRGB</h3><p>Once that the control of the WS2812B RGB was settled, I neded to find a way to control the build-in RGB of my motherboad, RAM, GPU and keyboard. That’s where another awesome software enters: <a href=https://gitlab.com/CalcProgrammer1/OpenRGB target=_blank rel="noopener noreffer">OpenRGB</a>. This is what is tieing everything together: OpenRGB is a cross-platform software that is able to control practically any RGB device from many manufacturers like Corsair, Asus, Gigabyte, HyperX, MSI … It also supports controlling devices using E1.31 and exposes an universal API to control all of them. Most of the devices are auto-detected but for E1.31 , you need to manually edit the configuration file in <code>%appdata%/OpenRGB/OpenRGB.json</code> to specify the IP of the device (here, our WLED esp). Also, keep in mind that access to some devices control interfaces (like SMBus) may be blocked by other softwares, especially anti-cheats like Vanguard.</p><div class=galleryContainer>
+<figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/openrgb.png>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/openrgb.png>
+</a>
+<figcaption class=image-caption>
+OpenRGB UI
+</figcaption></figure><figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/openrgb2.png>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/openrgb2.png>
+</a>
+<figcaption class=image-caption>
+OpenRGB config file
+</figcaption></figure></div><h3 id=aurora>Aurora</h3><p>A first options is to use <a href=https://github.com/antonpup/Aurora target=_blank rel="noopener noreffer">Aurora-Project</a>, to interact in real time with some games and apply some effects based on the game’s data. Aurora supports many well-known games like CS:GO, Minecraft, LoL … and a lot of different devices and protocols, including OpenRGB. So we just need to enable OpenRGB in Aurora (it will automatically connect to your local OpenRGB instance) and start the OpenRGB API Server to be able to use these effects.</p><div class=galleryContainer>
+<figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/aurora.png>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/aurora.png>
+</a>
+<figcaption class=image-caption>
+Aurora devices config tab
+</figcaption></figure><figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/csgo.png>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/csgo.png>
+</a>
+<figcaption class=image-caption>
+Aurora game effects config (CS:GO)
+</figcaption></figure></div><p>There are also some other software using the OpenRGB API, like <a href=https://gitlab.com/CalcProgrammer1/KeyboardVisualizer target=_blank rel="noopener noreffer">KeyboardVisualizer</a> (from the same author) that creates music-based lighting effects.</p><figure><a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/csgo.jpg title=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/csgo.jpg data-thumbnail=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/csgo.jpg data-sub-html="<h2>Example in CS:GO, the F1-12 line represents your life and the 1-9 keys represents your ammo level</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=assets/csgo.jpg data-srcset="/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/csgo.jpg, assets/csgo.jpg 1.5x, /2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/csgo.jpg 2x" data-sizes=auto alt=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/csgo.jpg width=80%>
+</a><figcaption class=image-caption>Example in CS:GO, the F1-12 line represents your life and the 1-9 keys represents your ammo level</figcaption></figure><h3 id=custom-effects>Custom effects</h3><p>Another option is to use directly the OpenRGB API to create new effects. Fortunately a lot of <a href=https://gitlab.com/CalcProgrammer1/OpenRGB#openrgb-sdk target=_blank rel="noopener noreffer">wrappers</a> in multiple languages already exists for this API. Here, we’ll be using <a href=https://github.com/jath03/openrgb-python target=_blank rel="noopener noreffer">python-openrgb</a>.</p><p>We will take Forza Horizon 5 as an example (as this is the latest game that I played). This game is has an option in <code>Settings > HUD and Gameplay</code> to send UDP telemetry packets while playing, we will use this data to create our effects. To decode these packets we will use the ForzaDataPacket class from the <a href=https://github.com/nettrom/forza_motorsport target=_blank rel="noopener noreffer">forza_motorsport</a> project. We will, in the first time, use a little script (test.py, see code below) to gather a bit of data and graph it with matplotlib, to have an idea of the evolution of these metrics.</p><div class=galleryContainer>
+<figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/forza_1.png>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/forza_1.png>
+</a>
+<figcaption class=image-caption>
+Forza Settings
+</figcaption></figure><figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/forza_2.png>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/forza_2.png>
+</a>
+<figcaption class=image-caption>
+Forza data graph
+</figcaption></figure></div><p>We can then map these values to RGB colors using a custom script (see below) and send them to OpenRGB. To determine which key you want to light-up, you can click on <code>Toggle LED View</code> in OpenRGB to show the emplacements of your keys, you can then use <code>keyboard.matrix_map[y][x]</code> to get the correct led id. Also note that spaces between keys also counts as keys, for example, the F1 key has the id 2 (and not 1) because of the space between the escape key (id: 0) and this key. With this script, the 1-9 keys of the keyboard represent your position in a race, the line below represents the engine rpm, below is the speed and the last line is the power. The insert/suppr/page up/page down keys represent the slip ratio for each tire and the lines 1/4/7 2/5/8 and 3/6/9 on the numpad represent your car’s status (acceleration/brake/handbrake).</p><div class=galleryContainer>
+<figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/keyboard.png>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/keyboard.png>
+</a>
+<figcaption class=image-caption>
+OpenRGB Keyboard View
+</figcaption></figure><figure class=galleryItem>
+<a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/zforza.gif>
+<img src=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/zforza.gif>
+</a>
+<figcaption class=image-caption>
+Forza Demo
+</figcaption></figure></div><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-py data-lang=py><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>socket</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>openrgb</span> <span class=kn>import</span> <span class=n>OpenRGBClient</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>openrgb.utils</span> <span class=kn>import</span> <span class=n>RGBColor</span><span class=p>,</span> <span class=n>DeviceType</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>numpy</span> <span class=kn>import</span> <span class=n>interp</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>fdp</span> <span class=kn>import</span> <span class=n>ForzaDataPacket</span>
+</span></span><span class=line><span class=cl><span class=c1># get fdp.py from https://github.com/nettrom/forza_motorsport</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>s</span> <span class=o>=</span> <span class=n>socket</span><span class=o>.</span><span class=n>socket</span><span class=p>(</span><span class=n>socket</span><span class=o>.</span><span class=n>AF_INET</span><span class=p>,</span> <span class=n>socket</span><span class=o>.</span><span class=n>SOCK_DGRAM</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>server_address</span> <span class=o>=</span> <span class=p>(</span><span class=s2>&#34;127.0.0.1&#34;</span><span class=p>,</span> <span class=mi>1010</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>s</span><span class=o>.</span><span class=n>bind</span><span class=p>(</span><span class=n>server_address</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;####### Server is listening #######&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>client</span> <span class=o>=</span> <span class=n>OpenRGBClient</span><span class=p>(</span><span class=s2>&#34;127.0.0.1&#34;</span><span class=p>,</span> <span class=mi>6742</span><span class=p>,</span> <span class=s2>&#34;forza&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>keyboard</span> <span class=o>=</span> <span class=n>client</span><span class=o>.</span><span class=n>get_devices_by_type</span><span class=p>(</span><span class=n>DeviceType</span><span class=o>.</span><span class=n>KEYBOARD</span><span class=p>)[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>zones</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>props</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;speed&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;fuel&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;race_pos&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;accel&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;brake&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;handbrake&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;current_engine_rpm&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;power&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;tire_slip_ratio_FL&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;tire_slip_ratio_FR&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;tire_slip_ratio_RL&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;tire_slip_ratio_RR&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;is_race_on&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>RED</span> <span class=o>=</span> <span class=n>RGBColor</span><span class=p>(</span><span class=mi>255</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>YELLOW</span> <span class=o>=</span> <span class=n>RGBColor</span><span class=p>(</span><span class=mi>255</span><span class=p>,</span> <span class=mi>255</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ORANGE</span> <span class=o>=</span> <span class=n>RGBColor</span><span class=p>(</span><span class=mi>255</span><span class=p>,</span> <span class=mi>165</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>GREEN</span> <span class=o>=</span> <span class=n>RGBColor</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>255</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>CYAN</span> <span class=o>=</span> <span class=n>RGBColor</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>255</span><span class=p>,</span> <span class=mi>255</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>MAGENTA</span> <span class=o>=</span> <span class=n>RGBColor</span><span class=p>(</span><span class=mi>255</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mi>255</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>BLACK</span> <span class=o>=</span> <span class=n>RGBColor</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>props_keys</span> <span class=o>=</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl><span class=n>i</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=n>props</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>props_keys</span><span class=p>[</span><span class=n>x</span><span class=p>]</span> <span class=o>=</span> <span class=n>i</span>
+</span></span><span class=line><span class=cl>    <span class=n>i</span> <span class=o>+=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>kb_black_keys</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>)):</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>j</span> <span class=ow>in</span> <span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=n>i</span><span class=p>]:</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>j</span> <span class=ow>is</span> <span class=ow>not</span> <span class=kc>None</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>kb_black_keys</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>BLACK</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>value2color</span><span class=p>(</span><span class=n>val</span><span class=p>,</span> <span class=nb>min</span><span class=p>,</span> <span class=nb>max</span><span class=p>,</span> <span class=n>inverted</span><span class=o>=</span><span class=kc>False</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>red</span> <span class=o>=</span> <span class=p>[</span><span class=mi>0</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>orange</span> <span class=o>=</span> <span class=p>[</span><span class=mi>20</span><span class=p>,</span> <span class=mi>21</span><span class=p>,</span> <span class=mi>22</span><span class=p>,</span> <span class=mi>23</span><span class=p>,</span> <span class=mi>24</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>yellow</span> <span class=o>=</span> <span class=p>[</span><span class=mi>30</span><span class=p>,</span> <span class=mi>31</span><span class=p>,</span> <span class=mi>32</span><span class=p>,</span> <span class=mi>33</span><span class=p>,</span> <span class=mi>34</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>green</span> <span class=o>=</span> <span class=p>[</span><span class=mi>50</span><span class=p>,</span> <span class=mi>51</span><span class=p>,</span> <span class=mi>52</span><span class=p>,</span> <span class=mi>53</span><span class=p>,</span> <span class=mi>54</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>inverted</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>colors</span> <span class=o>=</span> <span class=n>red</span> <span class=o>+</span> <span class=n>orange</span> <span class=o>+</span> <span class=n>yellow</span> <span class=o>+</span> <span class=n>green</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>colors</span> <span class=o>=</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>            <span class=nb>list</span><span class=p>(</span><span class=nb>reversed</span><span class=p>(</span><span class=n>green</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>            <span class=o>+</span> <span class=nb>list</span><span class=p>(</span><span class=nb>reversed</span><span class=p>(</span><span class=n>yellow</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>            <span class=o>+</span> <span class=nb>list</span><span class=p>(</span><span class=nb>reversed</span><span class=p>(</span><span class=n>orange</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>            <span class=o>+</span> <span class=nb>list</span><span class=p>(</span><span class=nb>reversed</span><span class=p>(</span><span class=n>red</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>RGBColor</span><span class=o>.</span><span class=n>fromHSV</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>colors</span><span class=p>[</span><span class=nb>round</span><span class=p>(</span><span class=n>interp</span><span class=p>(</span><span class=n>val</span><span class=p>,</span> <span class=p>[</span><span class=nb>min</span><span class=p>,</span> <span class=nb>max</span><span class=p>],</span> <span class=p>[</span><span class=mi>0</span><span class=p>,</span> <span class=nb>len</span><span class=p>(</span><span class=n>colors</span><span class=p>)</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]))],</span> <span class=mi>100</span><span class=p>,</span> <span class=mi>100</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>keys2band</span><span class=p>(</span><span class=n>kb</span><span class=p>,</span> <span class=n>start_line</span><span class=p>,</span> <span class=n>start_col</span><span class=p>,</span> <span class=n>nb</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>band</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=n>n</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>start_col</span><span class=p>,</span> <span class=nb>len</span><span class=p>(</span><span class=n>kb</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=n>start_line</span><span class=p>])):</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>kb</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=n>start_line</span><span class=p>][</span><span class=n>i</span><span class=p>]</span> <span class=ow>is</span> <span class=ow>not</span> <span class=kc>None</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>band</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>kb</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=n>start_line</span><span class=p>][</span><span class=n>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>            <span class=n>n</span> <span class=o>+=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>n</span> <span class=o>&gt;</span> <span class=n>nb</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=k>break</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>band</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>KB_LINE1</span> <span class=o>=</span> <span class=n>keys2band</span><span class=p>(</span><span class=n>keyboard</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>KB_LINE2</span> <span class=o>=</span> <span class=n>keys2band</span><span class=p>(</span><span class=n>keyboard</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>KB_LINE3</span> <span class=o>=</span> <span class=n>keys2band</span><span class=p>(</span><span class=n>keyboard</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>value2band</span><span class=p>(</span><span class=n>val</span><span class=p>,</span> <span class=n>val_min</span><span class=p>,</span> <span class=n>val_max</span><span class=p>,</span> <span class=n>band</span><span class=p>,</span> <span class=n>colors</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nb>max</span> <span class=o>=</span> <span class=nb>len</span><span class=p>(</span><span class=n>band</span><span class=p>)</span> <span class=o>-</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>    <span class=n>nb_keys</span> <span class=o>=</span> <span class=nb>int</span><span class=p>(</span><span class=n>interp</span><span class=p>(</span><span class=n>val</span><span class=p>,</span> <span class=p>[</span><span class=n>val_min</span><span class=p>,</span> <span class=n>val_max</span><span class=p>],</span> <span class=p>[</span><span class=mi>0</span><span class=p>,</span> <span class=nb>max</span><span class=p>]))</span>
+</span></span><span class=line><span class=cl>    <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=n>band</span><span class=p>[</span><span class=mi>0</span><span class=p>:</span><span class=n>nb_keys</span><span class=p>]:</span>
+</span></span><span class=line><span class=cl>        <span class=n>colors</span><span class=p>[</span><span class=n>x</span><span class=p>]</span> <span class=o>=</span> <span class=n>value2color</span><span class=p>(</span><span class=n>i</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=nb>max</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>i</span> <span class=o>+=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>client</span><span class=o>.</span><span class=n>clear</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=kc>True</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>raw</span><span class=p>,</span> <span class=n>address</span> <span class=o>=</span> <span class=n>s</span><span class=o>.</span><span class=n>recvfrom</span><span class=p>(</span><span class=mi>1024</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>data</span> <span class=o>=</span> <span class=n>ForzaDataPacket</span><span class=p>(</span><span class=n>raw</span><span class=p>,</span> <span class=s2>&#34;fh4&#34;</span><span class=p>)</span><span class=o>.</span><span class=n>to_list</span><span class=p>(</span><span class=n>props</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span> <span class=o>=</span> <span class=n>kb_black_keys</span><span class=o>.</span><span class=n>copy</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;race_pos&#34;</span><span class=p>]]</span> <span class=o>!=</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>key</span> <span class=o>=</span> <span class=mi>10</span> <span class=k>if</span> <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;race_pos&#34;</span><span class=p>]]</span> <span class=o>&gt;</span> <span class=mi>9</span> <span class=k>else</span> <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;race_pos&#34;</span><span class=p>]]</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>2</span><span class=p>][</span><span class=n>key</span><span class=p>]]</span> <span class=o>=</span> <span class=n>value2color</span><span class=p>(</span><span class=n>key</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;accel&#34;</span><span class=p>]]</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>2</span><span class=p>][</span><span class=mi>19</span><span class=p>]]</span> <span class=o>=</span> <span class=n>GREEN</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>3</span><span class=p>][</span><span class=mi>19</span><span class=p>]]</span> <span class=o>=</span> <span class=n>GREEN</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>4</span><span class=p>][</span><span class=mi>19</span><span class=p>]]</span> <span class=o>=</span> <span class=n>GREEN</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>5</span><span class=p>][</span><span class=mi>19</span><span class=p>]]</span> <span class=o>=</span> <span class=n>GREEN</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;brake&#34;</span><span class=p>]]</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>2</span><span class=p>][</span><span class=mi>20</span><span class=p>]]</span> <span class=o>=</span> <span class=n>CYAN</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>3</span><span class=p>][</span><span class=mi>20</span><span class=p>]]</span> <span class=o>=</span> <span class=n>CYAN</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>4</span><span class=p>][</span><span class=mi>20</span><span class=p>]]</span> <span class=o>=</span> <span class=n>CYAN</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>5</span><span class=p>][</span><span class=mi>20</span><span class=p>]]</span> <span class=o>=</span> <span class=n>CYAN</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;handbrake&#34;</span><span class=p>]]</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>2</span><span class=p>][</span><span class=mi>21</span><span class=p>]]</span> <span class=o>=</span> <span class=n>MAGENTA</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>3</span><span class=p>][</span><span class=mi>21</span><span class=p>]]</span> <span class=o>=</span> <span class=n>MAGENTA</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>4</span><span class=p>][</span><span class=mi>21</span><span class=p>]]</span> <span class=o>=</span> <span class=n>MAGENTA</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>5</span><span class=p>][</span><span class=mi>21</span><span class=p>]]</span> <span class=o>=</span> <span class=n>MAGENTA</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;is_race_on&#34;</span><span class=p>]]</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>0</span><span class=p>][</span><span class=mi>12</span><span class=p>]]</span> <span class=o>=</span> <span class=n>GREEN</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>0</span><span class=p>][</span><span class=mi>13</span><span class=p>]]</span> <span class=o>=</span> <span class=n>GREEN</span>
+</span></span><span class=line><span class=cl>        <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>0</span><span class=p>][</span><span class=mi>14</span><span class=p>]]</span> <span class=o>=</span> <span class=n>GREEN</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>value2band</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;current_engine_rpm&#34;</span><span class=p>]],</span> <span class=mi>0</span><span class=p>,</span> <span class=mi>10000</span><span class=p>,</span> <span class=n>KB_LINE1</span><span class=p>,</span> <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>value2band</span><span class=p>(</span><span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;speed&#34;</span><span class=p>]],</span> <span class=mi>0</span><span class=p>,</span> <span class=mi>100</span><span class=p>,</span> <span class=n>KB_LINE2</span><span class=p>,</span> <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>value2band</span><span class=p>(</span><span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;power&#34;</span><span class=p>]],</span> <span class=o>-</span><span class=mi>500000</span><span class=p>,</span> <span class=mi>500000</span><span class=p>,</span> <span class=n>KB_LINE3</span><span class=p>,</span> <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>2</span><span class=p>][</span><span class=mi>16</span><span class=p>]]</span> <span class=o>=</span> <span class=n>value2color</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;tire_slip_ratio_FL&#34;</span><span class=p>]],</span> <span class=o>-</span><span class=mi>30</span><span class=p>,</span> <span class=mi>30</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>2</span><span class=p>][</span><span class=mi>18</span><span class=p>]]</span> <span class=o>=</span> <span class=n>value2color</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;tire_slip_ratio_FR&#34;</span><span class=p>]],</span> <span class=o>-</span><span class=mi>30</span><span class=p>,</span> <span class=mi>30</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>3</span><span class=p>][</span><span class=mi>16</span><span class=p>]]</span> <span class=o>=</span> <span class=n>value2color</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;tire_slip_ratio_RL&#34;</span><span class=p>]],</span> <span class=o>-</span><span class=mi>30</span><span class=p>,</span> <span class=mi>30</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>keyboard</span><span class=o>.</span><span class=n>colors</span><span class=p>[</span><span class=n>keyboard</span><span class=o>.</span><span class=n>matrix_map</span><span class=p>[</span><span class=mi>3</span><span class=p>][</span><span class=mi>18</span><span class=p>]]</span> <span class=o>=</span> <span class=n>value2color</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>data</span><span class=p>[</span><span class=n>props_keys</span><span class=p>[</span><span class=s2>&#34;tire_slip_ratio_RR&#34;</span><span class=p>]],</span> <span class=o>-</span><span class=mi>30</span><span class=p>,</span> <span class=mi>30</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>keyboard</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-py data-lang=py><span class=line><span class=cl><span class=kn>import</span> <span class=nn>socket</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>fdp</span> <span class=kn>import</span> <span class=n>ForzaDataPacket</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>matplotlib</span> <span class=kn>import</span> <span class=n>pyplot</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>time</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Create a UDP socket</span>
+</span></span><span class=line><span class=cl><span class=n>s</span> <span class=o>=</span> <span class=n>socket</span><span class=o>.</span><span class=n>socket</span><span class=p>(</span><span class=n>socket</span><span class=o>.</span><span class=n>AF_INET</span><span class=p>,</span> <span class=n>socket</span><span class=o>.</span><span class=n>SOCK_DGRAM</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># Bind the socket to the port</span>
+</span></span><span class=line><span class=cl><span class=n>server_address</span> <span class=o>=</span> <span class=p>(</span><span class=s2>&#34;127.0.0.1&#34;</span><span class=p>,</span> <span class=mi>1010</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>s</span><span class=o>.</span><span class=n>bind</span><span class=p>(</span><span class=n>server_address</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Do Ctrl+c to exit the program !!&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>props</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=n>arr</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=n>t_max</span> <span class=o>=</span> <span class=n>time</span><span class=o>.</span><span class=n>time</span><span class=p>()</span> <span class=o>+</span> <span class=mi>30</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>props</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;speed&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=c1># accel, brake, handbrake -&gt; 1 or 0</span>
+</span></span><span class=line><span class=cl><span class=c1># current_engine_rpm [10 000], power [500 000]</span>
+</span></span><span class=line><span class=cl><span class=c1># speed [200], race_pos [0,10]</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>props</span><span class=p>)):</span>
+</span></span><span class=line><span class=cl>    <span class=n>arr</span><span class=o>.</span><span class=n>append</span><span class=p>([])</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=n>time</span><span class=o>.</span><span class=n>time</span><span class=p>()</span> <span class=o>&lt;</span> <span class=n>t_max</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;####### Server is listening #######&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>data</span><span class=p>,</span> <span class=n>address</span> <span class=o>=</span> <span class=n>s</span><span class=o>.</span><span class=n>recvfrom</span><span class=p>(</span><span class=mi>1024</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>df</span> <span class=o>=</span> <span class=n>ForzaDataPacket</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=s2>&#34;fh4&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>d</span> <span class=o>=</span> <span class=n>df</span><span class=o>.</span><span class=n>to_list</span><span class=p>(</span><span class=n>props</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>d</span><span class=p>)):</span>
+</span></span><span class=line><span class=cl>        <span class=n>arr</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>props</span><span class=p>)):</span>
+</span></span><span class=line><span class=cl>    <span class=n>pyplot</span><span class=o>.</span><span class=n>plot</span><span class=p>(</span><span class=nb>list</span><span class=p>(</span><span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>arr</span><span class=p>[</span><span class=n>i</span><span class=p>]))),</span> <span class=n>arr</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>label</span><span class=o>=</span><span class=n>props</span><span class=p>[</span><span class=n>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=n>pyplot</span><span class=o>.</span><span class=n>legend</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>pyplot</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=home-assistant>Home Assistant</h3><figure><a class=lightgallery href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/hass1.png title=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/hass1.png data-thumbnail=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/hass1.png data-sub-html="<h2>Home Assistant card with the different devices (on the left) and a device control popup (on the right)</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=assets/hass1.png data-srcset="/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/hass1.png, assets/hass1.png 1.5x, /2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/hass1.png 2x" data-sizes=auto alt=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/assets/hass1.png width=80%>
+</a><figcaption class=image-caption>Home Assistant card with the different devices (on the left) and a device control popup (on the right)</figcaption></figure><p>In addition to your RGB software on your PC, you can also control everything from your home automation system. For example, in <a href=https://www.home-assistant.io/ target=_blank rel="noopener noreffer">Home Assistant</a>, you can configure the <a href=https://www.home-assistant.io/integrations/wled/ target=_blank rel="noopener noreffer">WLED integration</a> to control your PC’s led stips. Using <a href=https://hacs.xyz/ target=_blank rel="noopener noreffer">HACS</a>, you can also install the <a href=https://github.com/koying/openrgb_ha target=_blank rel="noopener noreffer">OpenRGB integration</a>, which will then allow you to control all of your computer’s RGB devices using OpenRGB.</p><h2 id=conclusion>Conclusion</h2><p>We now have a complete RGB lighting system for our computer with dynamic game-based lighting effects. As written in the last paragraphs, we can even control it from python scripts or home automation systems which opens the door to even more powerful connections (for example make your first fan blink when you receive a new message, or sync your RGB with an ambilight system …).</p></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2021-11-29</span>
+</div><div class=post-info-license></div></div><div class=post-info-line>
+<div class=post-info-md></div><div class=post-info-share>
+<span></span>
+</div></div></div><div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/arduino/>arduino</a>,&nbsp;<a href=/tags/home-assistant/>home assistant</a>,&nbsp;<a href=/tags/esp8266/>esp8266</a>,&nbsp;<a href=/tags/hardware/>hardware</a>,&nbsp;<a href=/tags/rgb/>RGB</a>,&nbsp;<a href=/tags/python/>python</a></section><section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section></div><div class=post-nav><a href=/2020/11/03/control-your-light-with-a-nintendo-ds/ class=prev rel=prev title="Control your lights with a Nintendo DS"><i class="fas fa-angle-left fa-fw"></i>Control your lights with a Nintendo DS</a>
+<a href=/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/ class=next rel=next title="Easily create you DIY IoT devices with ESP Home and Home Assistant">Easily create you DIY IoT devices with ESP Home and Home Assistant<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=disqus_thread class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
+</noscript></div></article></div></main><footer class=footer>
+<div class=footer-container><div class=footer-line>© <script>document.write("2019 - "+(new Date).getFullYear())</script> DrosoCode | <a href=/privacy-policy>Privacy Policy</a> | <a href=/terms-of-use>Terms of Use</a> | <a href=/index.xml>RSS</a></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/lib/lightgallery/lightgallery.min.css><link rel=stylesheet href=/custom.css><link rel=stylesheet href=/devicon.min.css><link rel=stylesheet href=/glide.min.css><script type=text/javascript src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.fill%2CArray.prototype.find%2CArray.from%2CIntersectionObserver%2CMath.sign%2CObject.assign%2CPromise%2CObject.entries%2CElement.prototype.closest%2CrequestAnimationFrame%2CCustomEvent%2Chtml5shiv%2CObject.values%2Cfetch%2CElement.prototype.after"></script><script type=text/javascript src=https://droso.disqus.com/embed.js defer></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/lightgallery/lightgallery.min.js></script><script type=text/javascript src=/lib/lightgallery/lg-thumbnail.min.js></script><script type=text/javascript src=/lib/lightgallery/lg-zoom.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/glide.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:10},comment:{},lightGallery:{actualSize:!1,exThumbImage:"data-thumbnail",hideBarsDelay:2e3,selector:".lightgallery",speed:400,thumbContHeight:80,thumbWidth:80,thumbnail:!0},search:{highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30}}</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config",{client_storage:"none",anonymize_ip:!0,client_id:"UA-179623617-1"})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=UA-179623617-1" async></script></body></html>

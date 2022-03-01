@@ -1,0 +1,51 @@
+.galleryContainer {
+    display: flex;
+    flex-grow: 1;
+}
+
+.galleryItem {
+    flex: 1;
+}
+
+.row {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.row > * {
+    flex: 1;
+    max-width: 50%;
+}
+
+.col {
+    flex: 1;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.col > .glide, .col > .lightgallery {
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 600px) { 
+    .galleryContainer {
+        flex-direction: column;
+    }
+    .row {
+        flex-direction: column;
+    }
+    .row > * {
+        margin: 10px auto;
+        max-width: 90%;
+    }
+}
+
+.lightgallery > img {
+    display: block;
+    margin: 0 auto;
+}

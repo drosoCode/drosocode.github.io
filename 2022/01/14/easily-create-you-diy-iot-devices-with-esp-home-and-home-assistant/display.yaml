@@ -1,0 +1,143 @@
+esphome:
+  name: afficheur
+  platform: ESP8266
+  board: nodemcuv2
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: ""
+
+wifi:
+  ssid: !secret "wifi_ssid"
+  password: !secret "wifi_password"
+  
+  manual_ip:
+    static_ip: 10.20.8.1
+    gateway: 10.20.1.1
+    subnet: 255.255.0.0
+ 
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Afficheur Fallback Hotspot"
+    password: ""
+
+captive_portal:
+
+status_led:
+  pin: D4
+  
+
+#===================== display data =============================
+
+font:
+  - file: "pixelmix.ttf"
+    id: digit_font
+    size: 8
+
+time:
+  - platform: homeassistant
+    id: hass_time
+    
+globals:
+  - id: new_text
+    type: int
+    initial_value: "3"
+  - id: txt_cycles
+    type: int
+    initial_value: "1"
+
+text_sensor:
+  - platform: homeassistant
+    name: "afficheur texte"
+    entity_id: input_text.afficheur_txt
+    id: txt
+    on_value:
+      then:
+        lambda: |-
+          id(new_text) = 0;
+      
+#===================== display settings =============================
+
+spi:
+  clk_pin: D5
+  mosi_pin: D7
+
+display:
+  - platform: max7219digit
+    cs_pin: D8
+    num_chips: 4
+    rotate_chip: 90
+    id: matrixdisplay
+    intensity: 4
+    scroll_speed: 50ms
+    scroll_mode: STOP
+    update_interval: 3s
+    lambda: |-
+      if (id(new_text) <= id(txt_cycles)) {
+        if(id(new_text) == 0) {
+          id(txt_cycles) = ceil(strlen(id(txt).state.c_str()) / 6);
+        }
+        it.printf(0, 0, id(digit_font), "%s", id(txt).state.c_str());
+        id(new_text)++;
+      } else {
+        it.strftime(0, 0, id(digit_font), " %H:%M", id(hass_time).now());
+      }
+     
+
+#===================== display control =============================
+      
+number:
+  - platform: template
+    name: Screen Brightness
+    min_value: 0
+    max_value: 15
+    step: 1
+    set_action:
+      then:
+        lambda: |-
+          id(matrixdisplay).intensity(x);
+
+switch:
+  - platform: template
+    name: Screen Enable
+    turn_on_action:
+      then:
+        lambda: |-
+          id(matrixdisplay).turn_on_off(true);
+    turn_off_action:
+      then:
+        lambda: |-
+          id(matrixdisplay).turn_on_off(false);
+
+#===================== sensors =============================
+
+sensor:
+  - platform: adc
+    id: source_sensor
+    pin: A0
+    
+  - platform: resistance
+    sensor: source_sensor
+    configuration: DOWNSTREAM
+    resistor: 10kOhm
+    name: Resistance Sensor
+    
+binary_sensor:
+  - platform: gpio
+    pin: D3
+    name: "Btn 1"
+  - platform: gpio
+    pin: D2
+    name: "Btn 2"
+  - platform: gpio
+    pin: D1
+    name: "Btn 3"
+  - platform: gpio
+    pin: D0
+    name: "Btn 4"
+    
