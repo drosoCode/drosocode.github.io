@@ -3,76 +3,75 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=robots content="noodp">
-<title>Easily create you DIY IoT devices with ESP Home and Home Assistant - DrosoCode</title><meta name=Description content="This is my cool site"><meta property="og:title" content="Easily create you DIY IoT devices with ESP Home and Home Assistant">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Easily create you DIY IoT devices with ESP Home and Home Assistant - DrosoCode</title><meta name=Description content><meta property="og:title" content="Easily create you DIY IoT devices with ESP Home and Home Assistant">
 <meta property="og:description" content="When I started to tinker with home automation and electronics a few years ago, it was common to use arduino cards to create DIY connected devices. You would then communicate with a central server to send and receive information. The communications were usually done using usb, ethernet (using an ethernet shield) or radio (2.4Ghz or 433Mhz) with projects like MySensors.
 Most of the time these cards were programmed using the “Arduino language” which is quite close to C++.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thomasz.me/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-01-14T00:00:00+01:00">
-<meta property="article:modified_time" content="2022-01-14T00:00:00+01:00"><meta property="og:site_name" content="My cool site">
+<meta property="article:modified_time" content="2022-01-14T00:00:00+01:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Easily create you DIY IoT devices with ESP Home and Home Assistant">
 <meta name=twitter:description content="When I started to tinker with home automation and electronics a few years ago, it was common to use arduino cards to create DIY connected devices. You would then communicate with a central server to send and receive information. The communications were usually done using usb, ethernet (using an ethernet shield) or radio (2.4Ghz or 433Mhz) with projects like MySensors.
 Most of the time these cards were programmed using the “Arduino language” which is quite close to C++.">
-<meta name=application-name content="My cool site">
-<meta name=apple-mobile-web-app-title content="My cool site"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<meta name=application-name content="DrosoCode">
+<meta name=apple-mobile-web-app-title content="DrosoCode"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thomasz.me/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/><link rel=prev href=https://thomasz.me/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/><link rel=next href=https://thomasz.me/2022/01/14/a-comparison-of-upscaling-software-in-2021/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'>
-<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'>
-<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Easily create you DIY IoT devices with ESP Home and Home Assistant","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thomasz.me\/2022\/01\/14\/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant\/"},"genre":"posts","keywords":"docker, arduino, iot, home assistant, hardware","wordcount":1312,"url":"https:\/\/thomasz.me\/2022\/01\/14\/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant\/","datePublished":"2022-01-14T00:00:00+01:00","dateModified":"2022-01-14T00:00:00+01:00","publisher":{"@type":"Organization","name":"drosocode"},"author":{"@type":"Person","name":"droso"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thomasz.me/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/><link rel=prev href=https://thomasz.me/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/><link rel=next href=https://thomasz.me/2022/01/14/a-comparison-of-upscaling-software-in-2021/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Easily create you DIY IoT devices with ESP Home and Home Assistant","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thomasz.me\/2022\/01\/14\/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant\/"},"genre":"posts","keywords":"docker, arduino, iot, home assistant, hardware","wordcount":1312,"url":"https:\/\/thomasz.me\/2022\/01\/14\/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant\/","datePublished":"2022-01-14T00:00:00+01:00","dateModified":"2022-01-14T00:00:00+01:00","publisher":{"@type":"Organization","name":"drosocode"},"author":{"@type":"Person","name":"droso"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
 <div class=header-title>
-<a href=/ title=DrosoCode>My cool site</a>
+<a href=/ title=DrosoCode>DrosoCode</a>
 </div><div class=menu>
 <div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/projects/> Projects </a><a class=menu-item href=https://github.com/drosocode rel="noopener noreffer" target=_blank> Github </a><a class=menu-item href=/about/> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
 <input type=text placeholder="Search titles or contents..." id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
-<i class="fas fa-search fa-fw" aria-hidden=true></i>
+<i class="fas fa-search fa-fw"></i>
 </a>
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
-<i class="fas fa-times-circle fa-fw" aria-hidden=true></i>
+<i class="fas fa-times-circle fa-fw"></i>
 </a>
 <span class="search-button search-loading" id=search-loading-desktop>
-<i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
 </span>
 </span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
-<i class="fas fa-adjust fa-fw" aria-hidden=true></i>
+<i class="fas fa-adjust fa-fw"></i>
 </a>
 </div></div></div></header><header class=mobile id=header-mobile>
 <div class=header-container>
 <div class=header-wrapper>
 <div class=header-title>
-<a href=/ title=DrosoCode>My cool site</a>
+<a href=/ title=DrosoCode>DrosoCode</a>
 </div><div class=menu-toggle id=menu-toggle-mobile>
 <span></span><span></span><span></span>
 </div></div><div class=menu id=menu-mobile><div class=search-wrapper>
 <div class="search mobile" id=search-mobile>
 <input type=text placeholder="Search titles or contents..." id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
-<i class="fas fa-search fa-fw" aria-hidden=true></i>
+<i class="fas fa-search fa-fw"></i>
 </a>
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
-<i class="fas fa-times-circle fa-fw" aria-hidden=true></i>
+<i class="fas fa-times-circle fa-fw"></i>
 </a>
 <span class="search-button search-loading" id=search-loading-mobile>
-<i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
 </span>
 </div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
 Cancel
 </a>
 </div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/projects/ title>Projects</a><a class=menu-item href=https://github.com/drosocode title rel="noopener noreffer" target=_blank>Github</a><a class=menu-item href=/about/ title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
-<i class="fas fa-adjust fa-fw" aria-hidden=true></i>
+<i class="fas fa-adjust fa-fw"></i>
 </a></div></div></header><div class="search-dropdown desktop">
 <div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile">
 <div id=search-dropdown-mobile></div></div><main class=main>
 <div class=container><div class=toc id=toc-auto>
-<h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Easily create you DIY IoT devices with ESP Home and Home Assistant</h1><div class=post-meta>
-<div class=post-meta-line><span class=post-author><a href=https://github.com/drosocode title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>droso</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2022-01-14>2022-01-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;1312 words&nbsp;
-<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;7 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept=true>
+<h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Easily create you DIY IoT devices with ESP Home and Home Assistant</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=https://github.com/drosocode title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>droso</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-01-14>2022-01-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1312 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;</div></div><div class="details toc" id=toc-static kept=true>
 <div class="details-summary toc-title">
 <span>Contents</span>
-<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
 </div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
 <ul>
 <li><a href=#why-esp-home->Why ESP Home ?</a></li><li><a href=#getting-started-with-esp-home>Getting started with ESP Home</a></li><li><a href=#create-your-first-iot-device>Create your first IoT device</a></li><li><a href=#flashing-the-esp>Flashing the ESP</a></li></ul></nav></div></div><div class=content id=content><p>When I started to tinker with home automation and electronics a few years ago, it was common to use arduino cards to create DIY connected devices. You would then communicate with a central server to send and receive information. The communications were usually done using usb, ethernet (using an ethernet shield) or radio (2.4Ghz or 433Mhz) with projects like <a href=https://www.mysensors.org/ target=_blank rel="noopener noreffer">MySensors</a>.</p><p>Most of the time these cards were programmed using the “Arduino language” which is quite close to C++. I kept this habit when I switched to use the esp8266/esp32 cards but in the meantime, awesome projects were developped to facilitate the development of this kind of devices, especially dedicated ecosystems like <a href=https://espeasy.readthedocs.io/en/latest/ target=_blank rel="noopener noreffer">ESP-Easy</a>, <a href=https://tasmota.github.io/docs/ target=_blank rel="noopener noreffer">Tasmota</a> and <a href=https://esphome.io/ target=_blank rel="noopener noreffer">ESP Home</a>, which is the project that I decided to use.</p><h2 id=why-esp-home->Why ESP Home ?</h2><p>While Tasmota and ESP-Easy are “battery-included” firmwares that you flash on the esp board and then configure with a web ui, ESP Home compiles a firmware specially for your device based on a yaml configuration file that tells it which kind of technology (SPI, I2C, UART) and sensor (dht22, HC-SR04 …) you are using and on which pins they are accessible. It even allows you to manally add C++ code through “lambdas”. Another great point of ESP Home is the native integration to <a href=https://www.home-assistant.io/ target=_blank rel="noopener noreffer">Home Assistant</a> (a very powerful home automation system) so we can focus on actually creating our IoT device instead of bothering about communication with the server. So let’s get started !</p><h2 id=getting-started-with-esp-home>Getting started with ESP Home</h2><p>While this is not mandatory, I would recommend to install the ESP Home server using the docker image, which will facilitate the development of our devices with a user friendly web interface. (You can also skip this step and use directly ESP Home in <a href=https://esphome.io/guides/getting_started_command_line.html target=_blank rel="noopener noreffer">CLI</a>). So, I created the following docker-compose file to start the esphome dashboard and access it using traefik. I also decided to use ping instead of mdns to check for device status.</p><div class=highlight><div class=chroma>
@@ -113,7 +112,7 @@ Cancel
 </span></span></span><span class=line><span class=cl><span class=w>            </span>- <span class=l>traefik.http.services.lan_esphome.loadbalancer.server.port=6052</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>            </span>- <span class=l>traefik.enable=true</span><span class=w>
 </span></span></span></code></pre></td></tr></table></div></div><figure><a class=lightgallery href=/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png title=/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png data-thumbnail=/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png data-sub-html="<h2>ESP Home dashboard</h2>">
-<img class=lazyload src=/svg/loading.min.svg data-src=/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png data-srcset="/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png, /2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png 1.5x, /2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png 2x" data-sizes=auto alt=/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png width=90% height=630>
+<img class=lazyload src=/svg/loading.min.svg data-src=assets/esphome-dash.png data-srcset="/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png, assets/esphome-dash.png 1.5x, /2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png 2x" data-sizes=auto alt=/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/assets/esphome-dash.png width=90%>
 </a><figcaption class=image-caption>ESP Home dashboard</figcaption></figure><p>You now have access to your ESP Home dashboard and can create a new configuration by clicking on the “NEW DEVICE” button. You will then have to enter some information about your device and a default configuration will be generated.</p><div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
 <pre tabindex=0 class=chroma><code><span class=lnt> 1
@@ -519,19 +518,19 @@ The finished result
 <div class=post-info-line>
 <div class=post-info-mod>
 <span>Updated on 2022-01-14</span>
-</div></div><div class=post-info-line>
+</div><div class=post-info-license></div></div><div class=post-info-line>
 <div class=post-info-md></div><div class=post-info-share>
-<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://thomasz.me/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/ data-title="Easily create you DIY IoT devices with ESP Home and Home Assistant" data-hashtags="docker,arduino,iot,home assistant,hardware"><i class="fab fa-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://thomasz.me/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/ data-hashtag=docker><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://thomasz.me/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/ data-title="Easily create you DIY IoT devices with ESP Home and Home Assistant"><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://thomasz.me/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/ data-title="Easily create you DIY IoT devices with ESP Home and Home Assistant"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@6.20.0/icons/line.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://thomasz.me/2022/01/14/easily-create-you-diy-iot-devices-with-esp-home-and-home-assistant/ data-title="Easily create you DIY IoT devices with ESP Home and Home Assistant"><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a></span>
+<span></span>
 </div></div></div><div class=post-info-more>
-<section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/docker/>docker</a>,&nbsp;<a href=/tags/arduino/>arduino</a>,&nbsp;<a href=/tags/iot/>iot</a>,&nbsp;<a href=/tags/home-assistant/>home assistant</a>,&nbsp;<a href=/tags/hardware/>hardware</a></section><section>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/docker/>docker</a>,&nbsp;<a href=/tags/arduino/>arduino</a>,&nbsp;<a href=/tags/iot/>iot</a>,&nbsp;<a href=/tags/home-assistant/>home assistant</a>,&nbsp;<a href=/tags/hardware/>hardware</a></section><section>
 <span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
-</section></div><div class=post-nav><a href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/ class=prev rel=prev title="Upgrading your RGB with WLED, Aurora and OpenRGB"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Upgrading your RGB with WLED, Aurora and OpenRGB</a>
-<a href=/2022/01/14/a-comparison-of-upscaling-software-in-2021/ class=next rel=next title="A comparison of upscaling software in 2021">A comparison of upscaling software in 2021<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div id=comments><div id=disqus_thread class=comment></div><noscript>
+</section></div><div class=post-nav><a href=/2021/11/29/upgrading-your-rgb-with-wled-aurora-and-openrgb/ class=prev rel=prev title="Upgrading your RGB with WLED, Aurora and OpenRGB"><i class="fas fa-angle-left fa-fw"></i>Upgrading your RGB with WLED, Aurora and OpenRGB</a>
+<a href=/2022/01/14/a-comparison-of-upscaling-software-in-2021/ class=next rel=next title="A comparison of upscaling software in 2021">A comparison of upscaling software in 2021<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=disqus_thread class=comment></div><noscript>
 Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
 </noscript></div></article></div></main><footer class=footer>
-<div class=footer-container><div class=footer-line>© <script>document.write("2019 - "+(new Date).getFullYear())</script> DrosoCode | <a href=/privacy-policy>Privacy Policy</a> | <a href=/terms-of-use>Terms of Use</a> | <a href=/index.xml>RSS</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
-<i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+<div class=footer-container><div class=footer-line>© <script>document.write("2019 - "+(new Date).getFullYear())</script> DrosoCode | <a href=/privacy-policy>Privacy Policy</a> | <a href=/terms-of-use>Terms of Use</a> | <a href=/index.xml>RSS</a></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
 </a><a href=# id=view-comments class=fixed-button title="View Comments">
-<i class="fas fa-comment fa-fw" aria-hidden=true></i>
+<i class="fas fa-comment fa-fw"></i>
 </a>
-</div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery@2.4.0/css/lightgallery-bundle.min.css><link rel=stylesheet href=/custom.css><link rel=stylesheet href=/devicon.min.css><link rel=stylesheet href=/glide.min.css><script type=text/javascript src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.fill%2CArray.prototype.find%2CArray.from%2CIntersectionObserver%2CMath.sign%2CObject.assign%2CPromise%2CObject.entries%2Chtml5shiv%2CObject.values%2Cfetch%2CElement.prototype.after"></script><script type=text/javascript src=https://droso.disqus.com/embed.js defer></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.1/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery@2.4.0/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery@2.4.0/plugins/thumbnail/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery@2.4.0/plugins/zoom/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js></script><script type=text/javascript src=/glide.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:10},comment:{},lightgallery:!0,search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-179623617-1",{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=UA-179623617-1" async></script></body></html>
+</div><link rel=stylesheet href=/lib/lightgallery/lightgallery.min.css><link rel=stylesheet href=/custom.css><link rel=stylesheet href=/devicon.min.css><link rel=stylesheet href=/glide.min.css><script type=text/javascript src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.fill%2CArray.prototype.find%2CArray.from%2CIntersectionObserver%2CMath.sign%2CObject.assign%2CPromise%2CObject.entries%2CElement.prototype.closest%2CrequestAnimationFrame%2CCustomEvent%2Chtml5shiv%2CObject.values%2Cfetch%2CElement.prototype.after"></script><script type=text/javascript src=https://droso.disqus.com/embed.js defer></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/lightgallery/lightgallery.min.js></script><script type=text/javascript src=/lib/lightgallery/lg-thumbnail.min.js></script><script type=text/javascript src=/lib/lightgallery/lg-zoom.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/glide.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:10},comment:{},lightGallery:{actualSize:!1,exThumbImage:"data-thumbnail",hideBarsDelay:2e3,selector:".lightgallery",speed:400,thumbContHeight:80,thumbWidth:80,thumbnail:!0},search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-179623617-1",{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=UA-179623617-1" async></script></body></html>
