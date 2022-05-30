@@ -1,0 +1,164 @@
+esphome:
+  name: ambilight
+  platform: ESP32
+  board: esp32doit-devkit-v1
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: ""
+
+wifi:
+  ssid: !secret "wifi_ssid"
+  password: !secret "wifi_password"
+  
+  manual_ip:
+    static_ip: 10.20.8.2
+    gateway: 10.20.1.1
+    subnet: 255.255.0.0
+  
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Ambilight Fallback Hotspot"
+    password: ""
+
+captive_portal:
+
+status_led:
+  pin: GPIO4
+  
+############################ IR TV ON/OFF #############
+
+remote_transmitter:
+  pin: GPIO5
+  carrier_duty_percent: 10%
+
+switch:
+  - platform: template
+    name: "LG Power"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF10EF
+        nbits: 32
+  - platform: template
+    name: "LG Input"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DFD02F
+        nbits: 32
+  - platform: template
+    name: "LG Input"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DFD02F
+        nbits: 32
+  - platform: template
+    name: "LG Up"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF02FD
+        nbits: 32
+  - platform: template
+    name: "LG Down"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF827D
+        nbits: 32
+  - platform: template
+    name: "LG Right"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF609F
+        nbits: 32
+  - platform: template
+    name: "LG Left"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DFE01F
+        nbits: 32
+  - platform: template
+    name: "LG OK"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF22DD
+        nbits: 32
+  - platform: template
+    name: "LG Exit"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DFDA25
+        nbits: 32
+  - platform: template
+    name: "LG HDMI1"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF738C
+        nbits: 32
+  - platform: template
+    name: "LG HDMI2"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF33CC
+        nbits: 32
+  - platform: template
+    name: "LG HDMI3"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF9768
+        nbits: 32
+  - platform: template
+    name: "LG Settings"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DFC23D
+        nbits: 32
+  - platform: template
+    name: "LG Vol+"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF40BF
+        nbits: 32
+  - platform: template
+    name: "LG Vol-"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DFC03F
+        nbits: 32
+  - platform: template
+    name: "LG Mute"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF906F
+        nbits: 32
+  - platform: template
+    name: "LG 3D"
+    turn_on_action:
+      remote_transmitter.transmit_lg:
+        data: 0x20DF3BC4
+        nbits: 32
+        
+########################## LEDs #####################
+e131:
+  method: multicast # default: register E1.31 to Multicast group
+  
+wled:
+
+light:
+  - platform: neopixelbus
+    type: GRB
+    pin: GPIO18
+    num_leds: 146
+    name: "TV LEDs"
+    variant: WS2812
+    effects:
+      - e131:
+          universe: 1
+          channels: RGB
+      - wled:
+          port: 21324
+
+          
