@@ -1,0 +1,212 @@
+baseURL = 'https://thomasz.me'
+languageCode = 'en-us'
+title = 'DrosoCode'
+
+theme = "LoveIt"
+[params]
+    # LoveIt theme version
+    version = "0.2.X"
+    defaultTheme = "auto"
+    gitRepo = "https://github.com/drosocode"
+    dateFormat = "2006-01-02"
+
+    [params.search]
+        enable = true
+        type = "lunr"
+        # max index length of the chunked content
+        contentLength = 4000
+        # placeholder of the search bar
+        placeholder = ""
+        # LoveIt NEW | 0.2.1 max number of results length
+        maxResultLength = 10
+        # LoveIt NEW | 0.2.3 snippet length of the result
+        snippetLength = 30
+        # LoveIt NEW | 0.2.1 HTML tag name of the highlight part in results
+        highlightTag = "em"
+        # LoveIt NEW | 0.2.4 whether to use the absolute URL based on the baseURL in search index
+        absoluteURL = false
+
+    [params.footer]
+        enable = true
+        custom = '© <script>document.write("2019 - "+ new Date().getFullYear());</script> DrosoCode | <a href="/privacy-policy">Privacy Policy</a> | <a href="/terms-of-use">Terms of Use</a> | <a href="/index.xml">RSS</a>'
+        hugo = false
+        copyright = false
+        author = false
+
+    [params.list]
+        # special amount of posts in each list page
+        paginate = 20
+        # date format (month and day)
+        dateFormat = "01-02"
+        # amount of RSS pages
+        rss = 10
+
+    [params.home]
+        # LoveIt NEW | 0.2.0 amount of RSS pages
+        rss = 10
+        # Home page profile
+        [params.home.profile]
+            enable = true
+        [params.home.posts]
+            enable = true
+            # special amount of posts in each home posts page
+            paginate = 6
+
+    [params.page]
+        hiddenFromHomePage = false
+        hiddenFromSearch = false
+        fontawesome = true
+        lightgallery = true
+        linkToMarkdown = false
+        rssFullText = false
+        # LoveIt NEW | 0.2.0 Table of the contents config
+        [params.page.toc]
+            enable = true
+            # LoveIt NEW | 0.2.9 whether to keep the static table of the contents in front of the post
+            keepStatic = true
+            # whether to make the table of the contents in the sidebar automatically collapsed
+            auto = true
+        [params.page.code]
+            # whether to show the copy button of the code block
+            copy = true
+            # the maximum number of lines of displayed code by default
+            maxShownLines = 10
+        [params.page.comment]
+            enable = true
+            # Disqus comment config
+            [params.page.comment.disqus]
+                # LoveIt NEW | 0.1.1
+                enable = true
+                # Disqus shortname to use Disqus in posts
+                shortname = "droso"
+
+        # LoveIt NEW | 0.2.7 Third-party library config
+        [params.page.library]
+            [params.page.library.css]
+                devicon = "devicon.min.css"
+                glide = "glide.min.css"
+                custom = "custom.css"
+                # located in "assets/"
+                # Or
+                # someCSS = "https://cdn.example.com/some.css"
+            [params.page.library.js]
+                glide = "glide.min.js"
+                # someJavascript = "some.js"
+                # located in "assets/"
+                # Or
+                # someJavascript = "https://cdn.example.com/some.js"
+        [params.page.seo]
+            # image URL
+            images = []
+            # Publisher info
+            [params.page.seo.publisher]
+                name = "drosocode"
+                logoUrl = ""
+        
+    [params.analytics]
+        enable = true
+        # Google Analytics
+        [params.analytics.google]
+            id = "UA-179623617-1"
+            anonymizeIP = true
+
+    [params.compatibility]
+        # whether to use Polyfill.io to be compatible with older browsers
+        polyfill = true
+        # whether to use object-fit-images to be compatible with older browsers
+        objectFit = false
+
+# Markup related config in Hugo
+[markup]
+    # Syntax Highlighting
+    [markup.highlight]
+        codeFences = true
+        guessSyntax = true
+        lineNos = true
+        lineNumbersInTable = true
+        # false is a necessary configuration
+        # (https://github.com/dillonzq/LoveIt/issues/158)
+        noClasses = false
+    # Goldmark is from Hugo 0.60 the default library used for Markdown
+    
+    [markup.goldmark]
+        [markup.goldmark.extensions]
+            definitionList = true
+            footnote = true
+            linkify = true
+            strikethrough = true
+            table = true
+            taskList = true
+            typographer = true
+        [markup.goldmark.renderer]
+            # whether to use HTML tags directly in the document
+            unsafe = true
+    # Table Of Contents settings
+    [markup.tableOfContents]
+        startLevel = 2
+        endLevel = 6
+
+# Author config
+[author]
+    name = "droso"
+    email = "contact@thomasz.me"
+    link = "https://github.com/drosocode"
+
+# Sitemap config
+[sitemap]
+    changefreq = "weekly"
+    filename = "sitemap.xml"
+    priority = 0.5
+
+# Permalinks config
+[Permalinks]
+    posts = ":year/:month/:day/:filename"
+    #posts = ":filename"
+
+[mediaTypes]
+    [mediaTypes."text/plain"]
+        suffixes = ["md"]
+
+[outputs]
+    home = ["HTML", "RSS", "JSON"]
+    page = ["HTML"]
+    section = ["HTML", "RSS"]
+    taxonomy = ["HTML", "RSS"]
+
+
+[menu]
+    [[menu.main]]
+        identifier = "posts"
+        # you can add extra information before the name (HTML format is supported), such as icons
+        pre = ""
+        # you can add extra information after the name (HTML format is supported), such as icons
+        post = ""
+        name = "Posts"
+        url = "/posts/"
+        # title will be shown when you hover on this menu link
+        title = ""
+        weight = 1
+    [[menu.main]]
+        identifier = "projects"
+        pre = ""
+        post = ""
+        name = "Projects"
+        url = "/projects/"
+        title = ""
+        weight = 2
+    [[menu.main]]
+        identifier = "github"
+        pre = ""
+        post = ""
+        name = "Github"
+        url = "https://github.com/drosocode"
+        title = ""
+        weight = 3
+    [[menu.main]]
+        identifier = "about"
+        pre = ""
+        post = ""
+        name = "About"
+        url = "/about/"
+        title = ""
+        weight = 4

@@ -1,0 +1,24 @@
+{{ $id := .Get "id" }}
+{{ $style := .Get "style" | safeCSS }}
+{{ $slides := ( $.Page.Resources.Match $id ) }}
+
+<div class="glide">
+  <div data-glide-el="track" class="glide__track">
+    <ul class="glide__slides">
+      {{ range $key, $value := $slides }}
+        <li class="glide__slide"><img src="{{ .RelPermalink }}" style="{{ $style }}"/></li>
+      {{ end }}
+    </ul>
+  </div>
+  
+  <div class="glide__bullets" data-glide-el="controls[nav]">
+    {{ range $key, $value := $slides }}
+    <button class="glide__bullet" data-glide-dir="={{ $key }}"></button>
+    {{ end }}
+  </div>
+
+  <div class="glide__arrows" data-glide-el="controls">
+    <button class="glide__arrow glide__arrow--left" data-glide-dir="<">&lt;</button>
+    <button class="glide__arrow glide__arrow--right" data-glide-dir=">">&gt;</button>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+{{ $id := .Get "id" }}
+{{ $images := ( $.Page.Resources.Match $id ) }}
+
+<div class="galleryContainer">
+    {{ range $key, $value := $images }}
+    <figure class="galleryItem">
+        <a class="lightgallery" href="{{ .RelPermalink }}">
+            <img src="{{ .RelPermalink }}">
+        </a>
+        <figcaption class="image-caption">
+            {{ .Title }}
+        </figcaption>
+    </figure>
+    {{ end }}
+</div>

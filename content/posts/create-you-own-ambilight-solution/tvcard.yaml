@@ -1,0 +1,125 @@
+type: custom:tv-card
+entity: media_player.tv
+title: TV
+power_row:
+  - lg_power
+  - lg_settings
+  - lg_3d
+  - lg_exit
+channel_row:
+  - lg_left
+  - lg_up
+  - lg_ok
+  - lg_down
+  - lg_right
+apps_row:
+  - lg_vdw
+  - lg_mute
+  - lg_vup
+nav_row:
+  - lg_3d
+source_row:
+  - lg_input
+  - lg_h1
+  - lg_h2
+  - lg_h3
+media_control_row:
+  - kodi_play
+  - kodi_pause
+  - kodi_stop
+custom_keys:
+  lg_power:
+    icon: mdi:power
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_power
+  lg_mute:
+    icon: mdi:volume-mute
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_mute
+  lg_vup:
+    icon: mdi:volume-high
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_vol
+  lg_vdw:
+    icon: mdi:volume-medium
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_vol_2
+  lg_h1:
+    icon: mdi:video-switch
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_hdmi1
+  lg_h2:
+    icon: mdi:android
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_hdmi2
+  lg_h3:
+    icon: mdi:hdmi-port
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_hdmi3
+  lg_3d:
+    icon: mdi:video-3d
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_3d
+  lg_settings:
+    icon: mdi:cog
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_settings
+  lg_input:
+    icon: mdi:video-input-component
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_input
+  lg_exit:
+    icon: mdi:exit-to-app
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_exit
+  lg_up:
+    icon: mdi:arrow-up
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_up
+  lg_down:
+    icon: mdi:arrow-down
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_down
+  lg_left:
+    icon: mdi:arrow-left
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_left
+  lg_right:
+    icon: mdi:arrow-right
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_right
+  lg_ok:
+    icon: mdi:checkbox-blank-circle-outline
+    service: switch.turn_on
+    service_data:
+      entity_id: switch.lg_ok
+  kodi_play:
+    icon: mdi:play
+    service: media_player.media_play
+    service_data:
+      entity_id: media_player.kodi
+  kodi_pause:
+    icon: mdi:pause
+    service: media_player.media_pause
+    service_data:
+      entity_id: media_player.kodi
+  kodi_stop:
+    icon: mdi:stop
+    service: media_player.media_stop
+    service_data:
+      entity_id: media_player.kodi

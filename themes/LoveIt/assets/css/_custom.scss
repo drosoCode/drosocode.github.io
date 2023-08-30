@@ -1,0 +1,57 @@
+// ==============================
+// Custom style
+// 自定义样式
+// ==============================
+.galleryContainer {
+    display: flex;
+    flex-grow: 1;
+}
+
+.galleryItem {
+    flex: 1;
+}
+
+.row {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.row > * {
+    flex: 1;
+    max-width: 50%;
+}
+
+.col {
+    flex: 1;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.col > .glide, .col > .lightgallery {
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 600px) { 
+    .galleryContainer {
+        flex-direction: column;
+    }
+    .row {
+        flex-direction: column;
+        align-content: flex-start;
+    }
+    .row > * {
+        margin: 10px auto;
+        max-width: 90%;
+        margin-left: 20px;
+    }
+}
+
+.lightgallery > img {
+    display: block;
+    margin: 0 auto;
+}
