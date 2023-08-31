@@ -28,7 +28,7 @@ theme = "LoveIt"
 
     [params.footer]
         enable = true
-        custom = '© <script>document.write("2019 - "+ new Date().getFullYear());</script> DrosoCode | <a href="/privacy-policy">Privacy Policy</a> | <a href="/terms-of-use">Terms of Use</a> | <a href="/index.xml">RSS</a>'
+        custom = '© <script>document.write("2019 - "+ new Date().getFullYear());</script> &nbsp; DrosoCode | <a href="/privacy-policy">Privacy Policy</a> | <a href="/terms-of-use">Terms of Use</a> | <a href="/index.xml">RSS</a>'
         hugo = false
         copyright = false
         author = false
