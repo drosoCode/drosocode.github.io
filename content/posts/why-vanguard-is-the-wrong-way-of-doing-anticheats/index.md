@@ -27,8 +27,7 @@ With cheats getting more and more complex, this is a game of cat and mouse with 
 
 However it is important to keep in mind that you are installing another piece of completely closed source software in the most restricted area of your system (well we could say the same of using a closed source system such as Windows, but that's for another day ...).
 
-Writing some software to run it in [kernel mode](https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/user-mode-and-kernel-mode#kernel-mode) isn't an trivial thing: any error could compromise the security or the stability of the system. And you sould be wary of what you are running in this mode as we've already seen in the past 
-
+Writing some software to run it in [kernel mode](https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/user-mode-and-kernel-mode#kernel-mode) isn't an trivial thing: any error could compromise the security or the stability of the system. And you sould be wary of what you are running in this mode as we've already seen a lot of [vulnerable drivers](https://www.loldrivers.io/), Microsoft even maintains a list of [drivers to block](https://learn.microsoft.com/en-us/windows/security/application-security/application-control/windows-defender-application-control/design/microsoft-recommended-driver-block-rules#vulnerable-driver-blocklist-xml).
 
 ## Why it isn't effective
 
@@ -42,9 +41,21 @@ why vanguard and kernel anti cheats are too invasive
 why they are not 100% secure
 -> demo of aimbot for vanguard
 alternative to these anticheats (server-side analysis, community moderation (csgo), ranking (trust factor))
+https://www.reddit.com/r/ValorantTechSupport/search/?q=vanguard&restrict_sr=1&sort=new
 https://playvalorant.com/en-gb/news/dev/valorant-anti-cheat-what-why-and-how/
 https://www.frandroid.com/marques/microsoft/927715_halo-infinite-anti-triche-pc-kernel-noyau
 https://www.reddit.com/r/linux_gaming/comments/t7g87g/how_does_easy_anti_cheat_work_with_proton_on_linux/
 https://en.wikipedia.org/wiki/Cheating_in_online_games
 https://www.leagueoflegends.com/en-us/news/dev/dev-null-anti-cheat-kernel-driver/
 https://www.leagueoflegends.com/en-us/news/dev/dev-anti-cheat-in-lol-more/
+
+https://www.reddit.com/r/programming/comments/l32j5m/you_cant_play_the_multiplayer_shooter_game/
+https://stackoverflow.com/questions/75051390/android-studio-emulator-not-working-with-vanguard
+https://github.com/Rem0o/FanControl.Releases/issues/1694
+https://github.com/ixjf/MSIRGB/issues/115#issuecomment-647804343
+https://www.reddit.com/r/VALORANT/comments/gek5rm/vanguards_needs_to_ask_permission_to_disable_a/
+https://www.riotgames.com/en/news/a-message-about-vanguard-from-our-security-privacy-teams
+
+https://www.youtube.com/watch?v=hI7V60r7Jco
+https://www.youtube.com/watch?v=SnRgW54EWwA
+https://www.youtube.com/watch?v=ObhK8lUfIlc
