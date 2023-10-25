@@ -86,6 +86,11 @@ You can see at the bottom of the screen that we get the same error: "Cert reques
 
 We are now able to use the connect command to connect multiple PCs to the same session, we can now do a simple port forwarding to the pc hosting the game and try this shiny new beta in multiplayer.
 
+
+{{< admonition type=warning title="Warning" open=true >}}
+Do not use a patch like this when connecting to official VAC secured servers as the modification of game files is prohibited and you could get banned.
+{{< /admonition >}}
+
 ## Conclusion
 
 What was initially a simple curiosity to try-out the new beta quickly turned into quite a bit of research, but it was really fun project to do and in the end, we finally could test this game. 
