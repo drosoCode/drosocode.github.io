@@ -17,6 +17,8 @@ Hello, I am Thomas, a student currently in the last year of my master degree in 
 <a href="/index.xml" target="_blank"><i class="fas fa-rss-square" style="color:orange"></i>&nbsp;RSS</a>
 &nbsp;
 <a href="mailto:contact@thomasz.me" target="_blank"><i class="fas fa-envelope"></i>&nbsp;Mail</a>
+&nbsp;
+<a href="/cv.pdf" target="_blank"><i class="fas fa-id-card"></i>&nbsp;CV</a>
 <br/>
 
 ## Skills
@@ -26,21 +28,21 @@ Hello, I am Thomas, a student currently in the last year of my master degree in 
 <div class="row">
 <div class="column">
 
-- Python <i class="devicon-python-plain colored"></i>
-- PHP <i class="devicon-php-plain colored"></i>
 - Golang <i class="devicon-go-original-wordmark colored"></i>
-- C++ <i class="devicon-cplusplus-plain colored"></i>
+- Python <i class="devicon-python-plain colored"></i>
+- Java / Kotlin <i class="devicon-java-plain colored"></i> <i class="devicon-kotlin-plain colored"></i>
+- C <i class="devicon-c-plain colored"></i>
+- PHP <i class="devicon-php-plain colored"></i>
 - C# <i class="devicon-csharp-plain colored"></i>
-- Java <i class="devicon-java-plain colored"></i>
 </div>  
 <div class="column">
 
-- SQL (MariaDB / Oracle/ Postgres) <i class="devicon-mysql-plain colored"></i> <i class="devicon-oracle-plain colored"></i> <i class="devicon-postgresql-plain colored"></i>
+- Databases (MariaDB / Postgres / Elastic) <i class="devicon-mysql-plain colored"></i> <i class="devicon-postgresql-plain colored"></i>
 - HTML5 / CSS <i class="devicon-html5-plain colored"></i> <i class="devicon-css3-plain colored"></i>
-- Javascript (web and nodeJS) <i class="devicon-javascript-plain colored"></i> <i class="devicon-nodejs-plain colored"></i> <i class="devicon-electron-original colored"></i>
-- VueJS <i class="devicon-vuejs-plain colored"></i>
-- Quasar, Bootstrap <i class="devicon-bootstrap-plain colored"></i>
+- Javascript (web & node) <i class="devicon-javascript-plain colored"></i> <i class="devicon-nodejs-plain colored"></i> <i class="devicon-electron-original colored"></i>
+- Vue, React, Svelte <i class="devicon-vuejs-plain colored"></i> <i class="devicon-react-plain colored"></i> <i class="devicon-svelte-plain colored"></i>
 - REST API, Web Sockets <i class="fas fa-plug" style="color: #1696db;"></i>
+- Android (Kotlin) <i class="devicon-android-plain colored"></i>
 </div>
 </div>
 
@@ -50,10 +52,12 @@ Hello, I am Thomas, a student currently in the last year of my master degree in 
 
 - Networking <i class="fas fa-network-wired" style="color: #1696db;"></i>
 - Docker <i class="devicon-docker-plain colored"></i>
-- Linux administration <i class="devicon-linux-plain colored"></i>
+- Kubernetes <i class="devicon-kubernetes-plain colored"></i>
+- Infra as Code <i class="devicon-terraform-plain colored"></i> <i class="devicon-packer-original colored"></i> <i class="devicon-ansible-plain colored"></i>
 </div>  
 <div class="column">
 
+- Linux administration <i class="devicon-linux-plain colored"></i>
 - CI/CD <i class="fas fa-retweet" style="color: #1696db;"></i>
 - Git <i class="devicon-git-plain colored"></i>
 - Office Tools (PIX Certification n° 68412) <i class="fas fa-file-word" style="color: #1696db;"></i>
@@ -66,7 +70,7 @@ Hello, I am Thomas, a student currently in the last year of my master degree in 
 
 Languages:
  - French (native, Voltaire Certification n° 6YHRM7) 🇫🇷
- - English (B2 level) 🇺🇸
+ - English (B2 level) 🇬🇧
 </div>  
 <div class="column">
 
@@ -82,11 +86,11 @@ Other:
 
 [Summer 2022: Spacefoot](https://spacefoot.com/)
 
-2 months fixed-term contract to replace a search engine by a custom implementation based on elastisearch (Backend and importer in Python/FastAPI/ElasticSearch/SQL, frontend in HTML/CSS/JavaScript/Svelte)
+2 months fixed-term contract to replace a search engine by a custom implementation based on elastisearch (Backend and importer in Python/FastAPI/ElasticSearch/SQL, frontend in HTML/CSS/JavaScript/Svelte), deployed to a linux server using ansible.
 
 [Spring 2021: Elcimaï](https://www.elcimai.com/technologies-et-services-numeriques/)
 
-3 months internship to create a continuous integration system and adapt the existing projects (.NET Core, .NET Framework, Ionic/JS/angular)
+3 months internship to create a continuous integration system, adapt the existing projects (.NET Core, .NET Framework, Ionic/JS/angular) and add code quality (sonar) and monitoring tools. Developed using docker and deployed on Windows Server.
 
 ## Eduction
 
