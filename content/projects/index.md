@@ -187,6 +187,21 @@ resources:
   name: prjres
 - src: assets/prjres_7.png
   name: prjres
+
+- src: assets/borongo.png
+  name: borongo
+- src: assets/borongo_stations.png
+  name: borongo
+- src: assets/borongo_import.png
+  name: borongo
+- src: assets/borongo_doc.png
+  name: borongo
+- src: assets/borongo_graph.png
+  name: borongo
+- src: assets/borongo_issues.png
+  name: borongo
+- src: assets/borongo_ci.png
+  name: borongo
 ---
 
 ## Open Source Contributions
@@ -380,17 +395,17 @@ Python wrapper for Ile de france mobilités API.
 
 <div class="row">
 <div class="col">
-{{< carousel id="prjs1" >}}
-Static Website
+{{< carousel id="borongo" >}}
+Boron GO - 2023
 
-Static website built with bootstrap for our first semester project. Made with {{< link "https://clementd.fr" "Clement D" >}}.
+Navigation calculator based on Paris metro data, built in a group of 5 using Java, Spring, React, Material-UI, Gitlab CI. Works as a webapp or as a desktop program.
 </div>
 
 <div class="col">
-{{< carousel id="prjs2" style="width: 50%;" >}}
-Solitaire
+{{< carousel id="prjres" >}}
+Network Analyzer - 2022
 
-A CLI solitaire game written in php, in one week for our first project of second semester. Made with {{< link "https://clementd.fr" "Clement D" >}}.
+A multiplatform network trace analyzer supporting Ethernet, IPv4, UDP, DHCP and DNS. Written in node js and typescript and available as a web app or desktop app using electron.
 </div>
 </div>
 
@@ -398,17 +413,17 @@ A CLI solitaire game written in php, in one week for our first project of second
 
 <div class="row">
 <div class="col">
-{{< carousel id="prophunt" >}}
-Multiplayer Prophunt
+{{< carousel id="pizzarun" >}}
+Delivery App - 2021
 
-A multiplayer game built with A-Frame and nodeJS, in one week with a group of 2 people (second semester project). Made with {{< link "https://clementd.fr" "Clement D" >}}.
+A delivery app like Uber Eats with order and delivery management using custom algorithms. Built with React-Native, PHP and MariaDB. This is our current project for the third semester.
 </div>
 
 <div class="col">
-{{< carousel id="pizzarun" >}}
-Delivery App
+{{< carousel id="prophunt" >}}
+Multiplayer Prophunt - 2020
 
-A delivery app like Uber Eats with order and delivery management using custom algorithms. Built with React-Native, PHP and MariaDB. This is our current project for the third semester.
+A multiplayer game built with A-Frame and nodeJS, in one week with a group of 2 people (second semester project). Made with {{< link "https://github.com/clementd64" "Clement D" >}}.
 </div>
 </div>
 
@@ -417,15 +432,26 @@ A delivery app like Uber Eats with order and delivery management using custom al
 <div class="row">
 <div class="col">
 {{< carousel id="balkanimes" >}}
-{{< link "https://github.com/balkanimes" "Balkanimes" >}}
+{{< link "https://github.com/balkanimes" "Balkanimes - 2021" >}}
 
-Extensible automated downloader, written in nodeJS, VueJS and GraphQL, for our 4th semester project. Made with {{< link "https://clementd.fr" "Clement D" >}}.
+Extensible automated downloader, written in nodeJS, VueJS and GraphQL, for our 4th semester project. Made with {{< link "https://github.com/clementd64" "Clement D" >}}.
 </div>
 
 <div class="col">
-{{< carousel id="prjres" >}}
-Network Analyzer
+{{< carousel id="prjs2" style="width: 50%;" >}}
+Solitaire - 2019
 
-A multiplatform network trace analyzer supporting Ethernet, IPv4, UDP, DHCP and DNS. Written in node js and typescript and available as a web app or desktop app using electron.
+A CLI solitaire game written in php, in one week for our first project of second semester. Made with {{< link "https://github.com/clementd64" "Clement D" >}}.
 </div>
+</div>
+
+
+<div class="row">
+<div class="col">
+{{< carousel id="prjs1" >}}
+Static Website - 2019
+
+Static website built with bootstrap for our first semester project. Made with {{< link "https://github.com/clementd64" "Clement D" >}}.
+</div>
+
 </div>
