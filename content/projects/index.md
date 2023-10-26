@@ -20,17 +20,6 @@ resources:
 - src: assets/docker_ui_2.png
   name: dockergui
 
-- src: assets/hass_i_1.png
-  name: hass_i
-- src: assets/hass_i_2.png
-  name: hass_i
-- src: assets/hass_i_3.png
-  name: hass_i
-- src: assets/hass_i_4.png
-  name: hass_i
-- src: assets/hass_i_5.png
-  name: hass_i
-
 - src: assets/s1.png
   name: streamdeck
 - src: assets/s2.png
@@ -202,6 +191,83 @@ resources:
   name: borongo
 - src: assets/borongo_ci.png
   name: borongo
+
+- src: assets/dotfiles_1.png
+  name: dotfiles
+- src: assets/dotfiles_2.png
+  name: dotfiles
+
+- src: assets/infra.png
+  name: infra
+- src: assets/infra_2.png
+  name: infra
+- src: assets/infra_3.jpg
+  name: infra
+- src: assets/infra_4.png
+  name: infra
+
+- src: assets/bm_1.png
+  name: bookmarks
+- src: assets/bm_2.png
+  name: bookmarks
+- src: assets/bm_3.png
+  name: bookmarks
+- src: assets/bm_4.png
+  name: bookmarks
+
+- src: assets/readerlib_1.jpg
+  name: readerlib
+- src: assets/readerlib_2.png
+  name: readerlib
+
+- src: assets/edf_1.png
+  name: edf
+- src: assets/edf_2.png
+  name: edf
+- src: assets/edf_3.png
+  name: edf
+
+- src: assets/df_1.png
+  name: dumpflow
+- src: assets/df_2.png
+  name: dumpflow
+- src: assets/df_3.png
+  name: dumpflow
+- src: assets/df_4.png
+  name: dumpflow
+- src: assets/df_5.png
+  name: dumpflow
+- src: assets/df_6.png
+  name: dumpflow
+- src: assets/df_7.png
+  name: dumpflow
+
+
+- src: assets/mxwh_1.png
+  name: matrixwebhook
+- src: assets/mxwh_2.png
+  name: matrixwebhook
+
+- src: assets/brpc_1.png
+  name: bluerpc
+- src: assets/brpc_2.png
+  name: bluerpc
+- src: assets/brpc_3.png
+  name: bluerpc
+- src: assets/brpc_4.png
+  name: bluerpc
+- src: assets/brpc_5.png
+  name: bluerpc
+- src: assets/brpc_6.png
+  name: bluerpc
+- src: assets/brpc_7.png
+  name: bluerpc
+- src: assets/brpc_8.png
+  name: bluerpc
+- src: assets/brpc_9.png
+  name: bluerpc
+- src: assets/brpc_10.png
+  name: bluerpc
 ---
 
 ## Open Source Contributions
@@ -214,180 +280,211 @@ resources:
 
 ## Personnal Projects
 
+### General
+
+<div class="row">
+<div class="col">
+{{< carousel id="infra" >}}
+{{< link "https://github.com/drosocode/kube-infra-public" "Kubernetes Infrastructure" >}}
+Local infrastructure based on Kubernetes, Talos, Proxmox with storage server on debian. The full infrastructure can be deployed using tools like Packer, Terraform, Ansible and FluxCD. 
+</div>
+
+<div class="col">
+{{< carousel id="dotfiles" >}}
+{{< link "https://github.com/drosocode/dotfiles_i3" "Arch Linux Dotfiles" >}}
+
+Configuration files for my Surface laptop running on Arch/Xorg/i3.
+</div>
+</div>
+<br/>
+
 <div class="row">
 <div class="col">
 {{< carousel id="zogwine" >}}
 {{< link "https://github.com/drosocode/zogwine/tree/go_impl" "Zogwine Media Center" >}}
 This project is a media center with a golang backend and a VueJS / Quasar frontend (PWA). This is my main project.
 </div>
+</div>
 
+<br/>
+
+
+### Home Automation
+
+<div class="row">
 <div class="col">
-{{< carousel id="dockergui" >}}
-{{< link "https://github.com/drosocode/dockergui" "Simple Docker UI" >}}
+{{< carousel id="bluerpc" >}}
+{{< link "https://github.com/BlueRPC" "BlueRPC (2023)" >}}
 
-Simple web ui in python and bootstrap to view container logs and status and start/stop them. Configuration is done with a simple json file.
+Bluetooth proxy system based on gRPC. Available for Windows/Linux/MacOS/Android and compatible with Home-Assistant.
+</div>
+<div class="col">
+{{< carousel id="atvremote" >}}
+{{< link "https://github.com/drosoCode/atvremote" "ATV Remote (2022)" >}}
+
+Android TV / Google TV remote protocol implementation in golang.
 </div>
 </div>
+
 
 <br/>
 
 <div class="row">
 <div class="col">
-{{< image src="assets/amazfit_1.png" >}}
-Amazfit Viewer
+{{< carousel id="idfmapi" >}}
+{{< link "https://github.com/droso-hass/idfm-api" "IDFM-API (2022)" >}}
 
-A single php page to upload results from my phone to a database and visualize the data of my smart watch.
+Python wrapper for Ile de france mobilités API.
 </div>
-
 <div class="col">
-{{< image src="assets/gamelauncher.png" >}}
-{{< link "https://github.com/drosocode/dlauncher" "DLauncher" >}}
+{{< carousel id="edf" >}}
+{{< link "https://github.com/droso-hass/edf-api" "EDF-API (2022)" >}}
 
-A simple game launcher with time tracking and save syncing between devices. Written in nodeJS (electron) and bootstrap.
+Python wrapper for a reverse-engineered edf api (based on the android mobile app)
 </div>
 </div>
 
-<br/>
-
-<div class="row">
-<div class="col">
-{{< image src="assets/rgb_1.png" >}}
-{{< link "https://github.com/drosocode/ledcontrol" "LedControl" >}}
-
-A C# application to control and apply different effects to my computer RGB devices (ram, fans and ledstrips) with an arduino.
-</div>
-
-<div class="col">
-{{< image src="assets/offculus.png" width="60%" >}}
-{{< link "https://github.com/drosocode/offculus" "Offculus" >}}
-
-A collection of batch scripts to allow offline installation of the oculus software.
-</div>
-</div>
-
-<br/>
-
-<div class="row">
-<div class="col">
-{{< image src="assets/heimdallite.png" >}}
-{{< link "https://github.com/drosocode/heimdallite" "Heimdallite" >}}
-
-A lighter version of heimdall, this is a single php page configured with a json file, instead of a whole php framework and database.
-</div>
-
-<div class="col">
-{{< image src="assets/downloader.bmp" width="60%" >}}
-{{< link "https://github.com/drosocode/downloader2" "Downloader2" >}}
-
-Automated scraping of webpages with Puppeteer to retreive download links. Dockerized with a xvfb display and a noVNC server to handle captchas.
-</div>
-</div>
-
-<br/>
-
-<div class="row">
-<div class="col">
-{{< image src="assets/bscm.png" >}}
-{{< link "https://github.com/drosocode/BSCM" "BSCM" >}}
-
-Beat Saber Co-op Mod, written in C# to allow 2 player to play together, each one holding one saber.
-</div>
-
-<div class="col">
-{{< carousel id="hass_i" style="max-width: 70%; margin-left: 15%;" >}}
-{{< link "https://github.com/drosoCode/HASS_Custom_Components" "Home Assistant Integrations" >}}
-
-A lot of custom components for home assistant, written in python, from reverse-engineered api and softwares.
-</div>
-</div>
-
-<br/>
-
-<div class="row">
-<div class="col">
-{{< carousel id="streamdeck" >}}
-Streamdeck Plugins
-
-{{< link "https://github.com/drosoCode/streamdeck-osdsidekick" "OSD Sidekick" >}} plugin (based on gigabyte's software reverse engineering) and {{< link "https://github.com/drosoCode/streamdeck-droneci" "Drone CI" >}} plugin (to check build status and deploy to specific targets)
-</div>
-
-<div class="col">
-{{< carousel id="ipblocker" >}}
-{{< link "https://github.com/drosoCode/IPBlocker" "IP Blocker" >}}
-
-Software to block IPs on OPNsense firewall based on a gelf stream from Graylog. Written in python.
-</div>
-</div>
-
-<br/>
-
-<div class="row">
-<div class="col">
-{{< carousel id="marksnotif" >}}
-{{< link "https://github.com/drosoCode/marksnotifier" "Marks Notifier" >}}
-
-Discord bot to autmoatically send notifications when a new mark is added. Written in nodeJS with puppeteer to retreive data from an internal network using Jupyter and a python notebook.
-</div>
-
-<div class="col">
-{{< carousel id="bstreamer" >}}
-{{< link "https://github.com/drosoCode/docker-bstreamer" "docker-bstreamer" >}}
-
-Docker image used to stream a browser's video/audio over RTSP. Also includes a noVNC server and a proxy for puppeteer.
-</div>
-</div>
-
-<br/>
+### Tools
 
 <div class="row">
 <div class="col">
 {{< carousel id="dbackup" >}}
-{{< link "https://github.com/drosoCode/dbackup" "DBackup" >}}
+{{< link "https://github.com/drosoCode/dbackup" "DBackup (2021)" >}}
 
 A database backup solution. Supports MySQL/MariaDB, Postgres, Influx DB (v1) and MongoDB. Compresses the backups into a single zip on a regular basis (cron). Written in python and running in docker.
 </div>
 
 <div class="col">
 {{< carousel id="netbackup" >}}
-{{< link "https://github.com/drosoCode/netbackup" "NetBackup" >}}
+{{< link "https://github.com/drosoCode/netbackup" "NetBackup (2021)" >}}
 
 A network configuration backup solution. Supports SwitchOS, DLink Switches, OPNsens and OpenWRT. Saves the backups on a git repo on a regular basis (cron). Written in python and running in docker.
 </div>
 </div>
-
 <br/>
+
+<div class="row">
+<div class="col">
+{{< carousel id="ipblocker" >}}
+{{< link "https://github.com/drosoCode/IPBlocker" "IP Blocker (2021)" >}}
+
+Software to block IPs on OPNsense firewall based on a gelf stream from Graylog. Written in python.
+</div>
+<div class="col">
+{{< carousel id="bstreamer" >}}
+{{< link "https://github.com/drosoCode/docker-bstreamer" "docker-bstreamer (2020)" >}}
+
+Docker image used to stream a browser's video/audio over RTSP. Also includes a noVNC server and a proxy for puppeteer.
+</div>
+</div>
+
+### Deprecated
+
+
+<div class="row">
+<div class="col">
+{{< carousel id="marksnotif" >}}
+{{< link "https://github.com/drosoCode/marksnotifier" "Marks Notifier (2021)" >}}
+
+Discord bot to automatically send notifications when a new mark is added. Written in nodeJS with puppeteer to retreive data from an internal network using Jupyter and a python notebook.
+</div>
+<div class="col">
+{{< image src="assets/downloader.bmp" width="60%" >}}
+{{< link "https://github.com/drosocode/downloader2" "Downloader2 (2020)" >}}
+
+Automated scraping of webpages with Puppeteer to retreive download links. Dockerized with a xvfb display and a noVNC server to handle captchas.
+</div>
+</div>
+<br/>
+
+<div class="row">
+<div class="col">
+{{< image src="assets/bscm.png" >}}
+{{< link "https://github.com/drosocode/BSCM" "BSCM (2020)" >}}
+
+Beat Saber Co-op Mod, written in C# to allow 2 player to play together, each one holding one saber.
+</div>
+<div class="col">
+{{< image src="assets/offculus.png" width="60%" >}}
+{{< link "https://github.com/drosocode/offculus" "Offculus (2020)" >}}
+
+A collection of batch scripts to allow offline installation of the oculus software.
+</div>
+</div>
+<br/>
+
+
+<div class="row">
+<div class="col">
+{{< image src="assets/sncf_1.png" >}}
+SNCF Bot (2022)
+
+SNCF Auto Reservation bot using Appium to manipulate the android app and automatically book tickets on a regular basis.
+</div>
+<div class="col">
+{{< carousel id="noupdla" >}}
+{{< link "https://github.com/drosoCode/noupdatelauncher" "NoUpdateLauncher (2021)" >}}
+
+A simple program to prevent some steam games to update when launching them. Based on a {{< link "https://steamcommunity.com/sharedfiles/filedetails/?id=1985923465" "manifest hack" >}} and using python, {{< link "https://github.com/ValvePython/vdf" "VDF" >}} and PySimpleGUI.
+</div>
+</div>
+<br/>
+
 
 <div class="row">
 <div class="col">
 {{< carousel id="synoex" >}}
-{{< link "https://github.com/drosoCode/synologyexporter" "Synology Exporter" >}}
+{{< link "https://github.com/drosoCode/synologyexporter" "Synology Exporter (2021)" >}}
 
 A logs and metrics exporter for old synology NAS (DSM 3.1). Exports logs to Graylog using GELF and metrics to InfluxDB, using some endpoint of the DSM web ui.
 </div>
-
 <div class="col">
-{{< carousel id="noupdla" >}}
-{{< link "https://github.com/drosoCode/noupdatelauncher" "NoUpdateLauncher" >}}
+{{< carousel id="dockergui" >}}
+{{< link "https://github.com/drosocode/dockergui" "Simple Docker UI (2020)" >}}
 
-A simple program to prevent some steam games to update when launching them. Based on a {{< link "https://steamcommunity.com/sharedfiles/filedetails/?id=1985923465" "webmanifest hack" >}} and using python, {{< link "https://github.com/ValvePython/vdf" "VDF" >}} and PySimpleGUI.
+Simple web ui in python and bootstrap to view container logs and status and start/stop them. Configuration is done with a simple json file.
 </div>
 </div>
-
 <br/>
 
 <div class="row">
 <div class="col">
-{{< carousel id="atvremote" >}}
-{{< link "https://github.com/drosoCode/atvremote" "ATV Remote" >}}
+{{< carousel id="streamdeck" >}}
+Streamdeck Plugins (2020)
 
-Android TV / Google TV remote protocol implementation in golang.
+{{< link "https://github.com/drosoCode/streamdeck-osdsidekick" "OSD Sidekick" >}} plugin (based on gigabyte's software reverse engineering) and {{< link "https://github.com/drosoCode/streamdeck-droneci" "Drone CI" >}} plugin (to check build status and deploy to specific targets)
 </div>
-
 <div class="col">
-{{< carousel id="idfmapi" >}}
-{{< link "https://github.com/droso-hass/idfm-api" "IDFM-API" >}}
+{{< image src="assets/rgb_1.png" >}}
+{{< link "https://github.com/drosocode/ledcontrol" "LedControl (2018)" >}}
 
-Python wrapper for Ile de france mobilités API.
+A C# application to control and apply different effects to my computer RGB devices (ram, fans and ledstrips) with an arduino.
+</div>
+</div>
+<br/>
+
+<div class="row">
+<div class="col">
+{{< image src="assets/heimdallite.png" >}}
+{{< link "https://github.com/drosocode/heimdallite" "Heimdallite (2020)" >}}
+
+A lighter version of heimdall, this is a single php page configured with a json file, instead of a whole php framework and database.
+</div>
+<div class="col">
+{{< image src="assets/amazfit_1.png" >}}
+Amazfit Viewer (2020)
+
+A single php page to upload results from my phone to a database and visualize the data of my smart watch.
+</div>
+</div>
+<br/>
+
+<div class="row">
+<div class="col">
+{{< image src="assets/gamelauncher.png" >}}
+{{< link "https://github.com/drosocode/dlauncher" "DLauncher (2019)" >}} 
+
+A simple game launcher with time tracking and save syncing between devices. Written in nodeJS (electron) and bootstrap.
 </div>
 </div>
 
@@ -396,14 +493,14 @@ Python wrapper for Ile de france mobilités API.
 <div class="row">
 <div class="col">
 {{< carousel id="borongo" >}}
-Boron GO - 2023
+Boron GO (2023)
 
 Navigation calculator based on Paris metro data, built in a group of 5 using Java, Spring, React, Material-UI, Gitlab CI. Works as a webapp or as a desktop program.
 </div>
 
 <div class="col">
 {{< carousel id="prjres" >}}
-Network Analyzer - 2022
+Network Analyzer (2022)
 
 A multiplatform network trace analyzer supporting Ethernet, IPv4, UDP, DHCP and DNS. Written in node js and typescript and available as a web app or desktop app using electron.
 </div>
@@ -414,14 +511,14 @@ A multiplatform network trace analyzer supporting Ethernet, IPv4, UDP, DHCP and 
 <div class="row">
 <div class="col">
 {{< carousel id="pizzarun" >}}
-Delivery App - 2021
+Delivery App (2021)
 
 A delivery app like Uber Eats with order and delivery management using custom algorithms. Built with React-Native, PHP and MariaDB. This is our current project for the third semester.
 </div>
 
 <div class="col">
 {{< carousel id="prophunt" >}}
-Multiplayer Prophunt - 2020
+Multiplayer Prophunt (2020)
 
 A multiplayer game built with A-Frame and nodeJS, in one week with a group of 2 people (second semester project). Made with {{< link "https://github.com/clementd64" "Clement D" >}}.
 </div>
@@ -432,14 +529,14 @@ A multiplayer game built with A-Frame and nodeJS, in one week with a group of 2 
 <div class="row">
 <div class="col">
 {{< carousel id="balkanimes" >}}
-{{< link "https://github.com/balkanimes" "Balkanimes - 2021" >}}
+{{< link "https://github.com/balkanimes" "Balkanimes (2021)" >}}
 
 Extensible automated downloader, written in nodeJS, VueJS and GraphQL, for our 4th semester project. Made with {{< link "https://github.com/clementd64" "Clement D" >}}.
 </div>
 
 <div class="col">
 {{< carousel id="prjs2" style="width: 50%;" >}}
-Solitaire - 2019
+Solitaire (2019)
 
 A CLI solitaire game written in php, in one week for our first project of second semester. Made with {{< link "https://github.com/clementd64" "Clement D" >}}.
 </div>
@@ -449,7 +546,7 @@ A CLI solitaire game written in php, in one week for our first project of second
 <div class="row">
 <div class="col">
 {{< carousel id="prjs1" >}}
-Static Website - 2019
+Static Website (2019)
 
 Static website built with bootstrap for our first semester project. Made with {{< link "https://github.com/clementd64" "Clement D" >}}.
 </div>
