@@ -379,6 +379,22 @@ Software to block IPs on OPNsense firewall based on a gelf stream from Graylog. 
 Docker image used to stream a browser's video/audio over RTSP. Also includes a noVNC server and a proxy for puppeteer.
 </div>
 </div>
+<br/>
+
+<div class="row">
+<div class="col">
+{{< carousel id="bookmarks" >}}
+{{< link "https://github.com/drosoCode/bookmarks" "Bookmarks (2023)" >}}
+
+Quick and dirty bookmarks manager written in Go + Svelte supporting SSO (header auth), tags, and website backup (based on playwright).
+</div>
+<div class="col">
+{{< carousel id="matrixwebhook" >}}
+{{< link "https://github.com/drosoCode/matrix-webhook" "matrix-webhook (2022)" >}}
+
+Matrix Webhook gateway: allows to send messages to specified matrix rooms using a webhook call. Multiple formatters are supported: Discord, Sonarqube, Graylog, Grafana, Github
+</div>
+</div>
 
 ### Deprecated
 
@@ -424,10 +440,10 @@ SNCF Bot (2022)
 SNCF Auto Reservation bot using Appium to manipulate the android app and automatically book tickets on a regular basis.
 </div>
 <div class="col">
-{{< carousel id="noupdla" >}}
-{{< link "https://github.com/drosoCode/noupdatelauncher" "NoUpdateLauncher (2021)" >}}
+{{< carousel id="dumpflow" >}}
+{{< link "https://github.com/drosoCode/dumpflow" "Dumpflow (2022)" >}}
 
-A simple program to prevent some steam games to update when launching them. Based on a {{< link "https://steamcommunity.com/sharedfiles/filedetails/?id=1985923465" "manifest hack" >}} and using python, {{< link "https://github.com/ValvePython/vdf" "VDF" >}} and PySimpleGUI.
+Golang + Svelte web ui allowing to download, index, search and view StackExchange website dumps.
 </div>
 </div>
 <br/>
@@ -435,10 +451,10 @@ A simple program to prevent some steam games to update when launching them. Base
 
 <div class="row">
 <div class="col">
-{{< carousel id="synoex" >}}
-{{< link "https://github.com/drosoCode/synologyexporter" "Synology Exporter (2021)" >}}
+{{< carousel id="noupdla" >}}
+{{< link "https://github.com/drosoCode/noupdatelauncher" "NoUpdateLauncher (2021)" >}}
 
-A logs and metrics exporter for old synology NAS (DSM 3.1). Exports logs to Graylog using GELF and metrics to InfluxDB, using some endpoint of the DSM web ui.
+A simple program to prevent some steam games to update when launching them. Based on a {{< link "https://steamcommunity.com/sharedfiles/filedetails/?id=1985923465" "manifest hack" >}} and using python, {{< link "https://github.com/ValvePython/vdf" "VDF" >}} and PySimpleGUI.
 </div>
 <div class="col">
 {{< carousel id="dockergui" >}}
@@ -467,10 +483,10 @@ A C# application to control and apply different effects to my computer RGB devic
 
 <div class="row">
 <div class="col">
-{{< image src="assets/heimdallite.png" >}}
-{{< link "https://github.com/drosocode/heimdallite" "Heimdallite (2020)" >}}
+{{< carousel id="synoex" >}}
+{{< link "https://github.com/drosoCode/synologyexporter" "Synology Exporter (2021)" >}}
 
-A lighter version of heimdall, this is a single php page configured with a json file, instead of a whole php framework and database.
+A logs and metrics exporter for old synology NAS (DSM 3.1). Exports logs to Graylog using GELF and metrics to InfluxDB, using some endpoint of the DSM web ui.
 </div>
 <div class="col">
 {{< image src="assets/amazfit_1.png" >}}
@@ -482,6 +498,12 @@ A single php page to upload results from my phone to a database and visualize th
 <br/>
 
 <div class="row">
+<div class="col">
+{{< image src="assets/heimdallite.png" >}}
+{{< link "https://github.com/drosocode/heimdallite" "Heimdallite (2020)" >}}
+
+A lighter version of heimdall, this is a single php page configured with a json file, instead of a whole php framework and database.
+</div>
 <div class="col">
 {{< image src="assets/gamelauncher.png" >}}
 {{< link "https://github.com/drosocode/dlauncher" "DLauncher (2019)" >}} 
