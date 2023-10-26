@@ -270,13 +270,15 @@ resources:
   name: bluerpc
 ---
 
-## Open Source Contributions
-- {{< link "https://github.com/home-assistant/android/pull/3399" "Add Android Auto sensor data to home-assistant android app" >}}
-- {{< link "https://github.com/FreshRSS/FreshRSS/pull/4063" "Add remote auth header to FreshRSS" >}}
-- {{< link "https://github.com/antonpup/Aurora/pull/2362" "Fix steam library detection in Aurora Project" >}}
-- {{< link "https://github.com/Revadike/epicgames-freebies-claimer/pull/143" "Add support for notifications using apprise to epicgames-freebies-claimer" >}}
-- {{< link "https://github.com/AliasIO/wappalyzer/pull/4925" "Add option to use remote instance of chromium to wappalyzer" >}} {{< link "https://news.ycombinator.com/item?id=37236746" "(this project was made private)" >}}
-- {{< link "https://github.com/filebrowser/filebrowser/pull/1420" "Add OnlyOffice integration to filebrowser" >}}
+{{< admonition type=abstract title="CONTENTS" open=true >}}
+|&nbsp;{{< link "#personnal-projects" "Personnal Projects" >}}<br/>
+&nbsp;&nbsp;&nbsp;|&nbsp;{{< link "#general" "General" >}}<br/>
+&nbsp;&nbsp;&nbsp;|&nbsp;{{< link "#home-automation" "Home Automation" >}}<br/>
+&nbsp;&nbsp;&nbsp;|&nbsp;{{< link "#tools" "Tools" >}}<br/>
+&nbsp;&nbsp;&nbsp;|&nbsp;{{< link "#deprecated" "Deprecated" >}}<br/>
+|&nbsp;{{< link "#school-projects" "School Projects" >}}<br/>
+|&nbsp;{{< link "#open-source-contributions" "Open Source Contributions" >}}
+{{< /admonition >}}
 
 ## Personnal Projects
 
@@ -552,3 +554,11 @@ Static website built with bootstrap for our first semester project. Made with {{
 </div>
 
 </div>
+
+## Open Source Contributions
+- {{< link "https://github.com/home-assistant/android/pull/3399" "Add Android Auto sensor data to home-assistant android app" >}}
+- {{< link "https://github.com/FreshRSS/FreshRSS/pull/4063" "Add remote auth header to FreshRSS" >}}
+- {{< link "https://github.com/antonpup/Aurora/pull/2362" "Fix steam library detection in Aurora Project" >}}
+- {{< link "https://github.com/Revadike/epicgames-freebies-claimer/pull/143" "Add support for notifications using apprise to epicgames-freebies-claimer" >}}
+- {{< link "https://github.com/AliasIO/wappalyzer/pull/4925" "Add option to use remote instance of chromium to wappalyzer" >}} {{< link "https://news.ycombinator.com/item?id=37236746" "(this project was made private)" >}}
+- {{< link "https://github.com/filebrowser/filebrowser/pull/1420" "Add OnlyOffice integration to filebrowser" >}}
