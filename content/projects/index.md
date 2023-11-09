@@ -304,7 +304,7 @@ Configuration files for my Surface laptop running on Arch/Xorg/i3.
 <div class="col">
 {{< carousel id="zogwine" >}}
 {{< link "https://github.com/drosocode/zogwine/tree/go_impl" "Zogwine Media Center" >}}
-This project is a media center with a golang backend and a VueJS / Quasar frontend (PWA). This is my main project.
+This project is a media center/streaming website with a python backend (flask, uwsgi, nginx, redis) and a VueJS / Quasar frontend. It supports scanning local video and subtitles files, gathering metadata from external databases (and manually select/edit them), multi-user progression tracking (and syncing with other sources), advances searching (by tags, actors, date), displaying everything in a PWA, streaming videos directly if supported (h264) or using realtime transcoding (ffmpeg to generate hls stream). You can also use the ui to start a video on supported device on your lan (ex: kodi, xbox, tv) and remotely control it. A V2 using a golang backend is planned.
 </div>
 </div>
 
@@ -386,7 +386,7 @@ Docker image used to stream a browser's video/audio over RTSP. Also includes a n
 {{< carousel id="bookmarks" >}}
 {{< link "https://github.com/drosoCode/bookmarks" "Bookmarks (2023)" >}}
 
-Quick and dirty bookmarks manager written in Go + Svelte supporting SSO (header auth), tags, and website backup (based on playwright).
+Quick and dirty bookmarks manager written in Go + React supporting SSO (header auth), tags, and website backup (based on playwright).
 </div>
 <div class="col">
 {{< carousel id="matrixwebhook" >}}
