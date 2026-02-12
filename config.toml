@@ -160,8 +160,8 @@ theme = "LoveIt"
 
 # Permalinks config
 [Permalinks]
-    posts = ":year/:month/:day/:filename"
-    #posts = ":filename"
+    posts = ":year/:month/:day/:contentbasename"
+    #posts = ":contentbasename"
 
 [mediaTypes]
     [mediaTypes."text/plain"]
