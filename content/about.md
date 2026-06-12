@@ -84,13 +84,15 @@ Other:
 
 ## Work Experience
 
-[2024-now: Siemens Mobility](https://www.mobility.siemens.com/fr/fr/entreprise/notre-expertise-en-cbtc.html)
+[2024 - now: Siemens Mobility](https://www.mobility.siemens.com/fr/fr/entreprise/notre-expertise-en-cbtc.html)
 
-- Software development: maintenance, refactoring, addition of new features on internal tools (Java) used to generate the CBTC configuration
-- DevOps missions:
+- Software development: 
+  - Maintenance, refactoring and addition of new features on an internal tool (Java/SQL) used to generate the CBTC configuration
+  - Development and maintenance of other domain-specific tools (Java, SQL, Python, C#, VBA, Shell)
+- DevOps:
   - Migration from ClearCase VCS to Git
   - Definition of the new git workflows
-  - Development of domain-specific tools and CI/CD pipelines to integrate git
+  - Development of CI/CD pipelines for automated testing and releasing in a complex build environment
 
 [Spring 2024: Siemens Mobility (Internship)](https://www.mobility.siemens.com/fr/fr/entreprise/notre-expertise-en-cbtc.html)
 
@@ -112,7 +114,7 @@ Other:
 
 [2022 – 2024: Université Paris Cité](https://u-paris.fr/)
 
-I am currenty studying at Université Paris Cité (Paris, France) and I am in the second year of a master’s degree in computer science ([Master IMPAIRS](http://www.informatique.univ-paris-diderot.fr/formations/masters/impairs/accueil)).
+I graduated from Université Paris Cité (Paris, France) with a master’s degree in computer science ([Master IMPAIRS](http://www.informatique.univ-paris-diderot.fr/formations/masters/impairs/accueil)).
 
 [2021 – 2022: Sorbonne Université](https://www.sorbonne-universite.fr/)
 
