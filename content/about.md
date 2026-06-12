@@ -7,7 +7,7 @@ comment:
 
 ## Introduction
 
-Hello, I am Thomas, a student currently in the last year of my master degree in computer science. I am interested in many aspects of technology including (but not limited to) front-end and back-end programming, reverse-engeineering, 3D printing, VR, networking, system administration, home automation, etc … and I am sharing my different projects on this blog. [Here](/projects) is a quick overview.
+Hello, I am Thomas, a software engineer at Siemens Mobility. I am interested in many aspects of technology including (but not limited to) front-end and back-end programming, reverse-engeineering, 3D printing, VR, networking, system administration, home automation, etc … and I am sharing my different projects on this blog. [Here](/projects) is a quick overview.
 
 <br/>
 <a href="https://www.github.com/drosoCode" target="_blank"><i class="fab fa-github" style="color:black"></i>&nbsp;Github</a>
@@ -84,6 +84,22 @@ Other:
 
 ## Work Experience
 
+[2024-now: Siemens Mobility](https://www.mobility.siemens.com/fr/fr/entreprise/notre-expertise-en-cbtc.html)
+
+- Software development: maintenance, refactoring, addition of new features on internal tools (Java) used to generate the CBTC configuration
+- DevOps missions:
+  - Migration from ClearCase VCS to Git
+  - Definition of the new git workflows
+  - Development of domain-specific tools and CI/CD pipelines to integrate git
+
+[Spring 2024: Siemens Mobility (Internship)](https://www.mobility.siemens.com/fr/fr/entreprise/notre-expertise-en-cbtc.html)
+
+6 months internship with multiple tasks:
+- Introduce a CI/CD (in Gitlab) testing system for a legacy codebase (VBA in Excel + Java on Unix)
+- Bash/PowerShell/Python Scripting
+- Development of a bridge between an OpenGL Java application and the Excel VBA code (using Windows COM API)
+- Migration of the Java tool from Unix to Linux (bare metal and Docker) and from using an Oracle DB to Postgres
+
 [Summer 2022: Spacefoot](https://spacefoot.com/)
 
 2 months fixed-term contract to replace a search engine by a custom implementation based on elastisearch (Backend and importer in Python/FastAPI/ElasticSearch/SQL, frontend in HTML/CSS/JavaScript/Svelte), deployed to a linux server using ansible.
@@ -105,10 +121,6 @@ I studied for a year at Sorbonne Université (Paris, France) and got my bachelor
 [2019 – 2021: URCA](https://www.univ-reims.fr/)
 
 I studied at URCA (Reims University, France) for two years in order to complete my two-years degree in computer science.
-
-[2019: JASA](https://www.jeanne-darc-st-aspais.com/)
-
-I got my high school diploma in 2019, with high honours mention in scientific series.
 
 
 ## Hobbies
