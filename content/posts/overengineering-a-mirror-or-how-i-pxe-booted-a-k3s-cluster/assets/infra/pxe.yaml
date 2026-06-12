@@ -1,0 +1,49 @@
+# PXE configuration file
+# this is a common file used by:
+#   - the pxe script to prepare the iSCSI and tftp file trees (and patch the rpi cmdlines)
+#   - the ansible playbook to deploy the iSCSI disk images and tftp files
+#   - the ansible playbook to setup the iSCSI targets on the server
+
+iscsi_target:
+  ip: "storage_server_ip"
+  port: 3260
+  iqn: iqn.2023-06.tld.domain.storage_server_name:nvme1.pxe
+  username: <username>
+  password: <password>
+
+#  base_iscsi_target_path: /srv/iscsi/nvme1/pxe/
+
+ipxe:
+  iscsi_initiator_iqn: "iqn.2023-06.tld.domain.pxe:${mac:hexhyp}" # the ${mac:hexhyp} variable only works with iPXE
+  boot_config:
+    k3s:
+      initrd_path: initrd.img # path inside the disk image (to extract from)
+      kernel_path: vmlinuz
+      source_image_path: qemu_amd64_uefi/debian # path on the building machine, relative to the "src_img_path" supplied to the script
+      tftp_dir: k3s # subdirectory in the tftp root where to place the boot files
+
+# there are two types of supported boot types:
+#  - ipxe: standard iPXE boot, used by x86_64 and similar architectures
+#      - requires a ipxe_boot_config option to select the correct ipxe boot config to use (to get the kernel/initrd and ipxe bootloader)
+#      - requires the iscsi_initiator_iqn to be set to a fixed value (as ansible can't know the MAC address in advance)
+#  - rpi: Raspberry Pi network boot, which uses its own firmware and
+#      - requires the iscsi_initiator_iqn to be set to a fixed value (cannot use ${mac:hexhyp})
+#      - requires the source_image_path to point to the base disk image to use
+#      - requires the serial_number of the rpi (grep Serial /proc/cpuinfo) (used to set the tftp_dir)
+
+pxe:
+  - name: srv_dell
+    iscsi_target_path: srvdell.img # path of the disk image on the target server (relative to the target pxe mount point)
+    boot_type: ipxe
+    ipxe_boot_config: k3s
+    iscsi_initiator_iqn: "iqn.2023-06.tld.domain.pxe:d8-9e-f3-8e-d0-52"
+    image_size_gb: 32 # default size of the disk image to expand to
+
+  - name: rpi3b
+    iscsi_target_path: rpi3b.img
+    boot_type: rpi
+    iscsi_initiator_iqn: "iqn.2023-06.tld.domain.pxe:b8-27-eb-b1-64-13"
+    source_image_path: rpi_arm64.img
+    serial_number: xxxxxxxxx
+    image_size_gb: 32
+

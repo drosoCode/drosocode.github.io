@@ -179,7 +179,7 @@ theme = "LoveIt"
 # Permalinks config
 [Permalinks]
     posts = ":year/:month/:day/:contentbasename"
-    #posts = ":filename"
+    #posts = ":contentbasename"
 
 [mediaTypes]
     [mediaTypes."text/plain"]

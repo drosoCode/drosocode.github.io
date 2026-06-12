@@ -1,0 +1,44 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: violet-mirror
+  labels:
+    app: violet-mirror
+spec:
+  selector:
+    matchLabels:
+      app: violet-mirror
+  template:
+    metadata:
+      labels:
+        app: violet-mirror
+    spec:
+      strategy:
+        type: Recreate
+      containers:
+        - name: violet-mirror
+          image: ghcr.io/droso-hass/mirror-mqtt:v0.0.5
+          resources:
+            limits:
+              akri.sh/udev-violet-mirror: "1"
+            requests:
+              akri.sh/udev-violet-mirror: "1"
+          env:
+            - name: MIRROR_MQTT_HOST
+              value: nats.home.svc.cluster.local
+            - name: MIRROR_MQTT_PORT
+              value: "1883"
+            - name: MIRROR_DEV
+              value: /dev/hidraw0
+            - name: MIRROR_ID
+              value: mirror1
+            - name: MIRROR_MQTT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: violet-mirror-secrets
+                  key: MIRROR_MQTT_USERNAME
+            - name: MIRROR_MQTT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: violet-mirror-secrets
+                  key: MIRROR_MQTT_PASSWORD

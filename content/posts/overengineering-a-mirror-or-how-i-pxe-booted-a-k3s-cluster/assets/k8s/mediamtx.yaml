@@ -1,0 +1,62 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: mediamtx
+  labels:
+    app: mediamtx
+spec:
+  selector:
+    matchLabels:
+      app: mediamtx
+  template:
+    metadata:
+      labels:
+        app: mediamtx
+    spec:
+      strategy:
+        type: Recreate
+      containers:
+        - name: mediamtx
+          image: bluenviron/mediamtx:1
+          volumeMounts:
+            - name: mediamtx-config
+              mountPath: /mediamtx.yml
+              subPath: config.yaml
+          ports:
+            - name: rtsp
+              containerPort: 8554
+      volumes:
+        - name: mediamtx-config
+          secret:
+            secretName: mediamtx-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mediamtx
+spec:
+  ports:
+    - protocol: TCP
+      name: rtsp
+      port: 8554
+  selector:
+    app: mediamtx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mediamtx-lb
+  labels:
+    cilium-lb: lan-main
+  annotations:
+    lbipam.cilium.io/sharing-key: lan
+    lbipam.cilium.io/sharing-cross-namespace: "*"
+spec:
+  ports:
+    - protocol: TCP
+      name: rtsp
+      port: 8554
+  selector:
+    app: mediamtx
+  type: LoadBalancer
+  loadBalancerClass: io.cilium/l2-announcer
