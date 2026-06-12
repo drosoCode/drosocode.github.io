@@ -1,0 +1,43 @@
+apiVersion: akri.sh/v0
+kind: Configuration
+metadata:
+  name: udev-kinectv2
+  namespace: akri
+spec:
+  discoveryHandler:
+    name: udev
+    discoveryDetails: |+
+        udevRules:
+        -  'SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02c4"'
+        -  'SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02d8"'
+        -  'SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02d9"'
+        permissions: "rwm"
+  capacity: 10
+---
+apiVersion: akri.sh/v0
+kind: Configuration
+metadata:
+  name: udev-violet-mirror
+  namespace: akri
+spec:
+  discoveryHandler:
+    name: udev
+    discoveryDetails: |+
+        udevRules:
+        -  'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1da8", ATTRS{idProduct}=="1301"'
+        permissions: "rwm"
+  capacity: 5
+---
+apiVersion: akri.sh/v0
+kind: Configuration
+metadata:
+  name: udev-framebuffer
+  namespace: akri
+spec:
+  discoveryHandler:
+    name: udev
+    discoveryDetails: |+
+        udevRules:
+        -  'SUBSYSTEM=="graphics", KERNEL=="fb[0-9]*"'
+        permissions: "rwm"
+  capacity: 5

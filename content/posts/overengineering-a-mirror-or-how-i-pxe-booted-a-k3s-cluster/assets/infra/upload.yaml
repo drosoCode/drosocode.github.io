@@ -1,0 +1,50 @@
+- hosts: pxe_servers
+  name: "Upload PXE files to TFTP and iSCSI servers"
+  become: true
+  gather_facts: true
+  vars:
+    tftp_host: router_name
+    iscsi_host: storage_server_name
+    pxe_local_dir: "../../../pxe/output/"
+    base_iscsi_path: "{{ pxe_iscsi_path }}"
+    base_tftp_path: "/usr/local/tftp/"
+  tasks:
+    - name: Install rsync (apt)
+      apt:
+        name: rsync
+        state: present
+      when: inventory_hostname == iscsi_host
+      
+    - name: Install rsync (pkg)
+      community.general.pkgng:
+        name: rsync
+        state: present
+      when: inventory_hostname == tftp_host
+
+    - name: Upload boot files to TFTP server
+      ansible.posix.synchronize:
+        src: "{{ pxe_local_dir + 'tftp/' }}"
+        dest: "{{ base_tftp_path }}"
+        archive: true
+        recursive: true
+        delay_updates: false
+        delete: true
+        partial: true
+        rsync_opts:
+          - "--sparse"
+          - "--inplace"
+      when: inventory_hostname == tftp_host
+
+    - name: Upload disk image to iSCSI server
+      ansible.posix.synchronize:
+        src: "{{ pxe_local_dir + 'iscsi/' }}"
+        dest: "{{ base_iscsi_path }}"
+        archive: true
+        recursive: true
+        delay_updates: false
+        delete: true
+        partial: true
+        rsync_opts:
+          - "--sparse"
+          - "--inplace"
+      when: inventory_hostname == iscsi_host

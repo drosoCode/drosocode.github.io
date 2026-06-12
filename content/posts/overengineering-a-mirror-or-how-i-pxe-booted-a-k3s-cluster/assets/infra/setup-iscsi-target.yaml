@@ -1,0 +1,45 @@
+- hosts: kirito
+  name: "Setup iSCSI Target for PXE Boot"
+  become: true
+  gather_facts: true
+  vars:
+    pxe_config: "{{ lookup('file', '../../../settings/pxe.yaml') | from_yaml }}"
+    pxe_base_iscsi_path: "{{ pxe_iscsi_path }}"
+    iscsi_targets:
+      - name: "{{ pxe_config.iscsi_target.iqn }}"
+        disks: >-
+          {%- set disks = [] -%}
+          {%- for pxe_item in pxe_config.pxe -%}
+          {%- set disk = {
+              'name': 'lun_' + pxe_item.name,
+              'path': pxe_base_iscsi_path + pxe_item.iscsi_target_path,
+              'size': pxe_item.image_size_gb|string + 'G',
+              'type': 'fileio',
+              'lunid': loop.index0
+          } -%}
+          {%- set _ = disks.append(disk) -%}
+          {%- endfor -%}
+          {{ disks }}
+        initiators: >-
+          {%- set initiators = [] -%}
+          {%- for pxe_item in pxe_config.pxe -%}
+          {%- set initiator = {
+              'name': pxe_item.iscsi_initiator_iqn,
+              'authentication': {
+                'userid': pxe_config.iscsi_target.username,
+                'password': pxe_config.iscsi_target.password
+              },
+              'mapped_luns': [{
+                'mapped_lunid': 0,
+                'lunid': loop.index0
+              }]
+          } -%}
+          {%- set _ = initiators.append(initiator) -%}
+          {%- endfor -%}
+          {{ initiators }}
+        portals:
+          - ip: "0.0.0.0"
+            port: 3260
+
+  roles:
+    - role: ricsanfre.iscsi_target

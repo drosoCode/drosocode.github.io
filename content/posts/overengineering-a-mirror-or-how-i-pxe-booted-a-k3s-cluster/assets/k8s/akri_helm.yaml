@@ -1,0 +1,31 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: akri-repo
+  namespace: akri
+spec:
+  interval: 24h
+  url: https://project-akri.github.io/akri/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: akri
+  namespace: akri
+spec:
+  chart:
+    spec:
+      chart: akri
+      sourceRef:
+        kind: HelmRepository
+        name: akri-repo
+      version: 'v0.13.8'
+  interval: 1h
+  targetNamespace: akri
+  values:
+    udev:
+      discovery:
+        enabled: true
+
+  

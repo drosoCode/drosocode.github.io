@@ -1,0 +1,52 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kinect
+  labels:
+    app: kinect
+spec:
+  selector:
+    matchLabels:
+      app: kinect
+  template:
+    metadata:
+      labels:
+        app: kinect
+    spec:
+      strategy:
+        type: Recreate
+      containers:
+        - name: kinect
+          image: registry.tld/kinectv2_streamer:v0.0.2
+          resources:
+            limits:
+              akri.sh/udev-kinectv2: "3"
+              akri.sh/udev-framebuffer: "1"
+            requests:
+              akri.sh/udev-kinectv2: "3"
+              akri.sh/udev-framebuffer: "1"
+          env:
+            - name: RTSP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kinect-secrets
+                  key: RTSP_URL
+          securityContext:
+            privileged: true
+---
+# scaler based on home assistant switch state
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kinect-scaler
+spec:
+  scaleTargetRef:
+    name: kinect
+  triggers:
+  - type: mysql
+    metadata:
+      queryValue: "1"
+      activationQueryValue: "0"
+      query: "select IF(state='on', 1, 0) AS scale from states where metadata_id = (select metadata_id from states_meta where entity_id = 'input_boolean.kinect_streamer') order by last_updated_ts desc limit 1;"
+    authenticationRef:
+      name: keda-sql-scaler-auth
