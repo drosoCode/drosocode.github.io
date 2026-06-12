@@ -59,6 +59,12 @@ other = "Il tuo commento ..."
 
 [facebookLanguageCode]
 other = "it"
+
+[giscusLang]
+other = "it"
+
+[walineLang]
+other = "en"
 # === partials/comment.html ===
 
 # === partials/assets.html ===
@@ -158,6 +164,9 @@ other = "Sommario"
 
 [info]
 other = "Info"
+
+[todo]
+other = "Da fare"
 
 [tip]
 other = "Suggerimenti"

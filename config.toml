@@ -4,11 +4,15 @@ title = 'DrosoCode'
 
 theme = "LoveIt"
 [params]
-    # LoveIt theme version
-    version = "0.2.X"
     defaultTheme = "auto"
     gitRepo = "https://github.com/drosocode"
     dateFormat = "2006-01-02"
+
+    # Author config
+    [params.author]
+        name = "droso"
+        email = "contact@thomasz.me"
+        link = "https://github.com/drosocode"
 
     [params.search]
         enable = true
@@ -25,6 +29,19 @@ theme = "LoveIt"
         highlightTag = "em"
         # LoveIt NEW | 0.2.4 whether to use the absolute URL based on the baseURL in search index
         absoluteURL = false
+
+    # Header config
+    [params.header]
+        # desktop header mode ["fixed", "normal", "auto"]
+        desktopMode = "fixed"
+        # mobile header mode ["fixed", "normal", "auto"]
+        mobileMode = "auto"
+        # Header title config
+        [params.header.title]
+            # URL of the LOGO
+            logo = ""
+            # title name
+            name = "DrosoCode"
 
     [params.footer]
         enable = true
@@ -46,7 +63,7 @@ theme = "LoveIt"
         rss = 10
         # Home page profile
         [params.home.profile]
-            enable = true
+            enable = false
         [params.home.posts]
             enable = true
             # special amount of posts in each home posts page
@@ -80,6 +97,9 @@ theme = "LoveIt"
                 # Disqus shortname to use Disqus in posts
                 shortname = "droso"
 
+        [params.page.share]
+            enable = false
+
         # LoveIt NEW | 0.2.7 Third-party library config
         [params.page.library]
             [params.page.library.css]
@@ -112,9 +132,12 @@ theme = "LoveIt"
 
     [params.compatibility]
         # whether to use Polyfill.io to be compatible with older browsers
-        polyfill = true
+        polyfill = false
         # whether to use object-fit-images to be compatible with older browsers
         objectFit = false
+
+    [params.cdn]
+        data = "empty.yml"
 
 # Markup related config in Hugo
 [markup]
@@ -146,11 +169,6 @@ theme = "LoveIt"
         startLevel = 2
         endLevel = 6
 
-# Author config
-[author]
-    name = "droso"
-    email = "contact@thomasz.me"
-    link = "https://github.com/drosocode"
 
 # Sitemap config
 [sitemap]
@@ -160,7 +178,7 @@ theme = "LoveIt"
 
 # Permalinks config
 [Permalinks]
-    posts = ":year/:month/:day/:filename"
+    posts = ":year/:month/:day/:contentbasename"
     #posts = ":filename"
 
 [mediaTypes]
