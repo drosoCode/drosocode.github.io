@@ -60,8 +60,6 @@ To make disk image easily buildable and reproducibles, I will use Hashicorp's [P
 
 For the amd64 devices, I will use the debian installer to create the image.
 
-{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/builder/debian_amd64.pkr.hcl" >}}
-
 We first need to import the qemu builder in packer:
 ```hcl
 packer {
@@ -133,6 +131,61 @@ The first provisionner is used to execute our custom installation script, with s
 The other provisionners are used to define `authorized_keys` and revert the sshd changes to re-enable publickey-only auth.
 
 #### For Raspberry PIs
+
+For the Raspberry PI, instead of creating a debian image from scratch, I'm using the raspios-lite offical image (which is itself based on debian).
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/builder/rpi_arm64.pkr.hcl" >}}
+
+Since the rpi architecture is different from my base system (x64), I used a custom builder for ARM:
+ - A few of them are listed on the [packer docs](https://developer.hashicorp.com/packer/docs/builders/community-supported)
+ - The one that I actually setteld with was this fork: https://github.com/michalfita/packer-plugin-cross which added support for the new packer plugin system
+ - The plugin relies on `qemu-aarch64-static`, so make sure that this is installed on your machine 
+
+Import it with:
+```hcl
+packer {
+  required_plugins {
+    cross = {
+      version = ">= 1.1.3"
+      source  = "github.com/michalfita/cross"
+    }
+  }
+}
+```
+
+As the image file is compressed with xz, we need to add a custom command for extracting the downloaded image: `file_unarchive_cmd = ["xz", "--decompress", "$ARCHIVE_PATH"]`
+
+We then need to map the partitions to match the ones defined in the raspios image, to do this: 
+- download the image and extract it
+- run `fdisk -lu disk.img`
+- create the partitions blocks and set the starting blocks and size accordingly
+
+In my case, I ended up with this:
+```
+image_partitions {
+    filesystem   = "vfat"
+    mountpoint   = "/boot"
+    name         = "boot"
+    size         = "512M"
+    start_sector = "16384"
+    type         = "c"
+  }
+  image_partitions {
+    filesystem   = "ext4"
+    mountpoint   = "/"
+    name         = "root"
+    size         = "0"
+    start_sector = "1064960"
+    type         = "83"
+  }
+```
+
+Since the installation of the base system is already done, we just need to run our install script and add our ssh keys.
+
+In the install script, there are sections that are specific to RPis (activated with `TARGET_PLATFORM=rpi`), we'll get to them in the next sections. 
+
+For now, the only one worth mentionning is `systemctl disable userconfig.service` that is used to disable the userconfig service since we don't want any additional configuration happening after the creation of the image by packer. 
+
 
 #### Installation Script
 
