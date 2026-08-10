@@ -1,0 +1,29 @@
+{{ $slides := .slides }}
+{{ $style := .style }}
+
+{{ if gt (len $slides) 0 }}
+<div class="lightgallery_custom">
+  {{ range $index, $slide := $slides }}
+  <a
+    href="{{ $slide.RelPermalink }}"
+    data-thumb="{{ $slide.RelPermalink }}"
+    data-exthumbimage="{{ $slide.RelPermalink }}">
+
+    {{ if eq $index 0 }}
+      {{ $thumb := $slide.Resize "200x" }}
+      <img
+        src="{{ $thumb.RelPermalink }}"
+        alt=""
+        loading="lazy"/>
+    {{ else }}
+      <img
+        src="{{ $slide.RelPermalink }}"
+        alt=""
+        width="1"
+        height="1"
+        style="display:none"/>
+    {{ end }}
+  </a>
+  {{ end }}
+</div>
+{{ end }}

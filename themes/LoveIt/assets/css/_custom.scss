@@ -59,3 +59,45 @@
 footer {
     padding: 0;
 }
+
+// Make "custom pages" (i.e. not blog posts) wider
+@media only screen and (max-width: 1280px) {
+    .page.single.special {
+        width: 80%;
+    }
+}
+
+
+// CSS for projentry shortcode
+
+.proj_entry {
+    display: block;
+    margin: 10px 20px;
+}
+
+.proj_entry .lightgallery_custom {
+    width: 200px;
+}
+
+.proj_img > .lightgallery_custom > a:first-child img {
+    width: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.proj_name {
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.proj_desc {
+    display: block;
+    text-align: justify;
+}
+
+@media screen and (min-width: 520px) {
+    .proj_entry .lightgallery_custom {
+        float: left;
+        margin-right: 2rem;
+    }
+}
