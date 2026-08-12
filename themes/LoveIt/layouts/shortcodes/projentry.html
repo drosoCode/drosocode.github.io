@@ -1,7 +1,11 @@
 {{ $imgid := .Get "imgid" }}
 {{ $name := .Get "name" }}
 {{ $link := .Get "link" }}
+{{ $date := .Get "date" }}
+{{ $state := .Get "state" }}
 {{ $slides := $.Page.Resources.Match $imgid }}
+{{ $stateColors := dict "dev" "#37BC7D" "stale" "#2A9689" "deprecated" "#62748E" "completed" "#34A6F4" "maint" "#D0872E" "arch" "#A65F1B" }}
+{{ $stateText := dict "dev" "In Development" "stale" "Stale" "deprecated" "Deprecated" "completed" "Completed" "maint" "Maintenance only" "arch" "Archived" }}
 
 <div class="col">
 <div class="proj_entry col">
@@ -14,6 +18,9 @@
   {{ else }}
     <div class="proj_name">{{ $name }}</div>
   {{ end }}
+  <div class="proj_data">
+    <span>{{ $date }}</span> -  <span style="color: {{ index $stateColors $state }};">{{ index $stateText $state }}</span>
+  </div>
   <div class="proj_desc">{{ .Inner }}</div>
 </div>
 </div>
