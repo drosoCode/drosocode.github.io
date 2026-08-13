@@ -310,12 +310,18 @@ resources:
       name: x2m
     - src: assets/x2m2.png
       name: x2m
-    - src: assets/x2m3.png
-      name: x2m
-    - src: assets/x2m4.png
-      name: x2m
     - src: assets/x2m5.png
       name: x2m
+
+    - src: assets/ultraconv_1.png
+      name: ultraconv
+    - src: assets/ultraconv_2.png
+      name: ultraconv
+    - src: assets/ultraconv_3.png
+      name: ultraconv
+
+    - src: assets/openab_1.png
+      name: openab
 ---
 
 {{< admonition type=abstract title="CONTENTS" open=true >}}
@@ -388,7 +394,19 @@ Python wrapper for a reverse-engineered edf api (based on the android mobile app
 {{< /projentry >}}
 
 
+{{< projentry name="mirror-mqtt" date="2022" link="https://github.com/droso-hass/mirror-mqtt" state="maint" >}}
+A simple python script to expose the violet mir:ror as a MQTT tag reader for home-assistant.
+{{< /projentry >}}
 </div>
+
+
+<div class="row">
+{{< projentry name="openab" date="2022" link="https://github.com/droso-hass/openab" imgid="openab" state="stale" >}}
+A reimplementation of the firmware (in metal, a custom language used by the nabaztag:tag) and of the server (in golang) for the nabaztag v2 that enables its use as a voice assistant for home-assistant. See <a href="https://community.home-assistant.io/t/nabaztag-tag-no-hardware-mod/699745">my post on HA forum</a> for more details.
+{{< /projentry >}}
+
+</div>
+
 
 ### Tools
 
@@ -424,6 +442,16 @@ Quick and dirty bookmarks manager written in Go + React supporting SSO (header a
 
 {{< projentry name="matrix-webhook" date="2022" link="https://github.com/drosocode/matrix-webhook" imgid="matrixwebhook" state="completed" >}}
 Matrix Webhook gateway: allows to send messages to specified matrix rooms using a webhook call. Multiple formatters are supported: Discord, Sonarqube, Graylog, Grafana, Github
+{{< /projentry >}}
+</div>
+
+<div class="row">
+{{< projentry name="UltraConv" date="2025" link="https://github.com/drosocode/ultraconv" imgid="ultraconv" state="completed" >}}
+Python toolkit to easily create <a href="https://usdx.eu/format/">Ultrastar</a> files using yt-dlp, lyrics downloaders and converters, audio separation and lyrics pitching.
+{{< /projentry >}}
+
+{{< projentry name="routealias" date="2026" link="https://github.com/drosocode/routealias" state="completed" >}}
+A <a href="https://github.com/coredns/coredns">CoreDNS</a> plugin to automatically push IPs from resolved domains that matches a specific whitelist (in APB format) to an alias in OPNsense.
 {{< /projentry >}}
 </div>
 
