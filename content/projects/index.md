@@ -418,7 +418,7 @@ Docker image used to stream a browser's video/audio over RTSP. Also includes a n
 <br/>
 
 <div class="row">
-{{< projentry name="Bookmarks" date="2023" link="https://github.com/drosocode/bookmarks" imgid="bookmakrs" state="arch" >}}
+{{< projentry name="Bookmarks" date="2023" link="https://github.com/drosocode/bookmarks" imgid="bookmarks" state="arch" >}}
 Quick and dirty bookmarks manager written in Go + React supporting SSO (header auth), tags, and website backup (based on playwright).
 {{< /projentry >}}
 
@@ -460,7 +460,7 @@ A collection of batch scripts to allow offline installation of the oculus softwa
 SNCF Auto Reservation bot using Appium to manipulate the android app and automatically book tickets on a regular basis.
 {{< /projentry >}}
 
-{{< projentry name="Dumpflow" date="2022" link="https://github.com/drosocode/dumpflow" imgid="=dumpflow" state="deprecated" >}}
+{{< projentry name="Dumpflow" date="2022" link="https://github.com/drosocode/dumpflow" imgid="dumpflow" state="deprecated" >}}
 Golang + Svelte web ui allowing to download, index, search and view StackExchange website dumps.
 {{< /projentry >}}
 </div>

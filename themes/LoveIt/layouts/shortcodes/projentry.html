@@ -11,7 +11,6 @@
 <div class="proj_entry col">
   {{ partial "carousel.html" (dict
       "slides" $slides
-      "id" $imgid
   ) }}
   {{ if $link }}
     <a class="proj_name" href="{{ $link }}">{{ $name }}</a>
