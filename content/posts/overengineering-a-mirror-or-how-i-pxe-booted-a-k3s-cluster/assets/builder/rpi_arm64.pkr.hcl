@@ -5,7 +5,7 @@ source "cross" "rpi_arm64" {
   file_target_extension = "xz"
   file_unarchive_cmd    = ["xz", "--decompress", "$ARCHIVE_PATH"]
   file_urls             = ["https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-2025-12-04/2025-12-04-raspios-trixie-arm64-lite.img.xz"]
-  image_build_method    = "reuse"
+  image_build_method    = "resize"
   image_chroot_env      = ["PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"]
   // use fdisk -lu disk.img to find partition info
   image_partitions {
@@ -25,7 +25,7 @@ source "cross" "rpi_arm64" {
     type         = "83"
   }
   image_path                   = "output/rpi_arm64.img"
-  image_size                   = "5G"
+  image_size                   = "6G"
   image_type                   = "dos"
   qemu_binary_destination_path = "/usr/bin/qemu-aarch64-static"
   qemu_binary_source_path      = "/usr/bin/qemu-aarch64-static"

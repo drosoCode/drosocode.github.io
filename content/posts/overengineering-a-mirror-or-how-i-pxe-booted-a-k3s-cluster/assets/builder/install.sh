@@ -20,11 +20,15 @@ if [ "$INSTALL_K3S" == "true" ]; then
     if [ -z "$K3S_URL" ] || [ -z "$K3S_TOKEN" ]; then
         INSTALL_K3S_SKIP_ENABLE=true INSTALL_K3S_VERSION=$K3S_VERSION /root/get-k3s.sh
     else
-        INSTALL_K3S_SKIP_START=true K3S_URL="$K3S_URL" K3S_TOKEN="$K3S_TOKEN" INSTALL_K3S_VERSION=$K3S_VERSION /root/get-k3s.sh
+        K3S_EXEC="agent"
+        if [ "$TARGET_PLATFORM" == "rpi" ]; then
+            K3S_EXEC="agent --node-taint droso/target-type=lowpower:NoSchedule"
+        fi
+        INSTALL_K3S_SKIP_START=true K3S_URL="$K3S_URL" K3S_TOKEN="$K3S_TOKEN" INSTALL_K3S_VERSION=$K3S_VERSION INSTALL_K3S_EXEC="$K3S_EXEC" /root/get-k3s.sh
     fi
-    sysctl -w fs.inotify.max_user_watches=2099999999
-    sysctl -w fs.inotify.max_user_instances=2099999999
-    sysctl -w fs.inotify.max_queued_events=2099999999
+    echo "fs.inotify.max_user_watches=2099999999" >> /etc/sysctl.d/10-ionotify.conf
+    echo "fs.inotify.max_user_instances=2099999999" >> /etc/sysctl.d/10-ionotify.conf
+    echo "fs.inotify.max_queued_events=2099999999" >> /etc/sysctl.d/10-ionotify.conf
 fi
 
 if [ "$INSTALL_ISCSI" == "true" ]; then
@@ -49,8 +53,18 @@ if [ "$INSTALL_DYNHOSTNAME" == "true" ]; then
     script_data="$(cat <<-EOF
 #!/bin/bash
 set -e  
-# Find the first active network interface (excluding loopback)
-interface=\$(find /sys/class/net -mindepth 1 -maxdepth 1 -type l ! -name 'lo' -exec basename {} \; | head -n1)
+# Find the first ethernet network interface
+interface=\$(
+    for iface_path in /sys/class/net/*; do
+        iface=\$(basename "\$iface_path")
+        case "\$iface" in
+            eth*|en*) ;;
+            *) continue ;;
+        esac
+        echo "\$iface"
+        break
+    done
+)
 echo "Using network interface: \$interface"
 mac_addr=\$(cat /sys/class/net/\$interface/address 2>/dev/null || echo "00:00:00:00:00:00")
 short_mac=\$(echo \$mac_addr | tr -d ':' | cut -c7-12)

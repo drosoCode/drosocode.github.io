@@ -60,8 +60,6 @@ To make disk image easily buildable and reproducibles, I will use Hashicorp's [P
 
 For the amd64 devices, I will use the debian installer to create the image.
 
-{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/builder/debian_amd64.pkr.hcl" >}}
-
 We first need to import the qemu builder in packer:
 ```hcl
 packer {
@@ -134,9 +132,91 @@ The other provisionners are used to define `authorized_keys` and revert the sshd
 
 #### For Raspberry PIs
 
+For the Raspberry PI, instead of creating a debian image from scratch, I'm using the raspios-lite official image (which is itself based on debian).
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/builder/rpi_arm64.pkr.hcl" >}}
+
+Since the rpi architecture is different from my base system (x64), I used a custom builder for ARM:
+ - A few of them are listed on the [packer docs](https://developer.hashicorp.com/packer/docs/builders/community-supported)
+ - The one that I actually setteld with was this fork: https://github.com/michalfita/packer-plugin-cross which added support for the new packer plugin system
+ - The plugin relies on `qemu-aarch64-static`, so make sure that this is installed on your machine
+
+Import it with:
+```hcl
+packer {
+  required_plugins {
+    cross = {
+      version = ">= 1.1.3"
+      source  = "github.com/michalfita/cross"
+    }
+  }
+}
+```
+
+As the image file is compressed with xz, we need to add a custom command for extracting the downloaded image: `file_unarchive_cmd = ["xz", "--decompress", "$ARCHIVE_PATH"]`
+
+We then need to map the partitions to match the ones defined in the raspios image, to do this:
+- download the image and extract it
+- run `fdisk -lu disk.img`
+- create the partitions blocks and set the starting blocks and size accordingly
+
+In my case, I ended up with this:
+```
+image_partitions {
+    filesystem   = "vfat"
+    mountpoint   = "/boot"
+    name         = "boot"
+    size         = "512M"
+    start_sector = "16384"
+    type         = "c"
+  }
+  image_partitions {
+    filesystem   = "ext4"
+    mountpoint   = "/"
+    name         = "root"
+    size         = "0"
+    start_sector = "1064960"
+    type         = "83"
+  }
+```
+
+Since the installation of the base system is already done, we just need to run our install script and add our ssh keys.
+
+In the install script, there are sections that are specific to RPis (activated with `TARGET_PLATFORM=rpi`), we'll get to them in the next sections.
+
+For now, the only ones worth mentionning are:
+  - `systemctl disable userconfig.service` that is used to disable the userconfig service since we don't want any additional configuration happening after the creation of the image by packer.
+  - `K3S_EXEC="agent --node-taint droso/target-type=lowpower:NoSchedule"` that is used to apply a taint on k3s nodes running on a raspberry pi. This is done in order to prevent scheduling by default, so that the little rpi only runs the containers that strictly requires running on it.
+
 #### Installation Script
 
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/builder/install.sh" >}}
+
+This is a simple script to do the initial installation of packages and configuration for all build images.
+
+The config options are the following:
+<br/>
+
+`INSTALL_CLOUD_INIT`: if set to true, will install and configure the cloud-init packages, in my case this is only used to build images for proxmox, so it will not be used here
+<br/><br/>
+
+`INSTALL_K3S` is used to install the K3S agent or server. 
+
+If `K3S_URL` (the url to the master node) and `K3S_TOKEN` (the join token) are provided, the scripts configures k3s as an agent, else, it is configured as a server. 
+
+If `TARGET_PLATFORM=rpi` is set, the taint cli arg will also be added: `--node-taint droso/target-type=lowpower:NoSchedule`.
+
+We also increase the `fs.inotify` limits by writing a config file in `/etc/sysctl.d/10-ionotify.conf` since the defaults are not sufficient when running a lot of containers.
+<br/><br/>
+
+`INSTALL_DYNHOSTNAME` is used to add a script to set the hostname of the device at boot. 
+
+The script is executed as a `network-pre.target` systemd service, it lists the ethernet network interfaces and uses a short form of the mac address of the first insterface as the hostname. 
+
+This is required as k8s requires a unique hostname for each node (but our images are generic and used by multiple nodes).
+<br/><br/>
+
+`INSTALL_ISCSI` is used to install the ISCSI 
 
 
 ### Configuring the iSCSI server
