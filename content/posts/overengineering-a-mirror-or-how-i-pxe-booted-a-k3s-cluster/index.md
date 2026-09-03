@@ -216,14 +216,90 @@ The script is executed as a `network-pre.target` systemd service, it lists the e
 This is required as k8s requires a unique hostname for each node (but our images are generic and used by multiple nodes).
 <br/><br/>
 
-`INSTALL_ISCSI` is used to install the ISCSI 
+`INSTALL_ISCSI` is used to install the ISCSI initiator. This is the most important part as this is the software used at startup to mount the ISCSI share at the root of filesystem (effectively, replacing the need for a local drive). Here, we'll be using `open-iscsi`.
 
+The debian package supports [booting on an ISCSI drive](https://sources.debian.org/src/open-iscsi/2.0.874-7.1/debian/README.Debian/#L68), to enable it we need to create a `/etc/iscsi/iscsi.initramfs` file. Options such as the initiator iqn can be set in this file, but to keep this image generic, we'll use the second option which is to provide these option directly as cmdline when booting.
+
+We then need to rebuild the initramfs:
+- On the x64 version, is as easy as running `update-initramfs -u`
+- On the raspberry version, this doesn't work (at least in the packer builder), so we need to manually find the kernel version with this *beautiful* command `kernel_version=$(dd if=/boot/kernel8.img 2>/dev/null | gunzip | strings | grep "Linux version" | awk '{print $3}' | head -n 1)` and run `mkinitramfs -o /boot/initramfs8 $kernel_version`.
 
 ### Configuring the iSCSI server
 
+Now that we have build generic disk images for both raspberry and x64 devices, we need to configure the ISCSI server to serve these images and upload them from our pc to the server.
+
 #### Server
 
+There are [multiple implementations](https://wiki.debian.org/SAN/iSCSI/) of iscsi servers (also called `targets`) available on linux. Here, we'll be using the in-kernel implementation. To manage the server, we'll need to install `targetcli-fb`.
+
+First, you need to create the LUNs which are the actual storage spaces. You can of couse use block devices (such as physical disks or partitions), but here what's really interesting is the `fileio` backstore that enables you to use a disk image file as a storage medium.
+
+I created two LUNs, one for my raspberry of 32gb at the path `/srv/iscsi/nvme1/pxe/rpi3b.img` and one for my dell micro-pc of 64gb at `/srv/iscsi/nvme1/pxe/srvdell.img` (I allocated more space to the dell pc because since it way more powerful than the raspberry, it will receive more pods and thus require more storage for the container images).
+
+The disk images don't actually need to exist yet, just ensure that the size that you define in the backstore corresponds to the actual size that you want your img file to be (for example if you have a disk image of 64gb but the backstore is only defined for 32gb, only the 32gb will be accessible when mounting the drive over iscsi).
+
+You can now define the portal and targets:
+
+First, ensure that you have at least one portal configured and that it listens on the correct IP/Port for our initators to connect to.
+
+An ISCSI target is defined by its `iqn`, this is a unique identifier used to request a specific disk, the iqn should be formatted as follows: `iqn.yyyy-mm.domain:name` with "yyyy-mm" the date of acquisition of the domain, "domain" the reverse domain name, and "name" any unique name. For example, I'm using the following iqn format: `iqn.2023-06.tld.mydomain.pxe:macaddress_of_the_device`.
+
+For each device, create an iqn and associate a new acl to this iqn. The ACL contains the username and password used to mount the iscsi share, and the mapped_lun indicates the physical storage that this iqn can access (here, just add one LUN created previously to each iqn).
+
+Here is an example output of `targetcli ls` after finishing the configuration:
+```
+/> ls
+o- / ............................................................................................................. [...]
+  o- backstores .................................................................................................. [...]
+  | o- fileio ..................................................................................... [Storage Objects: 2]
+  | | o- lun_rpi3b ..................................... [/srv/iscsi/nvme1/pxe/rpi3b.img (32.0GiB) write-back activated]
+  | | | o- alua ....................................................................................... [ALUA Groups: 1]
+  | | |   o- default_tg_pt_gp ........................................................... [ALUA state: Active/optimized]
+  | | o- lun_srv_dell ................................ [/srv/iscsi/nvme1/pxe/srvdell.img (64.0GiB) write-back activated]
+  | |   o- alua ....................................................................................... [ALUA Groups: 1]
+  | |     o- default_tg_pt_gp ........................................................... [ALUA state: Active/optimized]
+  | o- pscsi ...................................................................................... [Storage Objects: 0]
+  | o- ramdisk .................................................................................... [Storage Objects: 0]
+  o- iscsi ................................................................................................ [Targets: 2]
+  | o- iqn.2023-06.tld.mydomain.myserver:nvme1.pxe ........................................................... [TPGs: 1]
+  |   o- tpg1 ................................................................................... [no-gen-acls, no-auth]
+  |     o- acls .............................................................................................. [ACLs: 2]
+  |     | o- iqn.2023-06.tld.mydomain.pxe:aa-aa-aa-aa-aa-aa ........................................... [Mapped LUNs: 1]
+  |     | | o- mapped_lun0 ................................................................ [lun1 fileio/lun_rpi3b (rw)]
+  |     | o- iqn.2023-06.tld.mydomain.pxe:bb-bb-bb-bb-bb-bb ........................................... [Mapped LUNs: 1]
+  |     |   o- mapped_lun0 ............................................................. [lun0 fileio/lun_srv_dell (rw)]
+  |     o- luns .............................................................................................. [LUNs: 2]
+  |     | o- lun0 .......................... [fileio/lun_srv_dell (/srv/iscsi/nvme1/pxe/srvdell.img) (default_tg_pt_gp)]
+  |     | o- lun1 ............................... [fileio/lun_rpi3b (/srv/iscsi/nvme1/pxe/rpi3b.img) (default_tg_pt_gp)]
+  |     o- portals ........................................................................................ [Portals: 1]
+  |       o- 0.0.0.0:3260 ......................................................................................... [OK]
+  o- loopback ............................................................................................. [Targets: 0]
+  o- srpt ................................................................................................. [Targets: 0]
+  o- vhost ................................................................................................ [Targets: 0]
+  o- xen-pvscsi ........................................................................................... [Targets: 0]
+/>
+```
+
+To make things easier, instead of configuring everything manually, I'm using Ansible and a `pxe.yaml` configuration file to define my options for each device.
+
+I was using the [ricsanfre/ansible-role-iscsi_target](https://github.com/ricsanfre/ansible-role-iscsi_target) role, but ended up forking it here: [ drosoCode/ansible-role-iscsi_target](https://github.com/drosoCode/ansible-role-iscsi_target) to add missing configuration option (especially regarding the fileio storage size). To use the forked version, add this in your ansible's `requirements.yaml`:
+
+```yaml
+roles:
+  - name: ricsanfre.iscsi_target
+    src: https://github.com/drosoCode/ansible-role-iscsi_target
+    version: master
+```
+
+You can find the playbook and pxe config below.
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/infra/setup-iscsi-target.yaml" >}}
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/infra/pxe.yaml" >}}
+
 #### Data Upload
+
+
 
 ### Configuring the TFTP server
 
@@ -250,4 +326,23 @@ While I didn't ended up using it for this project, I still wanted to connect an 
 ## Bonus: Easily lifting the bed
 
 ## Conclusion
+
+
+## References
+
+- https://sources.debian.org/src/open-iscsi/2.0.874-7.1/debian/README.Debian/
+- https://linuxhit.com/build-a-raspberry-pi-image-packer-packer-builder-arm/
+- https://developer.hashicorp.com/packer/docs/builders/community-supported
+- https://warmestrobot.com/blog/2024/06/27/raspberry-pi-network-boot-guide-2/
+- https://vwannabe.com/2024/01/11/cloning-linux-a-step-by-step-guide-to-booting-from-iscsi-lun/
+- https://forum.level1techs.com/t/gnu-linux-installation-server-ipxe-menu-sanboot/186919
+- https://romain.therrat.fr/posts/2011/04/iscsi-installation-dun-serveur-iscsi-sous-debian-et-connexion-dun-client/
+- https://wiki.debian.org/SAN/iSCSI/LIO
+- https://manpages.ubuntu.com/manpages/jammy/man8/targetctl.8.html
+- https://ipxe.org/cmd/kernel
+- https://ipxe.org/embed
+- https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#network-booting
+- https://kb.isc.org/docs/standard-dhcp-options
+- https://www.rfc-editor.org/rfc/rfc2132
+
 
