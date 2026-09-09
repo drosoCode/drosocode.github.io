@@ -1,5 +1,5 @@
 ---
-title: "Overengineering a mirror or how I PXE-booted a k3s cluster"
+title: "Overengineering a mirror or how I PXE-booted a k3s cluster - Part 1"
 date: 2026-02-14T00:00:00+00:00
 draft: true
 tags:
@@ -8,13 +8,16 @@ tags:
 - k8s
 ---
 
-## Introduction
-
 From the last years, I started to gain interest in another new hobby: dancing. Naturally, I would like to practice at home. The ideal environment would be a large empty room with full size mirrors on the wall, but I live in Paris so the rent is very expensive and thus I do not have this kind of space, actually I do not even have free wall without any furniture where I could place a mirror. 
 
 So, there was two problems: getting enough empty space to move, and getting some kind of visual feedback.
 
 The free space problem can be solved quite easily by lifting my bed against the wall (see the bonus at the end of this post). But for the mirror, I wanted to take advantage of my existing infrastructure and software development background.
+
+This is the first part of a series of 3 posts:
+- Part 1: Network Booting
+- [Part 2: Kinect Setup]()
+- [Part 3: K8s Deployment]()
 
 ## The Idea
 
@@ -230,7 +233,7 @@ Now that we have build generic disk images for both raspberry and x64 devices, w
 
 #### Server
 
-There are [multiple implementations](https://wiki.debian.org/SAN/iSCSI/) of iscsi servers (also called `targets`) available on linux. Here, we'll be using the in-kernel implementation. To manage the server, we'll need to install `targetcli-fb`.
+There are [multiple implementations](https://wiki.debian.org/SAN/iSCSI/) of iscsi servers (also called `targets`) available on linux. Here, we'll be using the in-kernel implementation. To manage its configuration, we'll need to install `targetcli-fb`.
 
 First, you need to create the LUNs which are the actual storage spaces. You can of couse use block devices (such as physical disks or partitions), but here what's really interesting is the `fileio` backstore that enables you to use a disk image file as a storage medium.
 
@@ -242,7 +245,7 @@ You can now define the portal and targets:
 
 First, ensure that you have at least one portal configured and that it listens on the correct IP/Port for our initators to connect to.
 
-An ISCSI target is defined by its `iqn`, this is a unique identifier used to request a specific disk, the iqn should be formatted as follows: `iqn.yyyy-mm.domain:name` with "yyyy-mm" the date of acquisition of the domain, "domain" the reverse domain name, and "name" any unique name. For example, I'm using the following iqn format: `iqn.2023-06.tld.mydomain.pxe:macaddress_of_the_device`.
+An ISCSI target is defined by its `iqn`, this is a unique identifier that we can use to assing ACLs to access our LUNs, the iqn should be formatted as follows: `iqn.yyyy-mm.domain:name` with "yyyy-mm" the date of acquisition of the domain, "domain" the reverse domain name, and "name" any unique name. For example, I'm using the following iqn format: `iqn.2023-06.tld.mydomain.pxe:macaddress_of_the_device`.
 
 For each device, create an iqn and associate a new acl to this iqn. The ACL contains the username and password used to mount the iscsi share, and the mapped_lun indicates the physical storage that this iqn can access (here, just add one LUN created previously to each iqn).
 
@@ -317,15 +320,8 @@ You can find the playbook and pxe config below.
 
 While I didn't ended up using it for this project, I still wanted to connect an RPI to my cluster, here I will be using a RPI 3.
 
-## Compiling libfreenect2
+## Overview
 
-## Cluster configuration
-
-## Final Configuration
-
-## Bonus: Easily lifting the bed
-
-## Conclusion
 
 
 ## References
