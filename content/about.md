@@ -110,7 +110,7 @@ Other:
 
 3 months internship to create a continuous integration system, adapt the existing projects (.NET Core, .NET Framework, Ionic/JS/angular) and add code quality (sonar) and monitoring tools. Developed using docker and deployed on Windows Server.
 
-## Eduction
+## Education
 
 [2022 – 2024: Université Paris Cité](https://u-paris.fr/)
 
