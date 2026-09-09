@@ -8,11 +8,11 @@ tags:
 - k8s
 ---
 
-From the last years, I started to gain interest in another new hobby: dancing. Naturally, I would like to practice at home. The ideal environment would be a large empty room with full size mirrors on the wall, but I live in Paris so the rent is very expensive and thus I do not have this kind of space, actually I do not even have free wall without any furniture where I could place a mirror. 
+From the last years, I started to gain interest in another new hobby: dancing. Naturally, I would like to practice at home. The ideal environment would be a large empty room with a full size mirror on the wall, but I live in Paris so the rent is very expensive and thus I do not have this kind of space, actually I do not even have any free wall without any furniture where I could place a mirror. 
 
 So, there was two problems: getting enough empty space to move, and getting some kind of visual feedback.
 
-The free space problem can be solved quite easily by lifting my bed against the wall (see the bonus at the end of this post). But for the mirror, I wanted to take advantage of my existing infrastructure and software development background.
+The free space problem can be solved quite easily by lifting my bed against the wall (see the bonus at the end of this series). But for the mirror, I wanted to take advantage of my existing infrastructure and software development background.
 
 This is the first part of a series of 3 posts:
 - Part 1: Network Booting
@@ -41,15 +41,14 @@ There are multiple stages to boot using the network:
 - First you must configure the device to use network boot (as this is usually not enabled by default)
 - Then, when booting, the device will send a DHCP request (DHCPDISCOVER), for PXE there are additional fields:
     -  Vendor-Class Identifier (Option 60): the vendor class identifier
-        - "PXEClient" for the Raspberry PI
-        - "PXEClient:Arch:00007" for UEFI x64 firmwares [TODO: check this]
-        - "PXEClient:Arch:00006" for UEFI x86 firmwares
+        - "PXEClient:Arch:00000" for the Raspberry PI (but not limited to it)
+        - "PXEClient:Arch:00007" for UEFI x64 firmwares
 - The DHCP server then responds with the proposed IP-address (DHCPOFFER) and additional parameters:
     - Vendor-specific Information (Option 43): not required for amd64, but for RPI this needs to be set to "Raspberry Pi Boot   " (with the 3 spaces at the end)
     - TFTP Server Name (Option 66): the IP of the TFTP server that will be used to load the bootfile
     - Bootfile Name (Option 67): the path (on the TFTP server) of the boot file to fetch and load
-    - Next-Server: This corresponds to the `siaddr` field in the DHCP packet, for iPXE, we will also need to set the it to the IP of the TFTP server to load the kernel/initramfs [TODO: check this]
-- The client accepts the DHCP offer, fetches the Bootfile on the specified TFTP server and loads it [TODO: check this]
+    - Next-Server: (or `siaddr`) a field in the DHCP packet. For iPXE, we will also need to set the it to the IP of the TFTP server to load the kernel/initramfs
+- The client accepts the DHCP offer (DHCPREQUEST + DHCPACK), fetches the Bootfile on the specified TFTP server and loads it
 - For Linux (the only case exposed here), the kernel and initramfs will be fetched from the TFTP server by the bootfile and then be loaded
 - Then, the iSCSI drive will be mounted as the root path and the system will finish starting up
 
@@ -229,9 +228,7 @@ We then need to rebuild the initramfs:
 
 ### Configuring the iSCSI server
 
-Now that we have build generic disk images for both raspberry and x64 devices, we need to configure the ISCSI server to serve these images and upload them from our pc to the server.
-
-#### Server
+Now that we have build generic disk images for both raspberry and x64 devices, we need to configure the ISCSI server to serve these images.
 
 There are [multiple implementations](https://wiki.debian.org/SAN/iSCSI/) of iscsi servers (also called `targets`) available on linux. Here, we'll be using the in-kernel implementation. To manage its configuration, we'll need to install `targetcli-fb`.
 
@@ -300,25 +297,98 @@ You can find the playbook and pxe config below.
 
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/infra/pxe.yaml" >}}
 
-#### Data Upload
+### Customizing and uploading the images
 
+To customize our disk images and upload them to the right location, we'll continue to use the `pxe.yaml` config file created above to centralize the pxe configuration (since there are many moving parts).
 
+*But why do we need to "customize" the images ?*
 
-### Configuring the TFTP server
+At this point, we've built a generic disk image for amd64 and RPI devices. But to actually make them boot we need to tell the BIOS how to boot these disk images and how to mount the root partition. To avoid building multiple images if we have multiple RPI or amd64 devices (as this would take quite some time), we're doing this in a distinct stage.
+
+We'll be using the following python script to automate these steps:
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/infra/pxe.py" >}}
+
+Note that for this step, you will have to already have configured an iSCSI target (previous step) and a TFTP server (a tftp package is often installable on good routers).
+
+TFTP is the protocol used by the PXE firmware to fetch the files to boot, the TFTP server url and the actual path to the bootfile are configured using DHCP options (we'll see this in the next step).
 
 #### For amd64 devices
 
+The legacy "PXE" booting doesn't allows to directly boot from a disk image on an iSCSI server, so we'll first need to boot into a more featureful bootloader such as [iPXE](https://ipxe.org/). This is called [chainloading](https://ipxe.org/howto/chainloading), depending on your network card firmware you may not need to do this (since some of them already supports iPXE out of the box).
+
+iPXE then allows you to write [scripts](https://ipxe.org/scripting) to control the boot process.
+
+There are two ways to use these scripts: 
+- You can pass the URL of the script to iPXE directly and it will fetch and execute it at runtime (ex `http://192.168.0.1/boot.php?mac=${net0/mac}&asset=${asset:uristring}`)
+- Or you can embed the script directly in the iPXE binary
+
+I've selected the second option (since it's required anyways to build iPXE if you want the chainloadable PXE binary), but I strongly suggest you to use the first method if your network card firmware already supports iPXE.
+
+In theory, you can use the [sanboot](https://ipxe.org/cmd/sanboot) command to directly boot from an iSCSI disk, but I haven't been able to make it work, so we'll use a little workaround:
+- We'll extract the kernel and initrd from our generic amd64 disk image and upload them to the TFTP server (along with the iPXE binary)
+- The legacy-PXE will boot the iPXE binary fetched from the TFTP server (the bootfile is specified in the dhcp responses)
+- Once loaded, the iPXE binary will fetch the kernel (and initrd) from the TFTP server and start it
+- The kernel will start the iscsi initiator (`open-iscsi` installed in the previous steps) and this initiator will use some arguments in the kernel cmdline to mount the iSCSI disk as the root partition
+
+The required kernel cmdline args for `open-iscsi` are:
+- `ISCSI_INITIATOR`: the IQN to use for this device, with iPXE we can use the `${mac:hexhyp}` substitution to use the mac address of the network card used to boot. (ex: `iqn.2023-06.tld.domain.pxe:${mac:hexhyp}`)
+- `ISCSI_TARGET_NAME`: the IQN of the iSCSI target (ex `iqn.2023-06.tld.domain.storage_server_name:nvme1.pxe`)
+- `ISCSI_TARGET_IP`: the IP address of the iSCSI target
+- `ISCSI_TARGET_PORT`: the port of the iSCSI target
+- `ISCSI_AUTHMETHOD=CHAP`: to use secure authentication
+- `ISCSI_USER`: the username to use with the iSCSI target
+- `ISCSI_PW`: the password to use with the iSCSI target
+
+Out of all these parameters, the `ISCSI_INITIATOR` is the only one that changes dynamically (depending on the mac address of the machine that is booting).
+
+Now here's what our iPXE script looks like:
+```
+#!ipxe
+dhcp
+kernel k3s/vmlinuz root=/dev/sda2 ro quiet ip=dhcp ISCSI_INITIATOR=iqn.2023-06.tld.domain.pxe:${mac:hexhyp} ISCSI_TARGET_NAME=iqn.2023-06.tld.domain.storage_server_name:nvme1.pxe ISCSI_TARGET_IP=10.10.2.1 ISCSI_TARGET_PORT=3260 ISCSI_AUTHMETHOD=CHAP ISCSI_USER=user ISCSI_PW=password
+initrd {tftp_dir}initrd.img
+boot
+```
+\* `k3s/` is the directory that I'm using in the TFTP server to store the kernel and initrd
+
+Then to build iPXE, we'll use a docker container:
+
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/builder/Dockerfile" >}}
 
+- Name your script `boot.ipxe`
+- Build the container with: `docker build -t ipxe_builder .`
+- Create the iPXE binary with: `docker run -it --rm -v ./path/to/ipxe_script_dir:/data ipxe_builder`
+
+We now need to extract the kernel and initrd from our disk image.
+
+In linux, it's pretty easy: all we need to do is mount the image and copy the right files
+- Create some folder to mount your disk to `mkdir /mnt/mountpoint`
+- Add a loopback device pointing to your disk image `losetup -f --show -P /path/to/disk.img`
+- Note the displayed path of your loopback device (ex: `/dev/loop0`)
+- Mount the partition `mount /dev/loop0p2 /mnt/mountpoint`: in this case `p2` means we're mounting the second partition (this is the root partition, the first one being the EFI partition)
+- Copy the kernel `cp /mnt/mountpoint/vmlinuz /some/backup/path/`
+- Copy the initrd `cp /mnt/mountpoint/initrd.img /some/backup/path/` 
+- Unmount the partition `umount /mnt/mountpoint`
+- Remove the loopback device `losetup -d /dev/loop0`
+
+Now, all we need is to copy the kernel, initrd and iPXE files to our TFTP server.
+
 #### For Raspberry PIs
+
+On the Rapsberry, the boot process is a bit different: the firwmare directly expects a predetermined file structure on the tftp server and will try to load only this one (see [here](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#network-booting)).
+
+Warning: Only the Raspberry models >= 3B can be used to boot from the network.
+
+
+
+#### Resizing and uploading images
+
+
 
 ### Configuring the DHCP server
 
-### For amd64 devices
 
-#### For Raspberry PIs
-
-While I didn't ended up using it for this project, I still wanted to connect an RPI to my cluster, here I will be using a RPI 3.
 
 ## Overview
 

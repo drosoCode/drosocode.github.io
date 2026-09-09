@@ -1,0 +1,42 @@
+sequenceDiagram
+    actor User
+    User->>+BIOS: Start
+
+    BIOS->>+DHCP_SRV: DHCPDISCOVER
+    DHCP_SRV-->>-BIOS: DHCPOFFER
+    BIOS->>+DHCP_SRV: DHCPREQUEST
+    DHCP_SRV-->>-BIOS: DHCPACK
+
+    BIOS->>+TFTP_SRV: Fetch PXE bootfile (option 67) from TFTP Server (option 66)
+    TFTP_SRV-->>-BIOS: bootfile (ipxe.efi)
+
+    BIOS->>+PXE_IMAGE: Execute bootfile
+
+
+    PXE_IMAGE->>+DHCP_SRV: DHCPDISCOVER
+    DHCP_SRV-->>-PXE_IMAGE: DHCPOFFER
+    PXE_IMAGE->>+DHCP_SRV: DHCPREQUEST
+    DHCP_SRV-->>-PXE_IMAGE: DHCPACK
+
+    PXE_IMAGE->>+TFTP_SRV: Fetch kernel from TFTP Server (next-server field)
+    TFTP_SRV-->>-PXE_IMAGE: kernel
+    PXE_IMAGE->>+TFTP_SRV: Fetch initrd from TFTP Server
+    TFTP_SRV-->>-PXE_IMAGE: initrd
+
+    PXE_IMAGE->>+KERNEL: Boot kernel with initrd
+    
+    
+    KERNEL->>+DHCP_SRV: DHCPDISCOVER
+    DHCP_SRV-->>-KERNEL: DHCPOFFER
+    KERNEL->>+DHCP_SRV: DHCPREQUEST
+    DHCP_SRV-->>-KERNEL: DHCPACK
+
+    KERNEL->>+ISCSI_TARGET: Mount root partition
+    ISCSI_TARGET->>+DISK_IMG: R/W
+    DISK_IMG-->>-ISCSI_TARGET: 
+
+    ISCSI_TARGET-->>-KERNEL: 
+    KERNEL-->-User: Started
+
+# arp requests are intentionally left out to make the diagram easier to read
+
