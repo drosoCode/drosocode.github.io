@@ -36,13 +36,13 @@ pxe:
     iscsi_target_path: srvdell.img # path of the disk image on the target server (relative to the target pxe mount point)
     boot_type: ipxe
     ipxe_boot_config: k3s
-    iscsi_initiator_iqn: "iqn.2023-06.tld.domain.pxe:d8-9e-f3-8e-d0-52"
+    iscsi_initiator_iqn: "iqn.2023-06.tld.domain.pxe:aa-aa-aa-aa-aa-aa"
     image_size_gb: 32 # default size of the disk image to expand to
 
   - name: rpi3b
     iscsi_target_path: rpi3b.img
     boot_type: rpi
-    iscsi_initiator_iqn: "iqn.2023-06.tld.domain.pxe:b8-27-eb-b1-64-13"
+    iscsi_initiator_iqn: "iqn.2023-06.tld.domain.pxe:bb-bb-bb-bb-bb-bb"
     source_image_path: rpi_arm64.img
     serial_number: xxxxxxxxx
     image_size_gb: 32

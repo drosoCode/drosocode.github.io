@@ -39,20 +39,16 @@ Since the configuration is a bit different between the mini-PC (amd64) and the r
 
 There are multiple stages to boot using the network:
 - First you must configure the device to use network boot (as this is usually not enabled by default)
-- Then, when booting, the device will send a DHCP request (DHCPDISCOVER), for PXE there are additional fields:
-    -  Vendor-Class Identifier (Option 60): the vendor class identifier
-        - "PXEClient:Arch:00000" for the Raspberry PI (but not limited to it)
-        - "PXEClient:Arch:00007" for UEFI x64 firmwares
-- The DHCP server then responds with the proposed IP-address (DHCPOFFER) and additional parameters:
-    - Vendor-specific Information (Option 43): not required for amd64, but for RPI this needs to be set to "Raspberry Pi Boot   " (with the 3 spaces at the end)
-    - TFTP Server Name (Option 66): the IP of the TFTP server that will be used to load the bootfile
-    - Bootfile Name (Option 67): the path (on the TFTP server) of the boot file to fetch and load
-    - Next-Server: (or `siaddr`) a field in the DHCP packet. For iPXE, we will also need to set the it to the IP of the TFTP server to load the kernel/initramfs
+- Then, when booting, the device will send a DHCP request (DHCPDISCOVER), with additional fields and options for PXE
+- The DHCP server then responds with the proposed IP-address (DHCPOFFER) and additional PXE parameters
 - The client accepts the DHCP offer (DHCPREQUEST + DHCPACK), fetches the Bootfile on the specified TFTP server and loads it
 - For Linux (the only case exposed here), the kernel and initramfs will be fetched from the TFTP server by the bootfile and then be loaded
 - Then, the iSCSI drive will be mounted as the root path and the system will finish starting up
 
-For more info on DHCP, see the [RFC2131](https://www.rfc-editor.org/rfc/rfc2131) and [RFC2132](https://www.rfc-editor.org/rfc/rfc2132).
+
+{{< admonition type=warning title="Warning" open=true >}}
+Only the Raspberry PI models >= 3B can be used to boot from the network.
+{{< /admonition >}}
 
 ### Creating disk images
 
@@ -232,7 +228,7 @@ Now that we have build generic disk images for both raspberry and x64 devices, w
 
 There are [multiple implementations](https://wiki.debian.org/SAN/iSCSI/) of iscsi servers (also called `targets`) available on linux. Here, we'll be using the in-kernel implementation. To manage its configuration, we'll need to install `targetcli-fb`.
 
-First, you need to create the LUNs which are the actual storage spaces. You can of couse use block devices (such as physical disks or partitions), but here what's really interesting is the `fileio` backstore that enables you to use a disk image file as a storage medium.
+First, we need to create the LUNs which are the actual storage spaces. You can of couse use block devices (such as physical disks or partitions), but here what's really interesting is the `fileio` backstore that enables you to use a disk image file as a storage medium.
 
 I created two LUNs, one for my raspberry of 32gb at the path `/srv/iscsi/nvme1/pxe/rpi3b.img` and one for my dell micro-pc of 64gb at `/srv/iscsi/nvme1/pxe/srvdell.img` (I allocated more space to the dell pc because since it way more powerful than the raspberry, it will receive more pods and thus require more storage for the container images).
 
@@ -297,13 +293,13 @@ You can find the playbook and pxe config below.
 
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/infra/pxe.yaml" >}}
 
-### Customizing and uploading the images
+### Extracting and customizing the images
 
 To customize our disk images and upload them to the right location, we'll continue to use the `pxe.yaml` config file created above to centralize the pxe configuration (since there are many moving parts).
 
 *But why do we need to "customize" the images ?*
 
-At this point, we've built a generic disk image for amd64 and RPI devices. But to actually make them boot we need to tell the BIOS how to boot these disk images and how to mount the root partition. To avoid building multiple images if we have multiple RPI or amd64 devices (as this would take quite some time), we're doing this in a distinct stage.
+At this point, we've built a generic disk image for amd64 and RPI devices. But to actually make them boot we need to tell the BIOS how to boot these disk images and how to mount the root partition. To do this, we need to extract some files from the build images and customize them.
 
 We'll be using the following python script to automate these steps:
 
@@ -311,7 +307,7 @@ We'll be using the following python script to automate these steps:
 
 Note that for this step, you will have to already have configured an iSCSI target (previous step) and a TFTP server (a tftp package is often installable on good routers).
 
-TFTP is the protocol used by the PXE firmware to fetch the files to boot, the TFTP server url and the actual path to the bootfile are configured using DHCP options (we'll see this in the next step).
+**TFTP** is the protocol used by the PXE firmware to fetch the files to boot, the TFTP server url and the actual path to the bootfile are configured using DHCP options (we'll see this in the next step).
 
 #### For amd64 devices
 
@@ -347,7 +343,7 @@ Now here's what our iPXE script looks like:
 #!ipxe
 dhcp
 kernel k3s/vmlinuz root=/dev/sda2 ro quiet ip=dhcp ISCSI_INITIATOR=iqn.2023-06.tld.domain.pxe:${mac:hexhyp} ISCSI_TARGET_NAME=iqn.2023-06.tld.domain.storage_server_name:nvme1.pxe ISCSI_TARGET_IP=10.10.2.1 ISCSI_TARGET_PORT=3260 ISCSI_AUTHMETHOD=CHAP ISCSI_USER=user ISCSI_PW=password
-initrd {tftp_dir}initrd.img
+initrd k3s/initrd.img
 boot
 ```
 \* `k3s/` is the directory that I'm using in the TFTP server to store the kernel and initrd
@@ -372,26 +368,168 @@ In linux, it's pretty easy: all we need to do is mount the image and copy the ri
 - Unmount the partition `umount /mnt/mountpoint`
 - Remove the loopback device `losetup -d /dev/loop0`
 
-Now, all we need is to copy the kernel, initrd and iPXE files to our TFTP server.
+Now, copy the kernel, initrd and iPXE files to the TFTP server.
 
 #### For Raspberry PIs
 
-On the Rapsberry, the boot process is a bit different: the firwmare directly expects a predetermined file structure on the tftp server and will try to load only this one (see [here](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#network-booting)).
+On the Rapsberry PI, the boot process is a bit different: the firwmare directly expects a predetermined file structure on the tftp server and will try to load only this one (see [here](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#network-booting)).
 
-Warning: Only the Raspberry models >= 3B can be used to boot from the network.
+This part is largely inspired from the [blog post from warmestrobot](https://warmestrobot.com/blog/2024/06/27/raspberry-pi-network-boot-guide-2/), please check it out for more details on the differences between the RPi versions.
+
+First, you need to boot from the sdcard (use any distribution as long as you have access to a terminal). Once connected to the PI:
+- Run `vcgencmd otp_dump | grep 17`, if the result is not `1020000a`, edit `/boot/config.txt` and set `program_usb_boot_mode=1` to enable the correct boot mode, reboot and verify the result
+- Find the RPi serial number with `grep Serial /proc/cpuinfo` (ignore the preceding zeros)
+- Find the RPi eth0 mac address with `ip a`
+- That's it for the on-device part
+
+{{< admonition type=warning title="Warning" open=true >}}
+If you're using the RPi model 3B, you need to format a SD Card to FAT32, place the `bootcode.bin` (extracted from the image, see below) at the root and put (and keep it all the time) the SD Card in the RPi to work around some hardcoded bugs in the network boot.
+{{< /admonition >}}
+
+Now, let's extract the boot files from our build image:
+- Create some folder to mount your disk to `mkdir /mnt/mountpoint`
+- Add a loopback device pointing to your disk image `losetup -f --show -P /path/to/disk.img`
+- Note the displayed path of your loopback device (ex: `/dev/loop0`)
+- Mount the partition `mount /dev/loop0p1 /mnt/mountpoint`: in this case `p1` means we're mounting the first partition
+- Copy the boot files `rsync -avhP /mnt/mountpoint/boot/ /some/backup/dir`
+- Unmount the partition `umount /mnt/mountpoint`
+- Remove the loopback device `losetup -d /dev/loop0`
 
 
+In the bootfiles destination folder (here `/some/backup/dir`), you will find a `cmdline.txt` file, edit it to look like this:
+- `console=serial0,115200 console=tty1 ip=dhcp root=/dev/sda2 rootfstype=ext4 elevator=deadline cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory rootwait rw ISCSI_INITIATOR=iqn.2023-06.tld.domain.pxe:bb-bb-bb-bb-bb-bb ISCSI_TARGET_NAME=iqn.2023-06.tld.domain.storage_server_name:nvme1.pxe ISCSI_TARGET_IP=10.10.2.1 ISCSI_TARGET_PORT=3260 ISCSI_AUTHMETHOD=CHAP ISCSI_USER=user ISCSI_PW=password`
 
-#### Resizing and uploading images
+Customize the `ISCSI_*` parameters according the their description (see the `amd64` section above). The only difference is that here, we need to specify the exact initiator value (so `${mac:hexhyp}` can't be used, we need to set a real unique value, here I'm still using the RPi mac address, but this config is now specific to each RPi device, this isn't really a problem since the RPi will look for this file in a folder named after their serial number anyways).
+
+Still in the same folder, edit the `config.txt` file and add at the end of the file:
+- `kernel=kernel8.img`
+- `initramfs initramfs8 followkernel`
+
+{{< admonition type=info title="Notice" open=true >}}
+If using a RPi model 5, instead of `kernel8` and `initramfs8`, use `kernel2712` and `initramfs2712`
+{{< /admonition >}}
+
+Now copy rename your bootfiles destination folder to the serial number of the RPi and copy this folder to your TFTP server.
+
+In this folder, you will also find the `bootcode.bin`, make sure to also copy this file to the root of the TFTP server as most RPi models will search for it at the root of the TFTP server.
 
 
+### Resizing and uploading the images
+
+The TFTP server layout should now look like this (if using both RPi and amd64):
+```
+| / 
+|   /k3s
+|     /k3s/vmlinuz
+|     /k3s/initrd.img
+|     /k3s/ipxe.efi
+|   /bootcode.bin
+|   /aabbccdd (<-- this is the RPi serial number)
+|     /aabbccdd/config.txt
+|     /aabbccdd/cmdline.txt
+|     /aabbccdd/bootcode.bin
+|     /aabbccdd/kernel8.img
+|     /aabbccdd/initramfs8
+|     /aabbccdd/<and a bunch of .dtb,.dat,.elf files ...>
+```
+
+Now the last step for storage is uploading the disk images to the iSCSI server.
+
+The generic image that we have generated have a quite small disk size to be easier to manipulate, but we may want to resize them to be larger (especially when running a lot of containeres, k3s will use quite a lot of space), so let's do this:
+
+
+{{< admonition type=warning title="Warning" open=true >}}
+The following process is only possible because the DATA partition (the one we want to expand) is the LAST partition. If you have followed this entire tutorial it should be fine, but for example if you've enabled the SWAP on debian, usually the SWAP partition is located *after* the DATA one, in that case, we can't expand the DATA part *this easily* since it's stuck between the EFI and SWAP partitions.
+{{< /admonition >}}
+
+- Create sparse data at the end of your disk image: `dd if=/dev/zero of=/path/to/disk.img bs=1M count=0 seek=SIZE` (replace SIZE by the actual size in megabytes, ex: `32768` for 32gb, it should be greater than the current image size)
+- Create a loopback device for the image: `losetup -f --show -P /path/to/disk.img`
+- Note the displayed path of your loopback device (ex: `/dev/loop0`)
+- Run: `parted /dev/loop0 --script print` and check if the output contains `gpt`
+  - If yes, move the gpt backup header to the end of the disk with `sgdisk -e /dev/loop0`
+- Now resize the data partition (here partition 2) to completely fill the end of the disk: `parted /dev/loop0 --script resizepart 2 100%`
+- And resize the filesystem with (still partition 2 here):
+  - `fsck -f /dev/loop0p2`
+  - `resize2fs /dev/loop0p2`
+  - `fsck -f /dev/loop0p2`
+- Finally, remove the loopback device `losetup -d /dev/loop0`
+
+Now to upload the image to the server, we can use `rsync` with the `--sparse --inplace` options, this will ensure that rsync will only copy the actual data (and not the zeroed free space that we added) thus ensuring a much faster transfer speed.
+
+I've created an ansible playbook to automate the task of uploading data to both the TFTP server and iSCSI server:
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/infra/upload.yaml" >}}
 
 ### Configuring the DHCP server
+
+You're almost there ! 
+
+The last step is now to configure your DHCP server to tell our devices where to find their bootfiles on the TFTP server.
+
+The client usually sends the following information with their DHCPDISCOVER and DHCREQUEST requests:
+-  Vendor-Class Identifier (Option 60): the vendor class identifier
+    - "PXEClient:Arch:00000" for the Raspberry PI (but not limited to it)
+    - "PXEClient:Arch:00007" for UEFI x64 firmwares
+- .... for iPXE
+
+The following options/fields are expected in the DHCPOFFER and DHCPACK responses to make the network boot work:
+  - TFTP Server Name (Option 66): the IP of the TFTP server that will be used to load the bootfile (used by both RPi and amd64)
+  - Bootfile Name (Option 67): the path (on the TFTP server) of the boot file to fetch and load (only used for the amd64 boot)
+  - Next-Server: (or `siaddr`) a field in the DHCP packet. For iPXE, we will also need to set the it to the IP of the TFTP server to use to load the kernel/initramfs (so only required for amd64 boot)
+  - Vendor-specific Information (Option 43): set to "Raspberry Pi Boot" (only required for the RPi boot)
+
+On dnsmasq, you can add rules like this (not the actual syntax) to limit the reach of these options:
+- if "vendor-class id == PXEClient:Arch:00007" set "bootfile_name = k3s/ipxe.efi"
+- if "client mac_address == xxxxxxxx" set "vendor-specific info = Raspberry Pi Boot"
+
+On OPNsense, you can configure this in `Services > Dnsmasq DNS & DHCP > DHCP Options`. If you don't have any other devices that requires Vendor-specific Information, it's also fine to leave everything set all the time. 
+
+{{< admonition type=info title="Notice" open=true >}}
+For more info on DHCP (especially the fields and options), see the [RFC2131](https://www.rfc-editor.org/rfc/rfc2131) and [RFC2132](https://www.rfc-editor.org/rfc/rfc2132).
+{{< /admonition >}}
 
 
 
 ## Overview
 
+### amd64 Boot
+
+{{< mermaid >}}
+sequenceDiagram
+    actor User
+    User->>+BIOS: Start
+    BIOS->>+DHCP_SRV: DHCPDISCOVER
+    DHCP_SRV-->>-BIOS: DHCPOFFER
+    BIOS->>+DHCP_SRV: DHCPREQUEST
+    DHCP_SRV-->>-BIOS: DHCPACK
+    BIOS->>+TFTP_SRV: Fetch PXE bootfile (option 67) from TFTP Server (option 66)
+    TFTP_SRV-->>-BIOS: bootfile (ipxe.efi)
+    BIOS->>+PXE_IMAGE: Execute bootfile
+    PXE_IMAGE->>+DHCP_SRV: DHCPDISCOVER
+    DHCP_SRV-->>-PXE_IMAGE: DHCPOFFER
+    PXE_IMAGE->>+DHCP_SRV: DHCPREQUEST
+    DHCP_SRV-->>-PXE_IMAGE: DHCPACK
+    PXE_IMAGE->>+TFTP_SRV: Fetch kernel from TFTP Server (next-server field)
+    TFTP_SRV-->>-PXE_IMAGE: kernel
+    PXE_IMAGE->>+TFTP_SRV: Fetch initrd from TFTP Server
+    TFTP_SRV-->>-PXE_IMAGE: initrd
+    PXE_IMAGE->>+KERNEL: Boot kernel with initrd
+    KERNEL->>+DHCP_SRV: DHCPDISCOVER
+    DHCP_SRV-->>-KERNEL: DHCPOFFER
+    KERNEL->>+DHCP_SRV: DHCPREQUEST
+    DHCP_SRV-->>-KERNEL: DHCPACK
+    KERNEL->>+ISCSI_TARGET: Mount root partition
+    ISCSI_TARGET->>+DISK_IMG: R/W
+    DISK_IMG-->>-ISCSI_TARGET: 
+    ISCSI_TARGET-->>-KERNEL: 
+    KERNEL-->-User: Started
+{{< /mermaid >}}
+
+### RPi Boot
+
+
+
+### Conclustion
 
 
 ## References
@@ -410,5 +548,3 @@ Warning: Only the Raspberry models >= 3B can be used to boot from the network.
 - https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#network-booting
 - https://kb.isc.org/docs/standard-dhcp-options
 - https://www.rfc-editor.org/rfc/rfc2132
-
-
