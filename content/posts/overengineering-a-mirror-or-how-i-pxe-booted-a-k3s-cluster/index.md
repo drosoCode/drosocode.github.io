@@ -1,7 +1,7 @@
 ---
-title: "Overengineering a mirror or how I PXE-booted a k3s cluster - Part 1"
-date: 2026-02-14T00:00:00+00:00
-draft: true
+title: "Overengineering a mirror - Part 1: PXE-booting a k3s cluster"
+date: 2026-09-13T00:00:00+00:00
+draft: false
 tags:
 - hardware
 - infra
@@ -12,12 +12,12 @@ From the last years, I started to gain interest in another new hobby: dancing. N
 
 So, there was two problems: getting enough empty space to move, and getting some kind of visual feedback.
 
-The free space problem can be solved quite easily by lifting my bed against the wall (see the bonus at the end of this series). But for the mirror, I wanted to take advantage of my existing infrastructure and software development background.
+The free space problem can be solved quite easily by lifting my bed against the wall (see the next parts of this series). But for the mirror, I wanted to take advantage of my existing infrastructure and software development background.
 
 This is the first part of a series of 3 posts:
 - Part 1: Network Booting
-- [Part 2: Kinect Setup]()
-- [Part 3: K8s Deployment]()
+- Part 2: Hardware Setup
+- Part 3: K8s Deployment
 
 ## The Idea
 
@@ -29,7 +29,7 @@ So, I decided to package the application capturing and restreaming the Kinect vi
 
 I already have a k3s master node on my proxmox server (installed using packer/terraform/fluxcd), so I can just add my mini-PC as another node on this cluster. And since we want some complexity (-and to learn a few new things), I decided to make this mini-PC use network boot (with PXE and iSCSI) to boot from a pre-configured disk image for the cluster (generated using packer) on my storage server.
 
-Initially I wanted to go with the Raspberry Pi 4 (as the Kinect V2 uses a much higher USB bandwidth than the Kinect V1 and thus requires a USB 3 port), but it just wasn't powerful enough (got around 7-14 fps, depending on the power supply). So I bought a Dell OptiPlex 3050 Tiny as I wanted to test this kind of mini PC for a while.
+Initially I wanted to go with the Raspberry Pi 4 (as the Kinect V2 uses a much higher USB bandwidth than the Kinect V1 and thus requires a USB 3 port), but it just wasn't powerful enough (got around 7-14 fps, depending on the power supply). So I bought a Dell OptiPlex 3050 Tiny: since I wanted to test this kind of mini PC for a while, this was a good pretext.
 
 Since the configuration is a bit different between the mini-PC (amd64) and the rpi (arm64), I will show the network boot process for both.
 
@@ -82,7 +82,7 @@ http_port_min  = 8100
 http_port_max  = 8100
 ```
 
-Then, the boot_command set the command that will be executed immediately when the VM boots, the command is entered directly on the console using an emulated keyboard. The "url" parameter specifies the path to our preseed file (with the HTTPIP and HTTPPort being automatically replaced by packer by the running server params).
+Then, the boot_command sets the command that will be executed immediately when the VM boots, the command is entered directly on the console using an emulated keyboard. The "url" parameter specifies the path to our preseed file (with the HTTPIP and HTTPPort being automatically replaced by packer by the running server params).
 ```hcl
 boot_command = [
     "<wait>c<wait>",
@@ -136,7 +136,7 @@ For the Raspberry PI, instead of creating a debian image from scratch, I'm using
 
 Since the rpi architecture is different from my base system (x64), I used a custom builder for ARM:
  - A few of them are listed on the [packer docs](https://developer.hashicorp.com/packer/docs/builders/community-supported)
- - The one that I actually setteld with was this fork: https://github.com/michalfita/packer-plugin-cross which added support for the new packer plugin system
+ - The one that I actually settled with was this fork: https://github.com/michalfita/packer-plugin-cross which added support for the new packer plugin system
  - The plugin relies on `qemu-aarch64-static`, so make sure that this is installed on your machine
 
 Import it with:
@@ -204,6 +204,10 @@ If `K3S_URL` (the url to the master node) and `K3S_TOKEN` (the join token) are p
 
 If `TARGET_PLATFORM=rpi` is set, the taint cli arg will also be added: `--node-taint droso/target-type=lowpower:NoSchedule`.
 
+{{< admonition type=warning title="Warning" open=true >}}
+This way of installation effectively means that the K3S_TOKEN is saved and stays into all disk images generated with this scripts. It's also expected to remain the same (at least until all machines joined the cluster). Depending on your threat model this might be a security concern.
+{{< /admonition >}}
+
 We also increase the `fs.inotify` limits by writing a config file in `/etc/sysctl.d/10-ionotify.conf` since the defaults are not sufficient when running a lot of containers.
 <br/><br/>
 
@@ -228,19 +232,37 @@ Now that we have build generic disk images for both raspberry and x64 devices, w
 
 There are [multiple implementations](https://wiki.debian.org/SAN/iSCSI/) of iscsi servers (also called `targets`) available on linux. Here, we'll be using the in-kernel implementation. To manage its configuration, we'll need to install `targetcli-fb`.
 
-First, we need to create the LUNs which are the actual storage spaces. You can of couse use block devices (such as physical disks or partitions), but here what's really interesting is the `fileio` backstore that enables you to use a disk image file as a storage medium.
+First, we need to create the backstores which are the actual storage spaces. You can of couse use block devices (such as physical disks or partitions), but here what's really interesting is the `fileio` backstore that enables you to use a disk image file as a storage medium:
+- Open the interactive cli with `targetcli`
+- Go to backstores: `cd /backstores/fileio`
+- Create a new backstore: `create rpi3b /srv/iscsi/nvme1/pxe/rpi3b.img 32G`
 
-I created two LUNs, one for my raspberry of 32gb at the path `/srv/iscsi/nvme1/pxe/rpi3b.img` and one for my dell micro-pc of 64gb at `/srv/iscsi/nvme1/pxe/srvdell.img` (I allocated more space to the dell pc because since it way more powerful than the raspberry, it will receive more pods and thus require more storage for the container images).
+I created two backstores, one for my raspberry of 32gb at the path `/srv/iscsi/nvme1/pxe/rpi3b.img` and one for my dell micro-pc of 64gb at `/srv/iscsi/nvme1/pxe/srvdell.img` (I allocated more space to the dell pc because since it way more powerful than the raspberry, it will receive more pods and thus require more storage for the container images).
 
 The disk images don't actually need to exist yet, just ensure that the size that you define in the backstore corresponds to the actual size that you want your img file to be (for example if you have a disk image of 64gb but the backstore is only defined for 32gb, only the 32gb will be accessible when mounting the drive over iscsi).
 
-You can now define the portal and targets:
+You can now define the portal and targets.
 
-First, ensure that you have at least one portal configured and that it listens on the correct IP/Port for our initators to connect to.
+An ISCSI target is defined by its `iqn` (iSCSI Qualified Name): this is a unique identifier for a machine (so both our clients and our server should have at least one iqn). We can then assing them ACLs to access our LUNs (Logical Unit Number: the virtual disks). The iqn should be formatted as follows: `iqn.yyyy-mm.domain:name` with "yyyy-mm" the date of acquisition of the domain, "domain" the reverse domain name, and "name" any unique name. For example, I'm using the following iqn format for my devices: `iqn.2023-06.tld.mydomain.pxe:macaddress_of_the_device` and the following iqn for my server: `iqn.2023-06.tld.mydomain.myserver:nvme1.pxe`.
 
-An ISCSI target is defined by its `iqn`, this is a unique identifier that we can use to assing ACLs to access our LUNs, the iqn should be formatted as follows: `iqn.yyyy-mm.domain:name` with "yyyy-mm" the date of acquisition of the domain, "domain" the reverse domain name, and "name" any unique name. For example, I'm using the following iqn format: `iqn.2023-06.tld.mydomain.pxe:macaddress_of_the_device`.
+Let's create the iqn for our server: 
+- `cd /iscsi`
+- `create iqn.2023-06.tld.mydomain.myserver:nvme1.pxe`
 
-For each device, create an iqn and associate a new acl to this iqn. The ACL contains the username and password used to mount the iscsi share, and the mapped_lun indicates the physical storage that this iqn can access (here, just add one LUN created previously to each iqn).
+Now let's add some LUNs to this iqn:
+- Go to LUNs: `cd iqn.2023-06.tld.mydomain.myserver:nvme1.pxe/tpg1/luns`
+- For each device, create a new LUN referencing its backstore: `create /backstores/fileio/rpi3b`
+- Go to ACLs: `cd ../acls`
+- Create the IQN of the clients: `create iqn.2023-06.tld.mydomain.pxe:aa-aa-aa-aa-aa-aa`
+- And for each of these IQNs, assign a username/password for authentication: `cd iqn.2023-06.tld.mydomain.pxe:aa-aa-aa-aa-aa-aa`, `set auth userid=myuser`, `set auth password=mysuperpass`
+
+Finally, ensure that you have at least one portal configured and that it listens on the correct IP/Port for our initators to connect to:
+- `cd /iscsi/iqn.2023-06.tld.mydomain.myserver:nvme1.pxe/tpg1/portals`
+- `create 0.0.0.0 3260`
+
+Don't forget to save your config before exiting:
+- `saveconfig`
+- `exit`
 
 Here is an example output of `targetcli ls` after finishing the configuration:
 ```
@@ -301,17 +323,20 @@ To customize our disk images and upload them to the right location, we'll contin
 
 At this point, we've built a generic disk image for amd64 and RPI devices. But to actually make them boot we need to tell the BIOS how to boot these disk images and how to mount the root partition. To do this, we need to extract some files from the build images and customize them.
 
-We'll be using the following python script to automate these steps:
+I'm using the following python script to automate these steps, but I will detail the manual process below.
 
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/assets/infra/pxe.py" >}}
 
-Note that for this step, you will have to already have configured an iSCSI target (previous step) and a TFTP server (a tftp package is often installable on good routers).
+Note that for this step, you will have to already have configured an iSCSI target (previous step) and a TFTP server (a tftp package is usually available if you have a decent router).
 
-**TFTP** is the protocol used by the PXE firmware to fetch the files to boot, the TFTP server url and the actual path to the bootfile are configured using DHCP options (we'll see this in the next step).
+
+{{< admonition type=info title="Info" open=true >}}
+TFTP is the protocol used by the PXE firmware to fetch the files to boot: it's a simple file transfer protocol over UDP. The TFTP server url and the actual path to the bootfile are configured using DHCP options (we'll see this in the next step).
+{{< /admonition >}}
 
 #### For amd64 devices
 
-The legacy "PXE" booting doesn't allows to directly boot from a disk image on an iSCSI server, so we'll first need to boot into a more featureful bootloader such as [iPXE](https://ipxe.org/). This is called [chainloading](https://ipxe.org/howto/chainloading), depending on your network card firmware you may not need to do this (since some of them already supports iPXE out of the box).
+The legacy "PXE" booting doesn't allow to directly boot from a disk image on an iSCSI server, so we'll first need to boot into a more featureful bootloader such as [iPXE](https://ipxe.org/). This is called [chainloading](https://ipxe.org/howto/chainloading), depending on your network card firmware you may not need to do this (since some of them already supports iPXE out of the box).
 
 iPXE then allows you to write [scripts](https://ipxe.org/scripting) to control the boot process.
 
@@ -377,7 +402,7 @@ On the Rapsberry PI, the boot process is a bit different: the firwmare directly 
 This part is largely inspired from the [blog post from warmestrobot](https://warmestrobot.com/blog/2024/06/27/raspberry-pi-network-boot-guide-2/), please check it out for more details on the differences between the RPi versions.
 
 First, you need to boot from the sdcard (use any distribution as long as you have access to a terminal). Once connected to the PI:
-- Run `vcgencmd otp_dump | grep 17`, if the result is not `1020000a`, edit `/boot/config.txt` and set `program_usb_boot_mode=1` to enable the correct boot mode, reboot and verify the result
+- Run `vcgencmd otp_dump | grep 17`, if the result is not `1020000a`, edit `/boot/config.txt` and set `program_usb_boot_mode=1` to enable the correct boot mode. Reboot and verify the result
 - Find the RPi serial number with `grep Serial /proc/cpuinfo` (ignore the preceding zeros)
 - Find the RPi eth0 mac address with `ip a`
 - That's it for the on-device part
@@ -466,19 +491,20 @@ You're almost there !
 
 The last step is now to configure your DHCP server to tell our devices where to find their bootfiles on the TFTP server.
 
-The client usually sends the following information with their DHCPDISCOVER and DHCREQUEST requests:
+The client *usually* sends the following information with their DHCPDISCOVER and DHCPREQUEST requests:
 -  Vendor-Class Identifier (Option 60): the vendor class identifier
     - "PXEClient:Arch:00000" for the Raspberry PI (but not limited to it)
     - "PXEClient:Arch:00007" for UEFI x64 firmwares
-- .... for iPXE
+-  User Class Information (Option 77) for iPXE
+-  UUID/GUID-based Client Identifier
 
-The following options/fields are expected in the DHCPOFFER and DHCPACK responses to make the network boot work:
+The following options/fields are **expected** in the DHCPOFFER and DHCPACK responses to make the network boot work:
   - TFTP Server Name (Option 66): the IP of the TFTP server that will be used to load the bootfile (used by both RPi and amd64)
   - Bootfile Name (Option 67): the path (on the TFTP server) of the boot file to fetch and load (only used for the amd64 boot)
   - Next-Server: (or `siaddr`) a field in the DHCP packet. For iPXE, we will also need to set the it to the IP of the TFTP server to use to load the kernel/initramfs (so only required for amd64 boot)
   - Vendor-specific Information (Option 43): set to "Raspberry Pi Boot" (only required for the RPi boot)
 
-On dnsmasq, you can add rules like this (not the actual syntax) to limit the reach of these options:
+On dnsmasq, you can add rules (for example using the values provided in the DHCPDISCOVER requests) to limit the reach of these options (not the actual syntax):
 - if "vendor-class id == PXEClient:Arch:00007" set "bootfile_name = k3s/ipxe.efi"
 - if "client mac_address == xxxxxxxx" set "vendor-specific info = Raspberry Pi Boot"
 
@@ -489,10 +515,18 @@ For more info on DHCP (especially the fields and options), see the [RFC2131](htt
 {{< /admonition >}}
 
 
-
 ## Overview
 
+The network boot part of this series if finally finished (and it took wayy more time to write than I initially expected). You can now start your amd64 and/or RPi and after a few minutes it should (hopefully) join your cluster ! 
+
+In case it's not working, I'm adding below a few explanations of how the boot process worked in my case. 
+
+To debug PXE boot issues, the best way to be able to capture the network traffic (especially the DHCP packets), if using OPNsense you can do this with the following command: `ssh root@10.10.1.1  'tcpdump -U -i mlxen1_vlan10 -w -' | sudo wireshark -k -S -i -` (mlxen1_vlan10 here is my network interface `mlxen1` with only the vlan 10 and 10.10.1.1 is my router ip. make sure to add your ssh key to it beforehand with `ssh-copy-id root@10.10.1.1`).
+
+
 ### amd64 Boot
+
+Here is the expected process for a amd64 boot (this diagram only focuses on the boot part, thus some parts are intentionally omitted or simplified).
 
 {{< mermaid >}}
 sequenceDiagram
@@ -525,11 +559,40 @@ sequenceDiagram
     KERNEL-->-User: Started
 {{< /mermaid >}}
 
+In Wireshark, this translates to this (with the following filter: `dhcp || ip.addr == 10.10.2.3`, 10.10.2.3 being the IP of my amd64 device):
+
+{{< image src="assets/images/amd64_dhcp.png" caption="amd64 general dhcp capture" width="50%" >}}
+
+Below, you can clearly see the DHCPDISCOVER request sent by our device that includes a Vendor-Class ID of `PXEClient:Arch:00007:UNDI:003016` and that requests the Bootfile Name and TFTP server options.
+
+{{< image src="assets/images/amd64_discover.png" caption="amd64 dhcp discover capture" width="50%" >}}
+
+The DHCP server responds with a DHCPOFFER with the following values:
+- `Bootfile Name`: k3s/ipxe.efi
+- `TFTP Server Name`: 10.10.1.1
+- `Next Server IP Address`: 10.10.1.1 (this value is not used in the first DHCP request but is used by iPXE when doing the second DHCP request)
+- You can of course also find the usual DHCP values like "client IP address", "router", "subnet mask", "domain name server" ...
+- Here the DHCP server always responds with `Vendor-Specific Information` set to "Raspberry Pi Boot" but this value is not used for the amd64 boot
+
+{{< image src="assets/images/amd64_offer.png" caption="amd64 dhcp offer capture" width="50%" >}}
+
+The iPXE bootloader is fetched (over TFTP) and executed, and then makes a second DHCPDISCOVER request (to get an IP since the network stack was restarted, and to get the `Next Server IP Address` to use to fetch the kernel/initrd files).
+
+{{< image src="assets/images/amd64_discover_2.png" caption="amd64 dhcp discover second capture" width="50%" >}}
+
+
 ### RPi Boot
 
+Here is the DHCPDISCOVER for the Raspberry Pi, with its Vendor-Class Identifier set to `PXEClient:Arch:00000:UNDI:002001`.
 
+{{< image src="assets/images/rpi_discover.png" caption="rpi dhcp discover capture" width="50%" >}}
 
-### Conclustion
+The DHCPOFFER in response contains:
+- The `Vendor-Specific Information` set to "Raspberry Pi Boot"
+- All the usual DHCP values
+- The `Bootfile Name` (set to "k3s/ipxe.efi"), which is not used in this case
+
+{{< image src="assets/images/rpi_offer.png" caption="rpi dhcp offer capture" width="50%" >}}
 
 
 ## References
