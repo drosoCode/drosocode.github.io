@@ -30,19 +30,25 @@ Of course, the main characteristic of the Kinect is that it's not a "simple" cam
 - A color camera (480p for the V1 and 1080p for the V2)
 - A microphone array
 - A depth-sensor (IR grid + IR camera on the V1, Time of Flight on the V2)
-- And of course an SDK that makes the depth data easy to manipulate (like skeleton/joints/hands tracking)
+- And of course an associated SDK that makes the depth data easy to manipulate (like skeleton/joints/hands tracking)
 
 While the SDK is pretty extensive and easy to use on Windows, on Linux it's a totally different story.
 
 There are very old frameworks called [OpenNI](https://github.com/OpenNI/OpenNI) / [OpenNI2](https://github.com/OpenNI/OpenNI2) (for the v1 and V2 respectively), with [modules for the v1](https://github.com/PrimeSense/Sensor). But the actual algorithms used to make the joints tracking easy to use are in another piece of software called NITE, which was always closed-source (and is now long dead). Furthermore, when Apple acquired PrimeSense (the company that manufactured the kinect's sensors, which is basically the same tech as FaceID), they took down all the websites (for example [openni.org](https://www.openni.org/) now redirects to their website).
 
-So you can basically forget taking advantage of the tracking algos on Linux (and the progress of AI models makes this less and less interesting anyways).
+So you unless you want to struggle to compile decades-old and unmaintained software, you can pretty much forget taking advantage of the tracking algos on Linux (and the progress of specialized AI models makes this less and less interesting anyways).
 
 Fortunately, there was an opensource implementation effort to get at least basic data from the sensors with:
 - [libfreenect](https://github.com/OpenKinect/libfreenect) for the V1
 - [libfreenect2](https://github.com/OpenKinect/libfreenect2) for the V2
 
+I have both models at home, and use the V1 as my desktop webcam since the resolution doesn't matter that much for this use case, however I definitely want to use the V2 for displaying on a TV.
 
+Getting video for the V1 is as easy as installing libfreenect: `yay -S libfreenect`.
+
+Then after plugging the Kinect a new video device appears, so you can directly use this in any software that supports using `/dev/videoX` devices (ex: `ffplay /dev/video0`).
+
+For the V2, it's a bit more complicated, as the AUR package doesn't compiles (and ideally, I want this in a debian container). So let's take a closer look.
 
 ### Compiling libfreenect2
 
@@ -50,3 +56,6 @@ Fortunately, there was an opensource implementation effort to get at least basic
 
 ### Building the docker container
 
+## References
+- https://aur.archlinux.org/packages/libfreenect2
+- 
