@@ -10,7 +10,7 @@ tags:
 
 This is the third and last part of this series of posts:
 - [Part 1: Network Booting]()
-- [Part 2: Kinect Setup]()
+- [Part 2: Hardware Setup]()
 - Part 3: K8s Deployment
 
 Now that our cluster is ready and that we know how to use the Kinect, we're ready to ~~write a ton of yaml~~, deploy everything on the cluster and do some automations !
