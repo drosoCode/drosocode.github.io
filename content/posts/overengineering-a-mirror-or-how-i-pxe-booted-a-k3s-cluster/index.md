@@ -517,7 +517,7 @@ For more info on DHCP (especially the fields and options), see the [RFC2131](htt
 
 ## Overview
 
-The network boot part of this series if finally finished (and it took wayy more time to write than I initially expected). You can now start your amd64 and/or RPi and after a few minutes it should (hopefully) join your cluster ! 
+The network boot part of this series is finally finished (and it took wayy more time to write than I initially expected). You can now start your amd64 and/or RPi and after a few minutes it should (hopefully) join your cluster ! 
 
 In case it's not working, I'm adding below a few explanations of how the boot process worked in my case. 
 
