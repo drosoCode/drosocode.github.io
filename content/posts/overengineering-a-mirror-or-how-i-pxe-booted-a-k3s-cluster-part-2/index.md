@@ -15,11 +15,13 @@ This is the second out of 3 of this posts series:
 - Part 2: Hardware Setup
 - Part 3: K8s Deployment
 
-## Kinect V1 and V2 comparison
+## Getting video from the Kinect
 
-## Compiling libfreenect2
+### Kinect V1 and V2 comparison
 
-## Adding a frame grabber
+### Compiling libfreenect2
 
-## Building the docker container
+### Adding a frame grabber
+
+### Building the docker container
 

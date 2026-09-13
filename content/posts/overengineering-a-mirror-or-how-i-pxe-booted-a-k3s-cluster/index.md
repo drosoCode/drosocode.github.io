@@ -594,6 +594,13 @@ The DHCPOFFER in response contains:
 
 {{< image src="assets/images/rpi_offer.png" caption="rpi dhcp offer capture" width="50%" >}}
 
+### Sidenote on iSCSI
+
+I used iSCSI in this case because I wanted to learn a new technology, but it could also be done using NFS.
+
+Having an iSCSI server is also interesting in my case as, besides network booting, I can also use the remaining space on the SSD (I made two partitions) to mount it into my proxmox machine.  Since both my storage server and proxmox server are equipped with Mellanox 10Gb SFP+ cards, I can also enable [iSER](https://networking-docs.nvidia.com/doca/archive/3-4-0/iser-iscsi-extensions-for-rdma): iSCSI Extensions for RDMA.
+
+RDMA is a technology to access block devices over the network dramatically faster by bypassing most of the network stack. iSER is the implementation for iSCSI (this requires specific network cards). Another interesting (and more up-to-date) storage protocol is NVME-oF that is designed for SSD drives and supports multiple transports like TCP or RoCE (RDMA).
 
 ## References
 
