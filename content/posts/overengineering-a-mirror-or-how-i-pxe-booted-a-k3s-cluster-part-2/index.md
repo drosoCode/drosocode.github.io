@@ -50,7 +50,40 @@ Then after plugging the Kinect a new video device appears, so you can directly u
 
 For the V2, it's a bit more complicated, as the AUR package doesn't compiles (and ideally, I want this in a debian container). So let's take a closer look.
 
+Another thing to keep in mind is that the V2 requires a much higher USB bandwidth, so **USB 3** ports are required. I tested with a RPi 4, but it still struggled to keep a decent framerate, so I switched to the dell mini-pc.
+
 ### Compiling libfreenect2
+
+We can use the [PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libfreenect2) file of the [AUR package](https://aur.archlinux.org/packages/libfreenect2) as a reference for installation instructions.
+
+Some comments on the package's page suggests to add `DCMAKE_POLICY_VERSION_MINIMUM=3.5` to CMake options to fix the current issues.
+
+I faced anothet error, this time during compilation and found that commenting out `s:const int CL_ICDL_Version` fixed this issue.
+
+So after installing the deps and cloning the repo:
+- `apt-get install -y build-essential git cmake opencl-headers pkg-config libjpeg62-turbo-dev libturbojpeg0-dev libusb-1.0-0-dev libglfw3-dev ocl-icd-opencl-dev libopencv-dev`
+- `git clone https://github.com/OpenKinect/libfreenect2 /tmp/libfreenect2 &&	cd /tmp/libfreenect2/ && git checkout fd64c5d9b214df6f6a55b4419357e51083f15d93`
+
+We can finally compile libfreenect2:
+
+```bash
+cd /tmp/libfreenect2 && mkdir build && cd build
+sed --debug -i -e 's:const int CL_ICDL_VERSION:// const int CL_ICDL_VERSION:' "../src/opencl_depth_packet_processor.cpp" "../src/opencl_kde_depth_packet_processor.cpp" && \
+cmake ".." \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DENABLE_CXX11=ON \
+		-DENABLE_OPENCL=ON \
+		-DENABLE_OPENGL=OFF \
+		-DENABLE_CUDA=OFF \
+		-DBUILD_EXAMPLES=OFF \
+		-DBUILD_SHARED_LIBS=OFF \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 && \
+	make
+```
+
+After running `make install` you should be able to execute the demo program with: `/usr/bin/Protonect`.
+If everything went well, you should now see a window with the live images for the multiple kinect's sensors.
 
 ### Adding a frame grabber
 
