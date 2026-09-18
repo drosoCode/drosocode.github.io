@@ -58,7 +58,7 @@ We can use the [PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h
 
 Some comments on the package's page suggests to add `DCMAKE_POLICY_VERSION_MINIMUM=3.5` to CMake options to fix the current issues.
 
-I faced anothet error, this time during compilation and found that commenting out `s:const int CL_ICDL_Version` fixed this issue.
+I faced another error, this time during compilation and found that commenting out `s:const int CL_ICDL_Version` fixed this issue.
 
 So after installing the deps and cloning the repo:
 - `apt-get install -y build-essential git cmake opencl-headers pkg-config libjpeg62-turbo-dev libturbojpeg0-dev libusb-1.0-0-dev libglfw3-dev ocl-icd-opencl-dev libopencv-dev`
@@ -86,6 +86,14 @@ After running `make install` you should be able to execute the demo program with
 If everything went well, you should now see a window with the live images for the multiple kinect's sensors.
 
 ### Adding a frame grabber
+
+But it's not yet finished for the video acquisition part as, unlike the KinectV1, the V2's libfreenect doesn't provides a `/dev/videoX` device from which we can easily grab the frames.
+
+Considering we only want to restream the color camera's video to the tv (with low latency), we just need to find a way to capture the raw frames from the kinect and *somehow* put them in the video framebuffer.
+
+Reading the issues and pull-requests on the libfreenectv2 repo regarding this mattet, I found the following [PR](https://github.com/OpenKinect/libfreenect2/pull/1197) from which I copied most of my code.
+
+
 
 ### Building the docker container
 
