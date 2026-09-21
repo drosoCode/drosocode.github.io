@@ -91,11 +91,24 @@ But it's not yet finished for the video acquisition part as, unlike the KinectV1
 
 Considering we only want to restream the color camera's video to the tv (with low latency), we just need to find a way to capture the raw frames from the kinect and *somehow* put them in the video framebuffer.
 
-Reading the issues and pull-requests on the libfreenectv2 repo regarding this mattet, I found the following [PR](https://github.com/OpenKinect/libfreenect2/pull/1197) from which I copied most of my code.
+Reading the issues and pull-requests on the libfreenectv2 repo regarding this matter, I found the following [PR](https://github.com/OpenKinect/libfreenect2/pull/1197) from which I copied most of my code.
 
+I slightly modified it to directly write the raw frames to stdout (the logs are sent to stderr), remove the dependency on opencv for color space conversion
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/assets/kinect/frame_grabber.cpp" >}}
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/assets/kinect/CMakeLists.txt" >}}
+
+
+### Usage
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/assets/kinect/launch.sh" >}}
 
 
 ### Building the docker container
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/assets/kinect/Dockerfile" >}}
+
 
 ## References
 - https://aur.archlinux.org/packages/libfreenect2
