@@ -93,7 +93,9 @@ Considering we only want to restream the color camera's video to the tv (with lo
 
 Reading the issues and pull-requests on the libfreenectv2 repo regarding this matter, I found the following [PR](https://github.com/OpenKinect/libfreenect2/pull/1197) from which I copied most of my code.
 
-I slightly modified it to directly write the raw frames to stdout (the logs are sent to stderr), remove the dependency on opencv for color space conversion
+I slightly modified it to directly write the raw frames to stdout (the logs are sent to stderr), remove the dependency on opencv for color space conversion (and also add a frame limiter, but this was mostly used for testing).
+
+Now, we just need to add this file and the CMakeLists file in a `frame_grabber` folder and reference our project in the main CMakeLists file with `ADD_SUBDIRECTORY(\${MY_DIR}/examples/frame_grabber)` for it to be build during libfreenect2 compilation.
 
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/assets/kinect/frame_grabber.cpp" >}}
 
@@ -102,12 +104,29 @@ I slightly modified it to directly write the raw frames to stdout (the logs are 
 
 ### Usage
 
+Our frame_grabber is now outputing the raw color frames from the kinect. To display them, we can use `ffplay` (part of [ffmpeg](https://ffmpeg.org/ffplay.html)), since there's no encoding, we need to specify the characteristics of the video directly to ffplay as cli args.
+
+The following command can be used to display the video: `./frame_grabber | ffplay -f rawvideo -pixel_format bgra -video_size 1920x1080 -` (note the `-` at the end to get the video from the stdin).
+
+We can add a few other parameters to reduce latency (honestly I don't know which ones are really useful, but I'm too lazy to test them independently): `./frame_grabber | ffplay -autoexit -max_delay 0 -max_probe_packets 1 -analyzeduration 0 -flags +low_delay -fflags +nobuffer -f rawvideo -pixel_format bgra -video_size 1920x1080 -`
+
+By default, ffplay will display the video in a new window if running with a desktop environment, but otherwise it will directly display the video on the framebuffer of a connected screen (which is exactly what we want !).
+
+As a bonus, we can also first pipe the frames through ffmpeg and then to ffplay, that way the video is displayed on the tv in realtime but can also be encoded and streamed to other devices (ex: for recording).
+
+To allow both modes, I created this simple script (controlled by an env var):
+
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/assets/kinect/launch.sh" >}}
 
 
 ### Building the docker container
 
+Now that everything is working, let's package everything nicely as a docker container.
+
+I'm using a two-stage build process: the first one to clone, patch and build libfreenect with our frame_grabber, and the second one to make a small image to deploy with only the required libs at runtime and our litte startup script.
+
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/assets/kinect/Dockerfile" >}}
+
 
 
 ## References
