@@ -132,7 +132,7 @@ I'm using a two-stage build process: the first one to clone, patch and build lib
 
 Since I want to automate as much things as possible in this project and that I also like to give a second life to old tech devices, I'll also use the following devices (of course non of them are strictly required and there are actually much simpler solutions).
 
-## The RFXLAN
+### The RFXLAN
 
 The [RFXLAN](https://web.archive.org/web/20130617090417/http://www.rfxcom.com/store/all/11201) is a now-deprecated device from RFXCOM that was used as an interface for home-automation systems to control 433 MHz devices (like alarm systems, temperature/humidity probes, remote-controlled plugs/lights ...).
 
@@ -146,6 +146,17 @@ In this project, it will be used to control an old smart plug (in 433 MHz) to au
 
 ### The violet mir:ror
 
+The [mir:ror](https://fr.wikipedia.org/wiki/Mir:ror) is a little usb RFID tag reader developed by violet (same manufacturer as the Nabaztag, one of the first IoT devices). This reader was designed to read tags embedded in little rabbit figurines as well as tiny rfid tags that you could stick to objects, once read by the mir:ror, a specific tag could perform any action on your computer.
+
+Of course, with IoT the same story repeats over and over again: the object and its software on the PC was not opensource, it relied on cloud servers, the company went bankrupt and the server were shutdown, making all mir:ror unusable.
+
+But fortunately, people didn't wait for the device to stop working to reverse-engineer the usb protocol (which is just presented as a HID device), more information can be found on the [nabaztag forum](https://nabaztag.forumactif.fr/) (mostly in french).
+
+I developed a simple program to publish the tags ID to mqtt topic compatible with home-assistant: [mirror-mqtt](https://github.com/droso-hass/mirror-mqtt).
+
+This device will be placed in front of the TV, to easily trigger the full automation by placing a rabbit on it when I want to start dancing.
+
+## A bit of DIY
 
 
 ## References
