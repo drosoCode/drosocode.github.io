@@ -128,6 +128,25 @@ I'm using a two-stage build process: the first one to clone, patch and build lib
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/assets/kinect/Dockerfile" >}}
 
 
+## Other hardware used in this project
+
+Since I want to automate as much things as possible in this project and that I also like to give a second life to old tech devices, I'll also use the following devices (of course non of them are strictly required and there are actually much simpler solutions).
+
+## The RFXLAN
+
+The [RFXLAN](https://web.archive.org/web/20130617090417/http://www.rfxcom.com/store/all/11201) is a now-deprecated device from RFXCOM that was used as an interface for home-automation systems to control 433 MHz devices (like alarm systems, temperature/humidity probes, remote-controlled plugs/lights ...).
+
+The particularity of this device was that unlike the other interfaces (that are still produced by rfxcom), I wasn't required to attach it to the usb port used by your home-automation system but it was actually operated over the network. So you could just place the RFXLAN wherever you needed it as long as you had an ethernet cable (which is especially useful for radio non-meshed networks).
+
+The issue with it is that the firmware is not opensource, not updated for at least a decade and uses an obscure protocol to communicate.
+
+But to make it usable with Home-Assistant (and other modern systems), I have developped [xpl2mqtt](https://github.com/droso-hass/xpl2mqtt) which translates the [xPL](https://xplproject.org.uk/) protocol used by the RFXLAN to a more modern protocol, commonly used for IoT devices: [MQTT](https://mqtt.org/).
+
+In this project, it will be used to control an old smart plug (in 433 MHz) to automatically power on and off the Kinect.
+
+### The violet mir:ror
+
+
 
 ## References
 - https://aur.archlinux.org/packages/libfreenect2
