@@ -16,7 +16,7 @@ The free space problem can be solved quite easily by lifting my bed against the 
 
 This is the first part of a series of 3 posts:
 - Part 1: Network Booting
-- [Part 2: Hardware Setup](/2026/09/13/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/)
+- [Part 2: Hardware Setup](/2026/10/02/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/)
 - Part 3: K8s Deployment
 
 ## The Idea

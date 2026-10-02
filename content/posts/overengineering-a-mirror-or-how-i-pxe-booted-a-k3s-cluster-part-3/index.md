@@ -9,8 +9,8 @@ tags:
 ---
 
 This is the third and last part of this series of posts:
-- [Part 1: Network Booting]()
-- [Part 2: Hardware Setup]()
+- [Part 1: Network Booting](/2026/09/13/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster/)
+- [Part 2: Hardware Setup](/2026/10/02/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/)
 - Part 3: K8s Deployment
 
 Now that our cluster is ready and that we know how to use the Kinect, we're ready to ~~write a ton of yaml~~, deploy everything on the cluster and do some automations !
