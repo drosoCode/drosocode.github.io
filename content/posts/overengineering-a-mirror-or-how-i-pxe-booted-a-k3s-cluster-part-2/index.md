@@ -164,6 +164,20 @@ This device will be placed in front of the TV, to easily trigger the full automa
 
 ## A bit of DIY
 
+### Mounting the Kinect
+
+To mount the Kinect V2 on top of my TV, I 3D-printed a custom support.
+
+The original file is taken from [thingiverse](https://www.thingiverse.com/thing:1188479/files).
+
+I then used [openscad](https://openscad.org/) to adapt it to my TV's measurements and printed it in ABS with my printer (Qidi Tech X-Plus-3).
+
+{{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-2/assets/kinect/stand.scad" >}}
+
+{{< image src="assets/support.png" caption="OpenSCAD and Qidi Slicer views of the modified support"  >}}
+
+### Adapting the bed
+
 As noted in the first post, to be able to make some space in the room I need to be able to lift the bed in front of the TV.
 
 My bed is an IKEA compact structure with a thick mattress on top of it. It's already possible to lift it as-is, but since the supports are thin wood-ish pieces I would not recommend it. Also since the total thickness of the bed is about 60 cm, just doing a 90° rotation would mean that there must be this 60 cm gap between the bed and the wall (which is of course absolutely not practical in such a tiny room).
@@ -176,7 +190,9 @@ Finally, to keep the mattress in place when going in a vertical position, I used
 
 {{< image src="assets/bed.png" caption="Replacing the bed supports" width="40%" >}}
 
-Once lifted, the bed reveals a pretty large space in front of the TV.
+### Final result
+
+Once lifted, the bed reveals a pretty large space in front of the TV/Kinect.
 
 {{< image src="assets/room.png" caption="Room size with the bed against the wall" width="40%" >}}
 
