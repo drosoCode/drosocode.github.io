@@ -1,7 +1,7 @@
 ---
 title: "Overengineering a mirror - Part 2: Setting up the hardware"
-date: 2026-09-13T01:00:00+00:00
-draft: true
+date: 2026-10-02T01:00:00+00:00
+draft: false
 tags:
 - hardware
 - infra
@@ -20,6 +20,8 @@ This is the second out of 3 of this posts series:
 So, the first step is to connect the Kinect to our PC and get some output, ideally with a low-enough latency and in an easy-to-use form.
 
 ### Kinect V1 and V2 comparison
+
+{{< image src="assets/kinect.png" caption="Kinect V2 vs Kinect V1" >}}
 
 There are two "main" revisions of the Kinect (we're excluding the xbox vs windows versions as they are basically the same except for the cable):
 
@@ -134,6 +136,8 @@ Since I want to automate as much things as possible in this project and that I a
 
 ### The RFXLAN
 
+{{< image src="assets/rfxlan.png" caption="RFXLan" >}}
+
 The [RFXLAN](https://web.archive.org/web/20130617090417/http://www.rfxcom.com/store/all/11201) is a now-deprecated device from RFXCOM that was used as an interface for home-automation systems to control 433 MHz devices (like alarm systems, temperature/humidity probes, remote-controlled plugs/lights ...).
 
 The particularity of this device was that unlike the other interfaces (that are still produced by rfxcom), I wasn't required to attach it to the usb port used by your home-automation system but it was actually operated over the network. So you could just place the RFXLAN wherever you needed it as long as you had an ethernet cable (which is especially useful for radio non-meshed networks).
@@ -146,19 +150,44 @@ In this project, it will be used to control an old smart plug (in 433 MHz) to au
 
 ### The violet mir:ror
 
+{{< image src="assets/mirror.png" caption="mir:ror with RFID rabbits and tags" width="40%" >}}
+
 The [mir:ror](https://fr.wikipedia.org/wiki/Mir:ror) is a little usb RFID tag reader developed by violet (same manufacturer as the Nabaztag, one of the first IoT devices). This reader was designed to read tags embedded in little rabbit figurines as well as tiny rfid tags that you could stick to objects, once read by the mir:ror, a specific tag could perform any action on your computer.
 
 Of course, with IoT the same story repeats over and over again: the object and its software on the PC was not opensource, it relied on cloud servers, the company went bankrupt and the server were shutdown, making all mir:ror unusable.
 
 But fortunately, people didn't wait for the device to stop working to reverse-engineer the usb protocol (which is just presented as a HID device), more information can be found on the [nabaztag forum](https://nabaztag.forumactif.fr/) (mostly in french).
 
-I developed a simple program to publish the tags ID to mqtt topic compatible with home-assistant: [mirror-mqtt](https://github.com/droso-hass/mirror-mqtt).
+I developed a simple program to publish the tags ID to mqtt topics compatible with home-assistant: [mirror-mqtt](https://github.com/droso-hass/mirror-mqtt).
 
 This device will be placed in front of the TV, to easily trigger the full automation by placing a rabbit on it when I want to start dancing.
 
 ## A bit of DIY
 
+As noted in the first post, to be able to make some space in the room I need to be able to lift the bed in front of the TV.
+
+My bed is an IKEA compact structure with a thick mattress on top of it. It's already possible to lift it as-is, but since the supports are thin wood-ish pieces I would not recommend it. Also since the total thickness of the bed is about 60 cm, just doing a 90° rotation would mean that there must be this 60 cm gap between the bed and the wall (which is of course absolutely not practical in such a tiny room).
+
+The solution for these problems is pretty easy: just swap the two back supports for two wheels (the two front ones are kept to keep the bed in place when in "normal" position). That way we can very easily rotate the bed (without risking to break the supports), and we can also easily translate it at the same time: so in normal position the bed can be put against the wall and when lifting it, I can move it forward a bit to have the 60 cm required to put it in a vertical position. 
+
+I've made sure to select fitting wheels both in terms of total height (compared to the wooden supports), weight tolerance and material (rubber wheels are ideal to protect the plastic floor and prevent the bed from moving when used) on a [specialized website](https://www.roues-et-roulettes.com/caoutchouc-super-elastique-easyroll-bleu/6563-roulette-fixe-caoutchouc-easyroll-bleu-diametre-80-mm-roulement-a-rouleaux-150-kg-0676327311541.html).
+
+Finally, to keep the mattress in place when going in a vertical position, I used two ratchet straps that are pretty fast to secure and very sturdy.
+
+{{< image src="assets/bed.png" caption="Replacing the bed supports" width="40%" >}}
+
+Once lifted, the bed reveals a pretty large space in front of the TV.
+
+{{< image src="assets/room.png" caption="Room size with the bed against the wall" width="40%" >}}
+
+Now, with both the mini-PC configured and the Kinect connected to it, we could just stop here and everything will work BUT I did mention automations and over-engineering, so I'm not done yet and I will show in the 3rd and last post of this series how to configure the K8s cluster to automate everything.
 
 ## References
 - https://aur.archlinux.org/packages/libfreenect2
-- 
+- https://github.com/OpenKinect/libfreenect2/pull/1197
+- https://skarredghost.com/2016/12/02/the-difference-between-kinect-v2-and-v1/
+- http://mfombaron.free.fr/mob/?tag=1-wire
+- https://www.journaldulapin.com/2013/02/12/reutiliser-un-mirror-sous-mac-os-x/
+- https://www.dailymotion.com/video/x7br7o
+- https://web.archive.org/web/20140625050654/http://rfxcom.com/Downloads
+- https://web.archive.org/web/20140626135449/http://rfxcom.com/Documents/RFXCOM%20implementation%20xPL.pdf
