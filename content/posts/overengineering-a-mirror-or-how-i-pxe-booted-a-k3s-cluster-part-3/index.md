@@ -31,13 +31,13 @@ I'm using [Flux CD](https://fluxcd.io/) to manage all my k8s config, so I'll sho
 
 First, create a `HelmRepository` and a `HelmRelease` to install Akri.
 
-In the `HelmRelease` values, don't forget to enable udev discovery.
+In the `HelmRelease` values, we're using `agent.full: true` to use agent images that already includes discovery handlers (instead of deploying them separately) since currently it's not possible to define tolerations for discovery handlers in the helm chart.
 
 {{< file "content/posts/overengineering-a-mirror-or-how-i-pxe-booted-a-k3s-cluster-part-3/assets/k8s/akri_helm.yaml" >}}
 
 ### Configuring udev rules
 
-Then, we can create Akri `Configuration` objects to match specific udev rules.
+Then, we create Akri `Configuration` objects to match specific udev rules.
 
 I created 3 Configurations:
 - `udev-framebuffer` to match a framebuffer device with: `SUBSYSTEM=="graphics", KERNEL=="fb[0-9]*"`
