@@ -20,12 +20,16 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: akri-repo
-      version: 'v0.13.8'
+      version: 'v0.14.0'
   interval: 1h
   targetNamespace: akri
-  values:
-    udev:
-      discovery:
-        enabled: true
+  values :
+    agent:
+      full: true
+      tolerations:
+        - key: droso/target-type
+          operator: Equal
+          value: lowpower
+          effect: NoSchedule
 
   
